@@ -1,12 +1,14 @@
 <template>
 
-    <div class="main card rounded-xl bg-white flex items-center border-2 text-darkgreen">
-      <img src="../../public/Imperial.png" alt="Imperial Logo" class="university-logo">
-      <div class="university-info">
+    <div class="main card sticky top-0 bg-white flex items-center border border-lightgrey text-darkgreen">
+      <img src="../../public/Imperial.png" alt="Imperial Logo" class="university-logo absolute left-4 md:left-auto md:relative mx-0 opacity-20 md:opacity-100 md:mx-8 w-16 md:w-12 xl:w-14">
+      <div class="university-info grid grid-rows-2 z-10">
         <div class="university-name">
-          <h2 class="font-bold text-xl">IMPERIAL COLLEGE LONDON</h2>
+          <h2 class="font-bold text-base xl:text-2xl">IMPERIAL COLLEGE LONDON</h2>
         </div>
-        <div class="location-gpa-semester">
+
+        <div class="location-gpa-semester md:row-start-2 ">
+
         <div class="location font-bold">
             <svg class="svg-icon" viewBox="0 0 20 29" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M10 0C4.47143 0 0 4.5385 0 10.15C0 12.673 0.714285 15.0365 2.01429 17.168C3.37143 19.401 5.15714 21.315 6.52857 23.548C7.2 24.6355 7.68571 25.6505 8.2 26.825C8.57143 27.6225 8.87143 29 10 29C11.1286 29 11.4286 27.6225 11.7857 26.825C12.3143 25.6505 12.7857 24.6355 13.4571 23.548C14.8286 21.3295 16.6143 19.4155 17.9714 17.168C19.2857 15.0365 20 12.673 20 10.15C20 4.5385 15.5286 0 10 0ZM10 14.1375C8.02857 14.1375 6.42857 12.5135 6.42857 10.5125C6.42857 8.5115 8.02857 6.8875 10 6.8875C11.9714 6.8875 13.5714 8.5115 13.5714 10.5125C13.5714 12.5135 11.9714 14.1375 10 14.1375Z" fill="#1E363E"/>
@@ -29,35 +31,30 @@
       </div>
     </div>
 
-    <div>
-    
-    <!-- AMA -->
-    <router-link to="/AMAPage">
-      <DiscussCard title="AMA about {schoolName}">
-        <!-- Content for AMA card -->
+    <div class="discussionContentWrapper grid grid-cols-12">
+      <div class="discussionsWrapper flex flex-col gap-1 col-span-12 md:col-span-8 xxl:col-span-7 md:col-start-2 xl:col-start-2 xxl:col-start-2 ">
+      <!-- AMA -->
+        <DiscussCard title="AMA about {schoolName}">
+          <!-- Content for AMA card -->
+        </DiscussCard>
+      <!-- Accoms -->
+      <DiscussCard title="Accommodation">
+        <!-- Content for Accoms card -->
       </DiscussCard>
-    </router-link>
-
-    <!-- Accoms -->
-    <DiscussCard title="Accommodation">
-      <!-- Content for Accoms card -->
-    </DiscussCard>
-
-    <!-- Budget -->
-    <DiscussCard title="Budget">
-      <!-- Content for Budget card -->
-    </DiscussCard>
-
-    <!-- To Do -->
-    <DiscussCard title="What to do in this city (Maybe can pull the city name)?">
-      <!-- Content for Living card -->
-    </DiscussCard>
-
-    <!-- Discuss Card 5 -->
-    <DiscussCard title="Who's Going to {schoolName}">
-      <!-- Content for Who's Going card -->
-    </DiscussCard>
-  </div>
+      <!-- Budget -->
+      <DiscussCard title="Budget">
+        <!-- Content for Budget card -->
+      </DiscussCard>
+      <!-- To Do -->
+      <DiscussCard title="What to do in this city (Maybe can pull the city name)?">
+        <!-- Content for Living card -->
+      </DiscussCard>
+      <!-- Discuss Card 5 -->
+      <DiscussCard title="Who's Going to {schoolName}">
+        <!-- Content for Who's Going card -->
+      </DiscussCard>
+      </div>
+    </div>
   </template>
 
   <script>
@@ -78,42 +75,19 @@
   .main {
     display: flex;
     align-items: center; /* Center vertically */
-    padding: 1rem;
-    height: 120px;
-    margin: 40px;
+    padding: 1rem 10%;
+    /* height: 120px; */
+    margin: 0 auto;
+    margin-bottom: 0.5rem;
   }
   
   .university-logo {
-    width: 50px;
+    /* width: 50px; */
     height: auto;
-    margin-left: 20px;
-    margin-right: 50px;
+    /* margin-left: 20px;
+    margin-right: 50px; */
     flex-direction: flex-start;
   }
-  
-  .university-info {
-    display: flex;
-    /* flex-direction: flex-start; */
-  }
-  
-  .university-name {
-    display: flex;
-    margin-right: 30px;
-    /* align-items: flex-start; */
-  }
-  
-  .font-bold {
-    font-weight: bold;
-  }
-  
-  .font-normal {
-    font-weight: normal;
-  }
-  
-  .text-xl {
-    font-size: 1.25rem;
-  }
-  
   .location-gpa-semester {
     display: flex;
     align-items: center;

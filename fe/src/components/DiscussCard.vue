@@ -1,11 +1,14 @@
 <template>
-  <div class="discuss-card card rounded-xl bg-white flex flex-col items-start border-2 text-darkgreen">
-    <h2 class="discuss-title">{{ title }}</h2>
-    <div class="underline"></div>
-    <div class="discuss-content">
-      <slot></slot>
+  <router-link :to="title">
+    <div class="discuss-card card rounded-xl bg-white flex flex-col items-start border-2 text-darkgreen">
+      <h2 class="discuss-title">{{ title }}</h2>
+      <div class="underline"></div>
+      <div class="discuss-content">
+        {{ description }}
+        <slot></slot>
+      </div>
     </div>
-  </div>
+  </router-link>
 </template>
 
 <script>
@@ -16,6 +19,11 @@ export default {
       type: String,
       required: true,
     },
+    description : {
+      type : String,
+      required : true,
+      default : 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugiat nobis, laborum dolores ex iste doloremque ut corporis rem in magnam exercitationem, reiciendis quaerat repellat quibusdam. Facilis est iusto ullam tenetur.'
+    }
   },
 };
 </script>
@@ -23,7 +31,6 @@ export default {
 <style scoped>
 .discuss-card {
   padding: 1rem;
-  margin: 40px;
 }
 
 .discuss-title {
