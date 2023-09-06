@@ -1,0 +1,84 @@
+<script>
+
+    import rangeSlider from './rangeSlider.vue'
+    import checkBox from './checkBox.vue';
+
+    export default {
+        name: 'exploreFilter',
+        mounted() {
+            var width = document.getElementById('filter').offsetWidth;
+            this.$emit('filterWidth', width);
+        },
+        components : {
+            rangeSlider,
+            checkBox
+        },
+        data() {
+            return {
+                gpa : null,
+                continent : [],
+                faculty : [],
+            }
+        },
+        props : {
+            filtered : Boolean
+        },
+        methods : {
+            doFilter() {
+                this.$emit('filter', this.$data);
+            },
+            resetFilter() {
+                this.$router.go()
+            }
+        },
+        inject: ["mq"],
+    }
+</script>
+
+<template>
+        <div class="flex items-center h-12">
+            <button @click="doFilter" :class="filtered ? 'bg-white border-darkgreen hover:bg-darkgreen' : 'hover:bg-white hover:border-darkgreen'" class="grow submitFilter group flex gap-2 items-center justify-center border-2 rounded-lg">
+                <svg :class="mq.lgPlus ? 'h-6' : 'h-5', filtered ? 'fill-darkgreen group-hover:fill-white' : 'group-hover:fill-darkgreen fill-white'" class="inline relative transition-all group-hover:-translate-y-1" viewBox="0 0 137 137" xmlns="http://www.w3.org/2000/svg">
+                <path d="M129.685 0H6.38566C0.720182 0 -2.1386 6.87416 1.87571 10.8885L51.026 60.0462V114.809C51.026 116.89 52.0414 118.84 53.7466 120.034L75.0074 134.911C79.2019 137.847 85.0433 134.872 85.0433 129.686V60.0462L134.195 10.8885C138.201 6.88213 135.362 0 129.685 0Z"/>
+                </svg>
+            <span :class="mq.lgPlus ? 'text-lg' : 'text-base', filtered ? 'group-hover:text-white text-darkgreen' : 'group-hover:text-darkgreen'" class="min-w-fit font-semibold">Filter{{ filtered ? 'ed' : ' Results'}}</span>
+            </button>
+            <button v-if="filtered" @click="resetFilter" class="group hover:bg-redtw hover:brightness-110 transition-all relative h-full p-0 rounded-lg bg-darkredtw w-8 mx-1 overflow-hidden flex justify-center items-center">
+                <svg style="outline: blue dashed 1px;" id="cross" class="absolute fill-redtw group-hover:brightness-75 brightness-125 block h-12 w-12" viewBox="2 2 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M6.99486 7.00636C6.60433 7.39689 6.60433 8.03005 6.99486 8.42058L10.58 12.0057L6.99486 15.5909C6.60433 15.9814 6.60433 16.6146 6.99486 17.0051C7.38538 17.3956 8.01855 17.3956 8.40907 17.0051L11.9942 13.4199L15.5794 17.0051C15.9699 17.3956 16.6031 17.3956 16.9936 17.0051C17.3841 16.6146 17.3841 15.9814 16.9936 15.5909L13.4084 12.0057L16.9936 8.42059C17.3841 8.03007 17.3841 7.3969 16.9936 7.00638C16.603 6.61585 15.9699 6.61585 15.5794 7.00638L11.9942 10.5915L8.40907 7.00636C8.01855 6.61584 7.38538 6.61584 6.99486 7.00636Z"/>
+                </svg>
+                <!-- <span class="group-hover:opacity-80 absolute w-fit opacity-0 transition-all font-semibold">Clear</span> -->
+            </button>
+        </div>
+        <div :class="mq.lgPlus ? 'text-lg' : 'text-base'" class="font-semibold flex flex-col gap-2">
+            <div class="font-semibold">
+            Continent
+                <div class="flex flex-col ml-4 min-w-fit">
+                    <checkBox label="Asia" value="Asia" v-model="continent"/>
+                    <checkBox label="Europe" value="Europe" v-model="continent"/>
+                    <checkBox label="North America" value="North America" v-model="continent"/>
+                    <checkBox label="South America" value="South America" v-model="continent"/>
+                    <checkBox label="Middle East" value="Middle East" v-model="continent"/>
+                </div>
+            </div>
+            <!-- TODO: MANUALLY EDITABLE GPA -->
+            <div class="font-semibold">
+                GPA up to {{ gpa }}
+                <rangeSlider @gpaFilter="(value) => {this.gpa = value}"/>
+            </div>
+            <div class="font-semibold">
+                Faculty
+                <div class="flex flex-col ml-4">
+                    <checkBox label="Business" value="Business" v-model="faculty"/>
+                    <checkBox label="Information Systems" value="Information Systems" v-model="faculty"/>
+                    <checkBox label="Accountancy" value="Accountancy" v-model="faculty"/>
+                    <checkBox label="Computer Science" value="Computer Science" v-model="faculty"/>
+                </div>
+            </div>
+        </div>
+
+</template>
+
+<style scoped>
+
+</style>
