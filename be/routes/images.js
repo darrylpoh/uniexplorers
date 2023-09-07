@@ -18,7 +18,7 @@ module.exports = app => {
                 .insert({
                     filename, filepath, mimetype, size
                 })
-                .into('image_files')
+                .into('image_file')
                 .then(() => res.json({
                     success: true,
                     filename
@@ -36,7 +36,7 @@ module.exports = app => {
             
             db
                 .select()
-                .from('image_files')
+                .from('image_file')
                 .where({filename})
                 .first()
                 .then(image => {
