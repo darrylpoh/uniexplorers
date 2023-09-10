@@ -5,6 +5,7 @@ import UniHomepage from '../views/UniHomepage.vue'
 import ProfilePage from '../views/ProfilePage.vue'
 import DiscussionPage from '../views/DiscussionPage.vue'
 import AMAPage from '../components/AMAPage.vue'
+import ExploreCitiesPage from '../views/ExploreCitiesPage.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -38,6 +39,11 @@ const router = createRouter({
       path: "/AMApage",
       name: "AMA",
       component: AMAPage
+    },
+    {
+      path:'/explorecitiespage',
+      name: 'ExploreCitiesPage',
+      component: ExploreCitiesPage
     },
   ]
 })
