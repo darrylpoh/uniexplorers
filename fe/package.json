@@ -14,7 +14,9 @@
     "element-plus": "^2.3.6",
     "flowbite": "^1.6.5",
     "flowbite-vue": "^0.0.12",
+    "gsap": "^3.12.2",
     "pinia": "^2.0.36",
+    "rellax": "^1.12.1",
     "vue": "^3.3.2",
     "vue-router": "^4.2.0",
     "vue3-mq": "^3.1.3"
