@@ -2,6 +2,7 @@
 
     import rangeSlider from './rangeSlider.vue'
     import checkBox from './checkBox.vue';
+    import gsap from 'gsap'
 
     export default {
         name: 'exploreFilter',
@@ -15,7 +16,9 @@
         },
         data() {
             return {
-                gpa : null,
+                slider : 200,
+                gparaw : null,
+                gpa : 4,
                 continent : [],
                 faculty : [],
             }
@@ -31,12 +34,17 @@
                 this.$router.go()
             }
         },
+        watch: {
+            gparaw(n) {
+            gsap.to(this, { duration: 0.3, gpa: Number(n) || 0 })
+            }
+        },
         inject: ["mq"],
     }
 </script>
 
 <template>
-        <div class="flex items-center h-12">
+        <div v-if="mq.mdPlus" class="flex items-center h-12">
             <button @click="doFilter" :class="filtered ? 'bg-white border-darkgreen hover:bg-darkgreen' : 'hover:bg-white hover:border-darkgreen'" class="grow submitFilter group flex gap-2 items-center justify-center border-2 rounded-lg">
                 <svg :class="mq.lgPlus ? 'h-6' : 'h-5', filtered ? 'fill-darkgreen group-hover:fill-white' : 'group-hover:fill-darkgreen fill-white'" class="inline relative transition-all group-hover:-translate-y-1" viewBox="0 0 137 137" xmlns="http://www.w3.org/2000/svg">
                 <path d="M129.685 0H6.38566C0.720182 0 -2.1386 6.87416 1.87571 10.8885L51.026 60.0462V114.809C51.026 116.89 52.0414 118.84 53.7466 120.034L75.0074 134.911C79.2019 137.847 85.0433 134.872 85.0433 129.686V60.0462L134.195 10.8885C138.201 6.88213 135.362 0 129.685 0Z"/>
@@ -50,6 +58,8 @@
                 <!-- <span class="group-hover:opacity-80 absolute w-fit opacity-0 transition-all font-semibold">Clear</span> -->
             </button>
         </div>
+
+
         <div :class="mq.lgPlus ? 'text-lg' : 'text-base'" class="font-semibold flex flex-col gap-2">
             <div class="font-semibold">
             Continent
@@ -63,8 +73,10 @@
             </div>
             <!-- TODO: MANUALLY EDITABLE GPA -->
             <div class="font-semibold">
-                GPA up to {{ gpa }}
-                <rangeSlider @gpaFilter="(value) => {this.gpa = value}"/>
+                GPA up to {{ gpa.toFixed(2) }}
+                <!-- <input type="text" :value="gpa.toFixed(2)" @change="(event) => {this.slider = event.target.value / 4 * 200}"> -->
+                <!-- @gpaFilter="(value) => {this.gparaw = value}" -->
+                <rangeSlider v-model="slider" :min="1.23" :max="4" @sliderValue="(value) => this.gparaw = value"/>
             </div>
             <div class="font-semibold">
                 Faculty

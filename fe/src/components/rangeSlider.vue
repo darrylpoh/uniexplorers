@@ -1,36 +1,49 @@
 <script>
     export default {
         name: 'rangeSlider',
-        mounted() {
-
-            const sliderEl = document.getElementById("range")
-            sliderEl.style.background = '#1E363E';
-            this.$emit('gpaFilter', (this.gpaOUT).toFixed(2))
-
-
-            sliderEl.addEventListener("input", (event) => {
-                const tempSliderValue = event.target.value;
-                const progress = (tempSliderValue / sliderEl.max) * 100;
-                const gpaOUT = progress / 100 * this.gpaGAP + this.gpaMIN;
-                this.$emit('gpaFilter', (gpaOUT).toFixed(2))
-                sliderEl.style.background = `linear-gradient(to right, #1E363E ${progress}%, #ccc ${progress}%)`;
-            })
-
+        props : {
+            min : {
+                type : Number,
+                required : true
+            },
+            max : {
+                type : Number,
+                required : true
+            },
+            modelValue: { type: Number, default : 200},
         },
-        beforeUnmount() {
-            console.log('removed listener')
+        computed:{
+            gap() {return this.max - this.min},
+            model:{
+                get() {
+
+                    // if (progress < 0) {
+                    //     this.$emit("update:modelValue", 0);
+                    //     this.$emit("gpaValue", this.gpaMIN)
+                    //     progress = 0
+                    // } else {
+                    //     this.$emit("update:modelValue", this.modelValue);
+                    //     this.$emit("gpaValue", this.modelValue / 200 * 4)
+                    // }
+
+                    // this.bgStyle = `linear-gradient(to right, #1E363E ${progress}%, #ccc ${progress}%)`
+
+                    console.log('get is called', this.modelValue)
+                    return this.modelValue;
+                },
+                set(value) {
+                    console.log('set is called')
+                    const progress = (value / 200) * 100;
+                    const valOUT = progress / 100 * this.gap + this.min;
+                    this.bgStyle = `linear-gradient(to right, #1E363E ${progress}%, #ccc ${progress}%)`
+                    this.$emit("update:modelValue", value);
+                    this.$emit("sliderValue", valOUT)
+                }
+            }
         },
         data() {
             return {
-                onclickpos : null,
-                mousePosHori : null,
-                width : null,
-                minPos : null,
-                maxPos : null,
-                dragging : false,
-                gpaGAP : 1.7,
-                gpaMIN : 2.3,
-                gpaOUT: 4.0,
+                bgStyle : 'linear-gradient(to right, #1E363E 100%, #ccc 0%)',
             }
         },
     }
@@ -38,11 +51,13 @@
 
 <template>
     <div class="w-full h-8 flex flex-row gap-3 items-center">
-        <p>2.3</p>
-        <div class="w-full"><input type="range" name="slider" min="0" max="50" value="50" id="range"></div>
+        <p>{{min}}</p>
+        <div class="w-full">
+            <input type="range" name="slider" min="0" max="200" v-model="model">
+        </div>
         <!-- TODO: AVG VALUE KIV 
             <p id="avg" class="absolute">▼</p> -->
-        <p>4.0</p>
+        <p>{{max}}</p>
     </div>
 
 </template>
@@ -79,7 +94,7 @@ input[type="range"] {
     outline: none;
 
     /* New additions */
-    background: #dfdfdf;
+    background: v-bind(bgStyle);
     height: 0.5rem;
     margin: 0 auto;
     padding: 0;
