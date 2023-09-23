@@ -1,124 +1,167 @@
 <template>
-    <div class="p-8">
-        <div class="bg-lightgreen rounded-lg h-screen overflow-auto flex">
-            <div class="p-10 leftcard w-1/2 flex-1">
-                <div class="logo w-full">
-                    <img src="/Dark Logo.png" class="h-24">
-                </div>
-                <h5 class="font-caudex w-full text-left text-[70px] font-medium text-darkgreen leading-tight">
-                    Find The University of Your Dreams
-                </h5>
-                <div class="w-full inline-flex">
-                    <button
-                        :class="{ 'bg-darkgreen text-white': isLoginMode, 'bg-white text-darkgreen': !isLoginMode }"
-                        @click="toggleMode(true)"
-                        class="w-full focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
-                        Login
-                    </button>
-                    <button
-                        :class="{ 'bg-darkgreen text-white': !isLoginMode, 'bg-white text-darkgreen': isLoginMode }"
-                        @click="toggleMode(false)"
-                        class="w-full focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
-                        Signup
-                    </button>
-                </div>
-                <form v-if="isLoginMode" class="space-y-6 h-133" action="#">
-                    <div>
-                        <label for="email" class="block mb-2 text-sm font-medium text-gray-900 text-darkgreen">Your
-                            email</label>
-                        <input type="email" name="email" id="email"
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 text-darkgreen"
-                            placeholder="name@company.com" required>
-                    </div>
-                    <div>
-                        <label for="password" class="block mb-2 text-sm font-medium text-gray-900 text-darkgreen">Your
-                            password</label>
-                        <input type="password" name="password" id="password" placeholder="••••••••"
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 text-darkgreen"
-                            required>
-                    </div>
-                    <div class="flex items-start">
-                        <div class="flex items-start">
-                            <div class="flex items-center h-5">
-                                <input id="remember" type="checkbox" value=""
-                                    class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800"
-                                    required>
-                            </div>
-                            <label for="remember" class="ml-2 text-sm font-medium text-gray-900 text-darkgreen">Remember
-                                me</label>
-                        </div>
-                        <a href="#" class="ml-auto text-sm text-blue-700 hover:underline text-darkgreen">Lost Password?</a>
-                    </div>
-                    <button type="submit"
-                        class="w-full text-white bg-darkgreen hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-green-600 dark:hover:bg-green-700 text-darkgreen">
-                        Login to your account
-                    </button>
-                </form>
-
-                <!-- Signup form fields here -->
-                <form v-else class="space-y-6 h-133" action="#">
-                    <div>
-                        <label for="email" class="block mb-2 text-sm font-medium text-gray-900 text-darkgreen">Your
-                            email</label>
-                        <input type="email" name="email" id="email"
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 text-darkgreen"
-                            placeholder="name@company.com" required>
-                    </div>
-                    <div>
-                        <label for="password"
-                            class="block mb-2 text-sm font-medium text-gray-900 text-darkgreen">Password</label>
-                        <input type="password" name="password" id="password" placeholder="••••••••"
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 text-darkgreen"
-                            required>
-                    </div>
-                    <div>
-                        <label for="confirmPassword"
-                            class="block mb-2 text-sm font-medium text-gray-900 text-darkgreen">Confirm password</label>
-                        <input type="confirmPassword" name="confirmPassword" id="confirmPassword" placeholder="••••••••"
-                            class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 text-darkgreen"
-                            required>
-                    </div>
-                    <div>
-                        <label for="university"
-                            class="block mb-2 text-sm font-medium text-gray-900 text-darkgreen">University</label>
-                        <select name=""
-                            class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 text-darkgreen">
-                            <option value="SMU">SMU</option>
-                            <option value="NTU">NTU</option>
-                            <option value="NUS">NUS</option>
-                            <option value="SMU">SUTD</option>
-                        </select>
-                    </div>
-
-                    <button type="submit"
-                        class="w-full text-white bg-darkgreen hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-green-600 dark:hover:bg-green-700 text-darkgreen">
-                        Signup >
-                    </button>
-                </form>
-            </div>
-            <div class="pl-10 rightcard w-1/2 flex-1">
-                <el-carousel height="auto" :interval="5000" arrow="always">
-                    <el-carousel-item style="height: 100vh" v-for="image in images" :key="image">
-                        <el-image style="width: 100%; height: 100%" :key="image" :src="image" :fit="fill" />
-                    </el-carousel-item>
-                </el-carousel>
-            </div>
+        
+    
+    <div class="coverBg rellax h-screen absolute bg-black overflow-x-hidden" >
+        <div class="imagesContainer flex h-full w-auto opacity-50">
+            <img class="inline-block object-cover w-full" v-for="image, idx in images" :src="image" :key="idx">
         </div>
     </div>
+
+    <div data-rellax-speed="3" class="rellax content relative z-10 flex justify-center items-center min-h-screen">
+
+        <div class="loginWrapper w-3/4 lg:w-1/2 xl:w-1/3 flex flex-col justify-center gap-4">
+            <div class="copyWriting">
+                <Transition mode="out-in" name="swing">
+                    <h1 v-if="heroShown == 'hello'" key="128121" class="text-lightgreen heroText"><div class="wave inline-block">👋</div> Students,<br> Welcome to <br> UniExplorers</h1>
+                    <h1 v-else key="3891893" class="text-lightgreen heroText inline-block">Effortless <br> Exchange <br> Exploration</h1>
+                </Transition>
+
+                <!-- <p class="inline-block basis-1/2 text-lightgreen text-3xl pt-8">Find the University of Your Dreams</p> -->
+            </div>
+            <div class="card bg-lightgreen p-8 rounded-lg ">
+                <loginForm/>
+            </div>
+        </div>
+
+        
+    </div>
+    
+    <div data-rellax-speed="7" class="rellax moreCopyContent min-h-screen bg-darkgreen">
+        <!-- TODO: Add more copy writing content -->
+        EYO BOB
+    </div>
+
+        <!-- <div class="pl-10 rightcard w-1/2 flex-1">
+            <el-carousel height="auto" :interval="5000" arrow="always">
+                <el-carousel-item style="height: 100vh" v-for="image in images" :key="image">
+                    <el-image style="width: 100%; height: 100%" :key="image" :src="image" :fit="fill" />
+                </el-carousel-item>
+            </el-carousel>
+        </div> -->
 </template>
   
 <script setup>
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
+import loginForm from '@/components/loginForm.vue'
+import Rellax from 'rellax'
+
+onMounted(() => {
+    let rellax = new Rellax('.rellax');
+})
 
 const isLoginMode = ref(true);
+var heroShown = ref('hello')
+
+
 
 const images = import.meta.glob('@/assets/universities/*.png', { import: 'default', eager: true });
 
 function toggleMode(loginMode) {
     isLoginMode.value = loginMode;
 }
+
+function swapHero() {
+    console.log('swapping', heroShown.value)
+    if (heroShown.value == 'hello') {
+        heroShown.value = 'bye'
+    } else {
+        heroShown.value = 'hello'
+    }
+}
+
+setInterval(swapHero, 4500)
+
+
 </script>
-  
+
 <style scoped>
-/* CSS styles for the component */
+
+.swing-enter-active {
+    animation: swing-in 0.8s cubic-bezier(0.175, 0.885, 0.320, 1.275) both;
+
+}
+.swing-leave-active {
+    animation: swing-out 0.8s cubic-bezier(0.600, -0.280, 0.735, 0.045) both;
+}
+
+.imagesContainer {
+    transform: translateX(0%);
+}
+
+.wave {
+    transform-origin: 70% 70%;  
+    animation: wiggle 1.5s cubic-bezier(0.445, 0.050, 0.550, 0.950) infinite both;
+}
+
+
+@keyframes wiggle {
+    0% { transform: rotate( 10.0deg) }
+   10% { transform: rotate(24.0deg) } 
+   20% { transform: rotate(2.0deg) }
+   30% { transform: rotate(24.0deg) }
+   40% { transform: rotate(6.0deg) }
+   50% { transform: rotate(20.0deg) }
+   60% { transform: rotate( 10.0deg) }
+  100% { transform: rotate( 10.0deg) }
+}
+
+
+@keyframes swing-in {
+  0% {
+    -webkit-transform: rotateX(-70deg);
+            transform: rotateX(-70deg);
+    -webkit-transform-origin: bottom;
+            transform-origin: bottom;
+    opacity: 0;
+  }
+  100% {
+    -webkit-transform: rotateX(0);
+            transform: rotateX(0);
+    -webkit-transform-origin: bottom;
+            transform-origin: bottom;
+    opacity: 1;
+  }
+}
+
+@keyframes swing-out {
+  0% {
+    -webkit-transform: rotateX(0deg);
+            transform: rotateX(0deg);
+    -webkit-transform-origin: top;
+            transform-origin: top;
+    opacity: 1;
+  }
+  100% {
+    -webkit-transform: rotateX(70deg);
+            transform: rotateX(70deg);
+    -webkit-transform-origin: top;
+            transform-origin: top;
+    opacity: 0;
+  }
+}
+
+/* ----------------------------------------------
+ * Generated by Animista on 2023-9-23 12:39:56
+ * Licensed under FreeBSD License.
+ * See http://animista.net/license for more info. 
+ * w: http://animista.net, t: @cssanimista
+ * ---------------------------------------------- */
+
+/**
+ * ----------------------------------------
+ * animation swing-in-bottom-bck
+ * ----------------------------------------
+ */
+
+
+@keyframes bgPan {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+
 </style>
