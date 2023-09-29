@@ -20,12 +20,12 @@ const router = createRouter({
       component: ExplorePage
     },
     {
-      path: '/unihomepage',
+      path: '/uni/:uniName',
       name: 'UniHomePage',
       component: UniHomepage
     },
     {
-      path: '/profilepage',
+      path: '/profile/:handle',
       name: 'ProfilePage',
       component: ProfilePage
     },
@@ -37,6 +37,16 @@ const router = createRouter({
     {
       path: "/AMApage",
       name: "AMA",
+      component: AMAPage
+    },
+    {
+      path: '/uni/:uniName/discussions',
+      name: 'uniDiscussions',
+      component: DiscussionPage
+    },
+    {
+      path: "/uni/:uniName/discussions/:thread",
+      name: "uniDiscussionsThread",
       component: AMAPage
     },
   ]
