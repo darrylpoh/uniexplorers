@@ -15,3 +15,22 @@
   font-weight: normal;
   min-height: 100vh;
 }
+
+@layer components {
+  .heroText {
+    @apply font-caudex text-5xl md:text-7xl xl:text-6xl font-bold text-darkgreen
+  }
+
+  .textInput {
+    @apply bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400;
+  }
+
+  .dialogWrapper {
+    @apply absolute z-10 backdrop-blur bg-darkgreen/50 w-screen min-h-screen flex justify-center items-center
+  }
+
+  .cardWhite {
+    @apply rounded-lg bg-white p-4 border-2 border-lightgrey
+  }
+
+}

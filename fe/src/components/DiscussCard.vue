@@ -1,6 +1,6 @@
 <template>
   <div class="discuss-card card rounded-xl bg-white flex flex-col items-start border-2 text-darkgreen">
-      <router-link :to="title">
+      <router-link :to="'discussions/' + title.replaceAll(' ', '-').toLowerCase()">
       <div class="titleTimestamp flex gap-2 w-fit pr-4 border-b-[1.5px] border-darkgreen mb-3">
         <h2 class="discuss-title font-bold text-lg inline">{{ title }}</h2> 
         <div class="statsTime inline-flex items-center">

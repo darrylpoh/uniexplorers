@@ -35,7 +35,7 @@
 <template>
     <label :class="checked ? 'active scale-105 text-darkgreen stroke-[0.5px] stroke-darkgreen' : ''" class="hover:scale-105 hover:text-darkgreen hover:stroke-[0.5px] hover:stroke-darkgreen transition-all max-w-fit pr-2 h-7 text-lightgrey flex flex-row items-center gap-2 select-none">
         <div class="h-full"><input class="text-darkgreen focus:ring-0" type="checkbox" :id="label" v-model="model" :value="value" :checked="checked" @change="checkBoxUpdate"> </div>
-        <span :class="mq.lgPlus ? 'text-base' : 'text-sm'" class="label min-w-max text-base text-center">{{ label }}</span>
+        <span :class="mq.lgPlus ? 'text-base' : (mq.mdPlus ? 'text-sm' : 'text-xs')" class="label min-w-max text-base text-center">{{ label }}</span>
     </label>
 </template>
 
