@@ -7,6 +7,8 @@ import DiscussionPage from '../views/DiscussionPage.vue'
 import AMAPage from '../components/AMAPage.vue'
 import ExploreCitiesPage from '../views/ExploreCitiesPage.vue'
 
+import {useAuthStore} from '@/stores'
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -55,7 +57,29 @@ const router = createRouter({
       name: 'ExploreCitiesPage',
       component: ExploreCitiesPage
     },
+
+    // Otherwise, redirect to home
+    {
+      path: '/:pathMatch(.*)*',
+      redirect: '/'
+    }
   ]
 })
+
+router.beforeEach(async (to) => {
+  // redirect to login page if not logged in and trying to access a restricted page
+  const publicPages = ['/'];
+  const authRequired = !publicPages.includes(to.path);
+  const auth = useAuthStore();
+
+  if (authRequired && !auth.user) {
+      auth.returnUrl = to.fullPath;
+      return '/login';
+  }
+  
+  if (auth.user && to.path == '/') {
+    return '/explore'
+  }
+});
 
 export default router
