@@ -1,6 +1,8 @@
 const db = require('../db/knex');
 const path = require('path');
+const NodeCache = require('node-cache');
 const {authenticateToken} = require('../modules/jwt_utils.js');
+const {Trie} = require('../modules/autocomplete.js');
 
 module.exports = app => {
     app.route('/universities')
@@ -53,7 +55,28 @@ module.exports = app => {
                     res.json(results)
                 }
             )
-        })
+        });
+
+    app.route('/universities/name/:name')
+        .get(async (req, res) => {
+            const { name } = req.params;
+            db
+                .select()
+                .from('university')
+                .where({name})
+                .first()
+                .then(university => {
+                    res.json(university)
+                })
+                .catch(err => res
+                    .status(404)
+                    .json({
+                        success: false,
+                        message: 'university does not exist',
+                        stack: err.stack,
+                    })
+                )
+        });
 
     app.route('/universities/image/:name/')
         .get(async (req, res) => {
@@ -98,5 +121,38 @@ module.exports = app => {
                         stack: err.stack,
                     })
                 );
+        })
+
+    var cache = {};
+
+    const trieCache = async (req, res, next) => {
+        if (!cache['trie']) {
+            // console.log("Generating trie")
+            const unis = await db
+                .select('name')
+                .from('university')
+                .pluck('name');
+
+            // const numReturn = req.params.count;
+
+            // generate trie
+            let t = new Trie();
+            unis.forEach((uni) => t.insert(uni));
+
+            cache['trie'] = t;
+            // console.log("Trie stored into cache");
+        }
+        
+        next();
+    }
+
+    app.route('/universities/search/:searchTerm')
+        .get(trieCache, async (req, res) => {
+            // pull all uni names
+            const prefix = req.params.searchTerm;
+
+            t = cache['trie'];
+
+            res.json(t.suggest(prefix));
         })
 }
