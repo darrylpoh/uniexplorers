@@ -10,11 +10,42 @@ module.exports = app => {
             const user = await db.select().from('user').where('email', jwtEmail).first(); // get user
             
             if (user.is_admin) {
-                var reviews = await db.select().from('review');
+                db
+                    .select()
+                    .from('review')
+                    .then(
+                        results => {
+                            res.json(results)
+                        }
+                    )
+                    .catch(err => res
+                        .status(404)
+                        .json({
+                            success: false,
+                            message: 'review database query failed',
+                            stack: err.stack,
+                        })
+                    );
             } else {
                 const user_email = user.email;
                 // console.log('User goes to', uni_name);
-                var reviews = await db.select().from('review').where('user_email', user_email);
+                db
+                    .select()
+                    .from('review')
+                    .where('user_email', user_email)
+                    .then(
+                        results => {
+                            res.json(results)
+                        }
+                    )
+                    .catch(err => res
+                        .status(404)
+                        .json({
+                            success: false,
+                            message: 'review database query failed',
+                            stack: err.stack,
+                        })
+                    );
             }
             
             res.json(reviews);

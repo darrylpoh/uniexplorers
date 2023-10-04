@@ -8,12 +8,25 @@ module.exports = app => {
             const user = await db.select().from('user').where('email', req.jwt_object.email).first(); // get user
             
             if (user.is_admin) {
-                var user_obj = await db.select().from('user');
+                db
+                    .select()
+                    .from('user')
+                    .then(
+                        results => {
+                            res.json(results)
+                        }
+                    )
+                    .catch(err => res
+                        .status(404)
+                        .json({
+                            success: false,
+                            message: 'user database query failed',
+                            stack: err.stack,
+                        })
+                    );
             } else {
-                var user_obj = user;
+                res.json(user);
             }
-            
-            res.json(user_obj);
         })
         .post(authenticateToken, async (req, res) => {
             // hash password

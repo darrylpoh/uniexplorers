@@ -10,11 +10,42 @@ module.exports = app => {
             const user = await db.select().from('user').where('email', jwtEmail).first(); // get user
             
             if (user.is_admin) {
-                var threads = await db.select().from('uni_forum_comment');
+                db
+                    .select()
+                    .from('uni_forum_comment')
+                    .then(
+                        results => {
+                            res.json(results)
+                        }
+                    )
+                    .catch(err => res
+                        .status(404)
+                        .json({
+                            success: false,
+                            message: 'uni forum comment database query failed',
+                            stack: err.stack,
+                        })
+                    );
             } else {
                 const user_email = user.email;
                 // console.log('User goes to', uni_name);
-                var threads = await db.select().from('uni_forum_comment').where('user_email', user_email);
+                db
+                    .select()
+                    .from('uni_forum_comment')
+                    .where('user_email', user_email)
+                    .then(
+                        results => {
+                            res.json(results)
+                        }
+                    )
+                    .catch(err => res
+                        .status(404)
+                        .json({
+                            success: false,
+                            message: 'uni forum comment database query failed',
+                            stack: err.stack,
+                        })
+                    );
             }
             
             res.json(threads);

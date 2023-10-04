@@ -153,6 +153,22 @@ module.exports = app => {
 
             t = cache['trie'];
 
-            res.json(t.suggest(prefix));
+            let suggestions = t.suggest(prefix);
+
+            db
+                .select()
+                .from('university')
+                .whereIn('name', suggestions)
+                .then(universities =>
+                    res.json(universities)
+                )
+                .catch(err => res
+                    .status(404)
+                    .json({
+                        success: false,
+                        message: 'universities not found',
+                        stack: err.stack,
+                    })
+                );
         })
 }

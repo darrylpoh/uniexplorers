@@ -10,9 +10,40 @@ module.exports = app => {
             const user = await db.select().from('user').where('email', jwtEmail).first(); // get user
             
             if (user.is_admin) {
-                var uniUsers = await db.select().from('uni_user');
+                db
+                    .select()
+                    .from('uni_user')
+                    .then(
+                        results => {
+                            res.json(results)
+                        }
+                    )
+                    .catch(err => res
+                        .status(404)
+                        .json({
+                            success: false,
+                            message: 'user database query failed',
+                            stack: err.stack,
+                        })
+                    );
             } else {
-                var uniUsers = await db.select().from('uni_user').where('user_email', jwtEmail);
+                db
+                    .select()
+                    .from('uni_user')
+                    .where('user_email', jwtEmail)
+                    .then(
+                        results => {
+                            res.json(results)
+                        }
+                    )
+                    .catch(err => res
+                        .status(404)
+                        .json({
+                            success: false,
+                            message: 'user database query failed',
+                            stack: err.stack,
+                        })
+                    );
             }
             
             res.json(uniUsers);
