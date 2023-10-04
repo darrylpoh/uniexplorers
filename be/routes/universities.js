@@ -1,4 +1,5 @@
 const db = require('../db/knex');
+const path = require('path');
 const {authenticateToken} = require('../modules/jwt_utils.js');
 
 module.exports = app => {
@@ -52,5 +53,50 @@ module.exports = app => {
                     res.json(results)
                 }
             )
-        });
+        })
+
+    app.route('/universities/image/:name/')
+        .get(async (req, res) => {
+            const { name } = req.params;
+            db
+                .select()
+                .from('university')
+                .where({name})
+                .first()
+                .then(university => {
+                    // university exists
+                    if (university) {
+                        // check if image exists
+                        let filename = university.image_filename;
+
+                        if (filename) {
+                            // retrieve from DB
+                            db
+                                .select()
+                                .from('image_file')
+                                .where({filename})
+                                .first()
+                                .then(image => {
+                                    if (image) {
+                                        const dirname = path.resolve();
+                                        const fullFilePath = path.join(dirname, image.filepath);
+                                        return res.type(image.mimetype).sendFile(fullFilePath);
+                                    }
+                                    return res.status(404).send('Image does not exist');
+                                })
+                        } else {
+                            return res.status(404).send('University has no image attached');
+                        }
+                    }
+                }
+                )
+                .catch(err => res
+                    .status(404)
+                    .json({
+                        success: false,
+                        message: 'university does not exist',
+                        stack: err.stack,
+                    })
+                );
+        })
 }

@@ -20,6 +20,7 @@ exports.seed = async (knex) => {
                     continent: 'Asia',
                     gpa: 3.0,
                     flavor_text: 'Far',
+                    image_filename: 'pikachu.png'
                 },
                 {
                     name: 'Test Africa',

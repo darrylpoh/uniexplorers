@@ -39,7 +39,7 @@ exports.up = function(knex) {
             table.string('location').notNullable();
             table.enum('continent', ['Asia', 'Africa', 'North America', 'South America', 'Europe', 'Australia']).defaultTo(null);
             table.float('gpa');
-            table.integer('image_id').index().references('id').inTable('image_file').defaultTo(null);
+            table.string('image_filename').index().references('filename').inTable('image_file').defaultTo(null);
             table.text('flavor_text');
             table.dateTime('created').defaultTo(knex.fn.now());
             table.dateTime('updated');
@@ -51,7 +51,7 @@ exports.up = function(knex) {
             // backend user info
             table.boolean('is_admin').notNullable();
             // default unset user info
-            table.integer('image_id').index().references('id').inTable('image_file').defaultTo(null);
+            table.string('image_filename').index().references('filename').inTable('image_file').defaultTo(null);
             table.boolean('is_alumni').defaultTo(false);
             table.integer('year_on_exchange').defaultTo(null);
             table.integer('exchange_duration').defaultTo(null);
