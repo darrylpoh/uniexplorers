@@ -20,7 +20,8 @@
       return {
         results : [],
         filtered : false,
-        error : "NO RESULTS :("
+        error : "NO RESULTS :(",
+        showfilter : false
       }
     },
     components : {
@@ -29,6 +30,9 @@
       MqResponsive
     },
     methods : {
+      toggleFilter(e) {
+        this.showfilter = !this.showfilter
+      },
       updateSpacer(width) {
         console.log(width)
         document.getElementById('SPACER').style.width = `${width}px`;
@@ -38,6 +42,10 @@
         // if (!Object.values(filters).every((category) => {!Boolean(category.length) || category == '4.00'})) {
         //   return;
         // }
+
+        if (this.mq.smMinus) {
+          this.toggleFilter()
+        }
         this.filtered = true;
         console.log(filters)
         let query = '';
@@ -77,12 +85,12 @@
             return val.name
           })
           this.results = res.data;
-          // this.results.forEach((ele, idx) => {
-          //   if (!returned.includes(ele.name)) {
-          //     console.log('not found')
-          //     this.results.splice(idx, 1);
-          //   }
-          // })
+          this.results.forEach((ele, idx) => {
+            if (!returned.includes(ele.name)) {
+              console.log('not found')
+              this.results.splice(idx, 1);
+            }
+          })
         })
       }
     }
@@ -91,21 +99,36 @@
 
 <template>
 <!-- right-[6.25%] -->
-    <div :class="mq.smMinus ? 'flex-col items-center' : 'flex-row justify-center '" class="gap-4 text-darkgreen flex my-4 relative px-8">
+
+<!-- FILTER DISPLAY FOR SM SCREENS -->
+<!-- @scroll.prevent -->
+    <Transition name="slide">
+      <div v-if="showfilter"  id="filter" class="dialogWrapper flex-col items-start pt-8" @click.self="toggleFilter">
+        <!-- [calc(100%-2rem)] -->
+          <div class="filtersm relative cardWhite w-full text-darkgreen grow">
+            <h2 class="text-xl font-bold"> Filter & Sort </h2>
+            <hr class="mb-2"/>
+            <exploreFilter @filter="updateResult" :filtered="filtered"/>
+          </div>
+      </div>
+    </Transition>
+<!-- FILTER DISPLAY FOR SM SCREENS -->
+
+
+    <div :class="mq.smMinus ? 'flex-col items-center px-4' : 'flex-row justify-center px-8'" class="gap-4 text-darkgreen flex my-4 relative">
       <MqResponsive target="md+">
         <div id="filter" class="rounded-xl h-fit w-fit bg-white outline outline-1 outline-darkgreen mx-2 p-4 flex flex-col gap-2">
           <exploreFilter @filter="updateResult" @filterWidth="updateSpacer" :filtered="filtered"/>
         </div>
       </MqResponsive>
 
-      <MqResponsive target="sm-" class="w-full h-10 flex items-center" style="outline: red dashed 1px;">
+      <MqResponsive target="sm-" class="w-full h-10 flex items-center gap-2">
           <!-- TODO: IMPLEMENT V MODEL -->
-          <input type="text" class="relative top-2 h-9 inline text-base rounded-xl w-full pl-4 text-black" placeholder="University?" v-model="search">
-          <button @click="" class="flex gap-2 bg-white text-darkgreen outline outline-1 py-1 px-3 ml-2 rounded-lg max-h-full w-fit float-left transition-all hover:scale-105 hover:outline-2 hover:outline-offset-2 active:brightness-90 active:scale-100 active:outline-offset-0">
-            <span class="inline">Filter</span>
-          </button>
-          <button class="rounded-xl outline outline-1 outline-darkgreen bg-white h-fit flex justify-center items-center px-2 py-1 ">
-            <svg class="inline m-auto h-6 rotate-90" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="#000000"><path fill-rule="evenodd" clip-rule="evenodd" d="M3.5 2h-1v5h1V2zm6.1 5H6.4L6 6.45v-1L6.4 5h3.2l.4.5v1l-.4.5zm-5 3H1.4L1 9.5v-1l.4-.5h3.2l.4.5v1l-.4.5zm3.9-8h-1v2h1V2zm-1 6h1v6h-1V8zm-4 3h-1v3h1v-3zm7.9 0h3.19l.4-.5v-.95l-.4-.5H11.4l-.4.5v.95l.4.5zm2.1-9h-1v6h1V2zm-1 10h1v2h-1v-2z"/>
+          <input type="text" class="relative top-2 h-full inline text-lg rounded-lg w-full pl-4 text-black " placeholder="University?" v-model="search">
+
+          <button @click="toggleFilter" class="rounded-lg text-darkgreen outline outline-1 outline-darkgreen bg-white h-full flex justify-center items-center px-2 py-1 ">
+            Filter
+            <svg class="inline m-auto h-6 rotate-90 ml-2" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="#000000"><path fill-rule="evenodd" clip-rule="evenodd" d="M3.5 2h-1v5h1V2zm6.1 5H6.4L6 6.45v-1L6.4 5h3.2l.4.5v1l-.4.5zm-5 3H1.4L1 9.5v-1l.4-.5h3.2l.4.5v1l-.4.5zm3.9-8h-1v2h1V2zm-1 6h1v6h-1V8zm-4 3h-1v3h1v-3zm7.9 0h3.19l.4-.5v-.95l-.4-.5H11.4l-.4.5v.95l.4.5zm2.1-9h-1v6h1V2zm-1 10h1v2h-1v-2z"/>
             </svg>
           </button>
       </MqResponsive>
@@ -140,5 +163,40 @@
   opacity: 0;
   transform: translateY(10%);
 }
+
+.slide-enter-active {
+  /* transition: all 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940); */
+  animation: slide-in-bottom 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+}
+.slide-leave-active {
+  /* transition: all 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940); */
+  animation: slide-out-bottom 0.5s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
+}
+
+
+
+
+@keyframes slide-out-bottom {
+  0% {
+    -webkit-transform: translateY(0);
+            transform: translateY(0);
+  }
+  100% {
+    -webkit-transform: translateY(100%);
+            transform: translateY(100%);
+  }
+}
+
+@keyframes slide-in-bottom {
+  0% {
+    -webkit-transform: translateY(100%);
+            transform: translateY(100%);
+  }
+  100% {
+    -webkit-transform: translateY(0);
+            transform: translateY(0);
+  }
+}
+
 
 </style>

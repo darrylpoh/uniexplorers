@@ -1,13 +1,20 @@
 <script>
     import tags from '@/components/tags.vue'
+    import axios from 'axios'
     export default {
         name: 'uniCards',
         components : {
             tags
         },
+        mounted() {
+            axios.get(import.meta.env.VITE_BACKEND + '/images/pikachu.png', {responseType : 'blob'}).then(res => {
+                this.img = URL.createObjectURL(new Blob([res.data]))
+            })
+        },
         data() {
             return {
-                name : 'BOB'
+                name : 'BOB',
+                img : ''
             }
         },
         props : {
@@ -19,8 +26,8 @@
 
 <template>
     <!-- TODO: Dyanmically change width-->
-<div :class="mq.mdPlus ? 'max-w-[50vw]' : ''" class="card rounded-xl min-w-min h-min bg-white flex items-center outline outline-1 outline-darkgreen text-darkgreen transition-all hover:scale-[102%]  hover:cursor-pointer hover:outline-2 hover:outline-offset-2 active:scale-100 active:brightness-90 active:outline-offset-0">
-    <img v-if="mq.lgPlus" alt="UNI HERE" class="w-48 h-48 flex-none" style="outline: red dashed 1px;">
+<div @click="$router.push('/uni/' + this.uniData.name.replaceAll(' ', '-').toLowerCase())" :class="mq.mdPlus ? 'max-w-[50vw]' : ''" class="card rounded-xl min-w-min h-min bg-white flex items-center outline outline-1 outline-darkgreen text-darkgreen transition-all hover:scale-[102%]  hover:cursor-pointer hover:outline-2 hover:outline-offset-2 active:scale-100 active:brightness-90 active:outline-offset-0">
+    <img v-if="mq.lgPlus" :src="img" alt="UNI HERE" class="w-48 h-48 flex-none">
     <div class="info flex flex-1 flex-col my-2 mx-4">
         <h2 :class="mq.xlPlus ? 'w-3/4' : 'w-full', mq.lgPlus ? 'text-xl' : 'text-base'" class="font-bold border-b-2"> {{ uniData.name }} </h2>
         <div :class="mq.lgPlus ? 'text-sm' : 'text-xs'" class="TRAITS min-w-min flex flex-row gap-x-4 my-2 mx-2">
