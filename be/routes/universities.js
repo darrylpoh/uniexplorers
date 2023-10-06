@@ -133,11 +133,14 @@ module.exports = app => {
                 .from('university')
                 .pluck('name');
 
+            let uni_words = [];
+            unis.forEach((uni) => uni_words.push(...uni.split(" ")))
+
             // const numReturn = req.params.count;
 
             // generate trie
             let t = new Trie();
-            unis.forEach((uni) => t.insert(uni));
+            uni_words.forEach((uni_word) => t.insert(uni_word));
 
             cache['trie'] = t;
             // console.log("Trie stored into cache");
@@ -149,16 +152,29 @@ module.exports = app => {
     app.route('/universities/search/:searchTerm')
         .get(trieCache, async (req, res) => {
             // pull all uni names
-            const prefix = req.params.searchTerm;
+            const search = req.params.searchTerm;
+            let searchArr = search.split(" ");
+
+            console.log('searchArr: ', searchArr)
 
             t = cache['trie'];
 
-            let suggestions = t.suggest(prefix);
+            let suggestions = [];
+            searchArr.forEach((split_word) => suggestions.push(...t.suggest(split_word)))
+
+            console.log('suggestions: ', suggestions)
 
             db
                 .select()
                 .from('university')
-                .whereIn('name', suggestions)
+                // queryBuilder.where('name', 'ilike', `%${reqName}%`);
+                // .whereIn('name', suggestions)
+                // .whereIn("name", "ilike", )
+                .where((builder) => {
+                    for (let suggestion of suggestions) {
+                        builder.orWhere('name', 'ilike', `%${suggestion}%`)
+                    }
+                })
                 .then(universities =>
                     res.json(universities)
                 )

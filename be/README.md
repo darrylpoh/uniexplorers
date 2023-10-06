@@ -11,6 +11,23 @@ HOST=db
 PG_PORT=5432
 ```
 
+Don't forget to add the `TOKEN_SECRET` too
+
+## Running the backend
+```bash
+docker-compose up -d --build
+```
+
+Run it again if the database doesn't seed properly, or if the database has been updated
+
+
+## Bringing the backend down
+```bash
+docker-compose down -v
+```
+
+Bring it down if there are database schema changes to purge existing files
+
 ## Routes
 
 ### `/`
