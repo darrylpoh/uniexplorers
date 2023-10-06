@@ -1,7 +1,10 @@
 .DS_Store
 
 # Data
-/data
+populate_db/data
+
+# Populate venv
+populate_db/backend_env
 
 # Images
 /images
