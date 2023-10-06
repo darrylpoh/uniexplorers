@@ -183,7 +183,6 @@ for (let i=0; i<reviews.length; i++) {
     </div>
     <ctaBanner class="mt-12 md:mt-20"></ctaBanner>
 
-    <myFooter />
   </div>
 </template>
   
