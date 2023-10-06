@@ -3,22 +3,32 @@
   import uniCards from '../components/uniCards.vue';
   import exploreFilter from '../components/exploreFilter.vue';
   import { MqResponsive } from "vue3-mq";
+  import { useSearchStore } from '@/stores/searchStore'
 
   export default {
     name: 'ExplorePage',
+    setup() {
+      const searchStore = useSearchStore()
+      return { searchStore }
+    },
     mounted() {
-      axios.get(import.meta.env.VITE_BACKEND + '/universities').then((res) => {
-        this.results = res.data
-      }).catch((err) => {
-          if (err.code == 'ERR_NETWORK') {
-            this.error = "DB Not Connected..."
-          }
-        })
+
+      if (this.searchStore.searchResults.length == 0) {
+        axios.get(import.meta.env.VITE_BACKEND + '/universities').then((res) => {
+          this.searchStore.setSearchResults(res.data)
+        }).catch((err) => {
+            if (err.code == 'ERR_NETWORK') {
+              this.error = "DB Not Connected..."
+            }
+          })
+      } else {
+        this.results = this.searchStore.searchResults
+      }
+
     },
     inject: ["mq"],
     data() {
       return {
-        results : [],
         filtered : false,
         error : "NO RESULTS :(",
         showfilter : false
@@ -34,7 +44,7 @@
         this.showfilter = !this.showfilter
       },
       updateSpacer(width) {
-        console.log(width)
+        // console.log(width)
         document.getElementById('SPACER').style.width = `${width}px`;
       },
       updateResult(filters) {
@@ -47,7 +57,7 @@
           this.toggleFilter()
         }
         this.filtered = true;
-        console.log(filters)
+
         let query = '';
         for (var category in filters) {
 
@@ -80,11 +90,12 @@
 
         }
 
+        this.searchStore.setSearchQuery(query)
+
         axios.get(import.meta.env.VITE_BACKEND + '/universities' + query).then((res) => {
           const returned = res.data.map((val, idx) => {
             return val.name
           })
-          this.results = res.data;
           this.results.forEach((ele, idx) => {
             if (!returned.includes(ele.name)) {
               console.log('not found')
@@ -133,18 +144,18 @@
           </button>
       </MqResponsive>
 
-      <div :class="mq.lgPlus ? 'w-auto' : 'w-full'" class="RESULTS rounded-xl flex justify-center gap-2 min-w-[50vw] min-h-[50vh]">
+      <div :class="mq.lgPlus ? 'w-auto' : 'w-full'" class="RESULTS rounded-xl flex flex-col justify-start gap-2 min-w-[50vw] min-h-[50vh]">
         
+        <div class="text-lg font-bold">
+          Showing {{ filtered ? searchStore.searchResults.length : `All (${searchStore.searchResults.length})` }} Results
+        </div>
         <transition-group name="list"  mode="out-in" tag="div" class="flex flex-col gap-3">
-          <div class="text-lg font-bold">
-            Showing {{ filtered ? results.length : `All (${results.length})` }} Results
-          </div>
-            <div v-for="uni in results" v-bind:key="uni.name">
+            <div v-for="uni in searchStore.searchResults" v-bind:key="uni.name">
               <uniCards :uniData="uni"/>
             </div>
         </transition-group>
 
-        <div v-if="results.length == 0" class="w-full h-full flex justify-center items-center">
+        <div v-if="searchStore.searchResults.length == 0" class="w-full h-full flex justify-center items-center">
           <span class="text-7xl font-bold">{{ error }}</span>
         </div>
       </div>
