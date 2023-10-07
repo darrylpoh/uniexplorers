@@ -3,6 +3,7 @@
   import { MqResponsive } from "vue3-mq";
   import axios from 'axios'
   import { useSearchStore } from '@/stores/searchStore'
+  import { useAuthStore } from '@/stores';
   import textSearch from "./textSearch.vue";
 
   export default {
@@ -12,7 +13,7 @@
       textSearch
     },
     data() {
-
+      // authStore: useAuthStore()
     },
     methods : {
       goToProfile() {
