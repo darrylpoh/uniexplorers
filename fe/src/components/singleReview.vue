@@ -26,8 +26,8 @@ function onClickShow() {
 		<div class="lg:basis-11/12 mb-3">
 			<p class="text-gray-500 text-sm md:text-md">{{ comment }}</p>
 			
-			<p class="mt-2 font-semibold underline underline-offset-4 text-gray-700" v-if="!showmore" @click="onClickShow">Show More</p>
-			<p class="mt-2 font-semibold underline underline-offset-4 text-gray-700" v-else @click="onClickShow">Show Less</p>
+			<p class="mt-2 font-semibold underline underline-offset-4 text-sm md:text-md text-gray-700 cursor-pointer" v-if="!showmore" @click="onClickShow">Show More</p>
+			<p class="mt-2 font-semibold underline underline-offset-4 text-sm md:text-md text-gray-700 cursor-pointer" v-else @click="onClickShow">Show Less</p>
 		</div>
 	</div>
 </template>

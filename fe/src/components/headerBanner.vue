@@ -3,6 +3,7 @@
   import { MqResponsive } from "vue3-mq";
   import axios from 'axios'
   import { useSearchStore } from '@/stores/searchStore'
+  import { useAuthStore } from '@/stores';
 
   export default {
     name: 'headerBanner',
@@ -16,6 +17,7 @@
         debounceTimeout : null,
         showResults : false,
         searched : false
+        // authStore: useAuthStore()
       }
     },
     methods : {
