@@ -4,15 +4,22 @@ import { defineStore } from 'pinia'
 export const useTagsStore = defineStore('tags', {
   state: () => ({
     tags: {
-      'Business' : 'bluepastel',
-      'Information Systems' : 'greenpastel',
-      'Accountancy' : 'yellowpastel',
-      'Computer Science' : 'red',
+      'Business' : {
+        background : 'bluepastel',
+        font : 'content'
+      },
+      'Information Systems' : {
+        background : 'greenpastel',
+        font : 'content'
+      },
+      'Accountancy' : {
+        background : 'yellowpastel',
+        font : 'white'
+      },
+      'Computer Science' : {
+        background : 'redtw',
+        font : 'white'
+      },
     }
   }),
-  getters: {
-    getColour(state) {
-      return (tag) => {state.tags[tag]}
-    }
-  },
 })

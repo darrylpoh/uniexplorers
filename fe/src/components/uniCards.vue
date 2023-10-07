@@ -26,7 +26,7 @@
 
 <template>
     <!-- TODO: Dyanmically change width-->
-<div @click="$router.push('/uni/' + this.uniData.name.replaceAll(' ', '-').toLowerCase())" :class="mq.mdPlus ? 'max-w-[50vw]' : ''" class="card rounded-xl min-w-min h-min bg-white flex items-center outline outline-1 outline-darkgreen text-darkgreen transition-all hover:scale-[102%]  hover:cursor-pointer hover:outline-2 hover:outline-offset-2 active:scale-100 active:brightness-90 active:outline-offset-0">
+<div @click="$router.push('/uni/' + this.uniData.name.replaceAll(' ', '-').toLowerCase())" class="card xl:max-w-[50vw] rounded-xl min-w-min h-min bg-white flex items-center outline outline-1 outline-darkgreen text-darkgreen transition-all hover:scale-[102%]  hover:cursor-pointer hover:outline-2 hover:outline-offset-2 active:scale-100 active:brightness-90 active:outline-offset-0">
     <img v-if="mq.lgPlus" :src="img" alt="UNI HERE" class="w-48 h-48 flex-none">
     <div class="info flex flex-1 flex-col my-2 mx-4">
         <h2 :class="mq.xlPlus ? 'w-3/4' : 'w-full', mq.lgPlus ? 'text-xl' : 'text-base'" class="font-bold border-b-2"> {{ uniData.name }} </h2>
@@ -58,19 +58,19 @@
         <div v-if="mq.lgPlus" class="h-auto review flex items-center gap-4 mb-2">
             <img class="w-16 h-16 flex-none" src="" alt=""  style="outline: red dashed 1px;">
             <div>
-                <p class="text-sm font-bold italic text-darkgreen">What BOB has to say...</p>
                 <p class="reviewtext text-lightgrey text-sm">
                     “ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut fermentum arcu mauris, id tempor urna pulvinar id. Donec lobortis lacinia quam, eu faucibus ante viverra in. “
-                </p>
+                    <span class="text-sm font-medium "> - Bob, Y2 Exchange Student</span>
+                </p> 
             </div>
         </div>
 
-        <div class="TAGS flex gap-4 items-center h-auto">
+        <div v-if="uniData.tags" class="TAGS flex gap-4 items-center h-auto">
             <svg :class="mq.lgPlus ? 'w-7' : 'w-5'" class="flex-none" viewBox="0 0 33 33" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M19.7094 32.0594C19.2219 32.5469 18.6328 32.7906 17.9422 32.7906C17.2516 32.7906 16.6625 32.5469 16.175 32.0594L0.940625 16.825C0.669792 16.5542 0.486979 16.2698 0.392188 15.9719C0.297396 15.674 0.25 15.3625 0.25 15.0375V2.6875C0.25 1.98333 0.480208 1.40104 0.940625 0.940625C1.40104 0.480208 1.98333 0.25 2.6875 0.25H15.0375C15.3625 0.25 15.6875 0.297396 16.0125 0.392188C16.3375 0.486979 16.6354 0.669792 16.9062 0.940625L32.0594 16.0938C32.574 16.6083 32.8313 17.2109 32.8313 17.9016C32.8313 18.5922 32.574 19.1948 32.0594 19.7094L19.7094 32.0594ZM6.95313 9.025C7.52188 9.025 8.01615 8.8151 8.43594 8.39531C8.85573 7.97552 9.06563 7.48125 9.06563 6.9125C9.06563 6.34375 8.85573 5.84948 8.43594 5.42969C8.01615 5.0099 7.52188 4.8 6.95313 4.8C6.38438 4.8 5.8901 5.0099 5.47031 5.42969C5.05052 5.84948 4.84063 6.34375 4.84063 6.9125C4.84063 7.48125 5.05052 7.97552 5.47031 8.39531C5.8901 8.8151 6.38438 9.025 6.95313 9.025Z" fill="black"/>
             </svg>
             <div class="flex flex-wrap gap-2" >
-                <tags/>
+                <tags :tagName="tag" v-for="tag in uniData.tags.split(', ')"/>
             </div>
         </div>
     </div>
