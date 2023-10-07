@@ -10,6 +10,7 @@
             var width = document.getElementById('filter').offsetWidth;
             this.$emit('filterWidth', width);
         },
+        emits: ['filter', 'filterWidth'],
         components : {
             rangeSlider,
             checkBox
@@ -21,17 +22,16 @@
                 gpa : 4,
                 continent : [],
                 faculty : [],
+                filtered : false,
             }
-        },
-        props : {
-            filtered : Boolean
         },
         methods : {
             doFilter() {
+                this.filtered = true
                 this.$emit('filter', this.$data);
             },
             resetFilter() {
-                this.$router.go()
+                this.$emit('filter', 'reset');
             }
         },
         watch: {
@@ -60,7 +60,7 @@
         </div>
 
 
-        <div :class="mq.lgPlus ? 'text-lg' : 'text-base'" class="font-semibold flex flex-col gap-2">
+        <div :class="mq.lgPlus ? 'text-lg' : 'text-base px-4'" class="font-semibold flex flex-col gap-2">
             <div class="font-semibold">
             Continent
                 <div class="flex flex-col ml-4 min-w-fit">
@@ -76,7 +76,7 @@
                 GPA up to {{ gpa.toFixed(2) }}
                 <!-- <input type="text" :value="gpa.toFixed(2)" @change="(event) => {this.slider = event.target.value / 4 * 200}"> -->
                 <!-- @gpaFilter="(value) => {this.gparaw = value}" -->
-                <rangeSlider v-model="slider" :min="1.23" :max="4" @sliderValue="(value) => this.gparaw = value"/>
+                <rangeSlider v-model="slider" :min="1.23" :max="4" @sliderValue="(value) => this.gparaw = value" @bgStyle=""/>
             </div>
             <div class="font-semibold">
                 Faculty
@@ -87,6 +87,12 @@
                     <checkBox label="Computer Science" value="Computer Science" v-model="faculty"/>
                 </div>
             </div>
+        </div>
+
+        <div v-if="mq.smMinus" class="absolute bottom-0 w-full left-0 p-4 mb-8">
+            <hr/>
+            <button @click="doFilter" class="my-2 h-16 w-full text-lg font-medium">Show Results</button>
+            <button v-if="filtered" @click="resetFilter" class="w-full bg-redtw"> Reset </button>
         </div>
 
 </template>

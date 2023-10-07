@@ -16,27 +16,13 @@
             gap() {return this.max - this.min},
             model:{
                 get() {
-
-                    // if (progress < 0) {
-                    //     this.$emit("update:modelValue", 0);
-                    //     this.$emit("gpaValue", this.gpaMIN)
-                    //     progress = 0
-                    // } else {
-                    //     this.$emit("update:modelValue", this.modelValue);
-                    //     this.$emit("gpaValue", this.modelValue / 200 * 4)
-                    // }
-
-                    // this.bgStyle = `linear-gradient(to right, #1E363E ${progress}%, #ccc ${progress}%)`
-
-                    console.log('get is called', this.modelValue)
                     return this.modelValue;
                 },
                 set(value) {
-                    console.log('set is called')
                     const progress = (value / 200) * 100;
                     const valOUT = progress / 100 * this.gap + this.min;
                     this.bgStyle = `linear-gradient(to right, #1E363E ${progress}%, #ccc ${progress}%)`
-                    this.$emit("update:modelValue", value);
+                    this.$emit("update:modelValue", Number(value));
                     this.$emit("sliderValue", valOUT)
                 }
             }

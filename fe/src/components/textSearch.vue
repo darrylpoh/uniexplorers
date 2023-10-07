@@ -66,7 +66,6 @@
                 return this.performSearch(true)
             },
             unFocus() {
-                console.log('i clicked outside')
                 this.showResults = false
             }
         }

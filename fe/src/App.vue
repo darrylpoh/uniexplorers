@@ -5,7 +5,7 @@ import myFooter from './components/myFooter.vue';
 </script>
 
 <template>
-  <div id="app" :class="{'bg-lightgreen' : $route.path != '/', 'bg-darkgreen' : $route.path == '/'}" class="overflow-auto">
+  <div id="app" :class="{'bg-lightgreen' : $route.path != '/', 'bg-darkgreen' : $route.path == '/'}">
     <headerBanner v-if="$route.path != '/'"/>
     <RouterView />
     <myFooter />

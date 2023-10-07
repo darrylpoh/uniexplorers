@@ -33,4 +33,12 @@
     @apply rounded-lg bg-white p-4 border-2 border-lightgrey
   }
 
+  .wrapper {
+    @apply w-full h-full m-0 p-0 relative
+  }
+
+  .shadow {
+    @apply shadow-[rgba(60,64,67,0.3)_0px_1px_2px_0px,rgba(60,64,67,0.15)_0px_2px_6px_2px];
+  }
+
 }

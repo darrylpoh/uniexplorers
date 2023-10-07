@@ -2,6 +2,7 @@
   import axios from 'axios';
   import uniCards from '../components/uniCards.vue';
   import exploreFilter from '../components/exploreFilter.vue';
+  import textSearch from '../components/textSearch.vue';
   import { MqResponsive } from "vue3-mq";
   import { useSearchStore } from '@/stores/searchStore'
 
@@ -9,7 +10,8 @@
     name: 'ExplorePage',
     setup() {
       const searchStore = useSearchStore()
-      return { searchStore }
+      var filterKey = 0
+      return { searchStore, filterKey }
     },
     mounted() {
 
@@ -37,6 +39,7 @@
     components : {
       uniCards,
       exploreFilter,
+      textSearch,
       MqResponsive
     },
     methods : {
@@ -47,17 +50,7 @@
         // console.log(width)
         document.getElementById('SPACER').style.width = `${width}px`;
       },
-      updateResult(filters) {
-        // TODO: DON'T CALL DB IF NONE IS FILTERED
-        // if (!Object.values(filters).every((category) => {!Boolean(category.length) || category == '4.00'})) {
-        //   return;
-        // }
-
-        if (this.mq.smMinus) {
-          this.toggleFilter()
-        }
-        this.filtered = true;
-
+      queryBuilder(filters) {
         let query = '';
         for (var category in filters) {
 
@@ -90,18 +83,25 @@
 
         }
 
-        this.searchStore.setSearchQuery(query)
+        return query
+      },
+      updateResult(filters) {
 
+        if (this.mq.smMinus) {
+          this.toggleFilter()
+        }
+        this.filtered = true;
+        var query = ''
+
+        if (filters !== 'reset') {
+          query = this.queryBuilder(filters)
+        } else {
+          this.filterKey++
+        }
+
+        this.searchStore.setSearchQuery(query)
         axios.get(import.meta.env.VITE_BACKEND + '/universities' + query).then((res) => {
-          const returned = res.data.map((val, idx) => {
-            return val.name
-          })
-          this.results.forEach((ele, idx) => {
-            if (!returned.includes(ele.name)) {
-              console.log('not found')
-              this.results.splice(idx, 1);
-            }
-          })
+          this.searchStore.setSearchResults(res.data)
         })
       }
     }
@@ -114,12 +114,12 @@
 <!-- FILTER DISPLAY FOR SM SCREENS -->
 <!-- @scroll.prevent -->
     <Transition name="slide">
-      <div v-if="showfilter"  id="filter" class="dialogWrapper flex-col items-start pt-8" @click.self="toggleFilter">
+      <div v-show="showfilter"  id="filter" class="dialogWrapper flex-col items-start pt-8" @click.self="toggleFilter">
         <!-- [calc(100%-2rem)] -->
           <div class="filtersm relative cardWhite w-full text-darkgreen grow">
             <h2 class="text-xl font-bold"> Filter & Sort </h2>
             <hr class="mb-2"/>
-            <exploreFilter @filter="updateResult" :filtered="filtered"/>
+            <exploreFilter :key="filterKey" @filter="updateResult"/>
           </div>
       </div>
     </Transition>
@@ -128,14 +128,15 @@
 
     <div :class="mq.smMinus ? 'flex-col items-center px-4' : 'flex-row justify-center px-8'" class="gap-4 text-darkgreen flex my-4 relative">
       <MqResponsive target="md+">
-        <div id="filter" class="rounded-xl h-fit w-fit bg-white outline outline-1 outline-darkgreen mx-2 p-4 flex flex-col gap-2">
-          <exploreFilter @filter="updateResult" @filterWidth="updateSpacer" :filtered="filtered"/>
+        <div style="box-shadow: rgba(30, 54, 62, 0.3) 0px 2px 4px;" id="filter" class="rounded-xl h-fit w-fit bg-white mx-2 p-4 flex flex-col gap-2">
+          <exploreFilter @filter="updateResult" @filterWidth="updateSpacer"/>
         </div>
       </MqResponsive>
 
       <MqResponsive target="sm-" class="w-full h-10 flex items-center gap-2">
           <!-- TODO: IMPLEMENT V MODEL -->
-          <input type="text" class="relative top-2 h-full inline text-lg rounded-lg w-full pl-4 text-black " placeholder="University?" v-model="search">
+          <textSearch/>
+          <!-- <input type="text" class="relative top-2 h-full inline text-lg rounded-lg w-full pl-4 text-black " placeholder="University?" v-model="search"> -->
 
           <button @click="toggleFilter" class="rounded-lg text-darkgreen outline outline-1 outline-darkgreen bg-white h-full flex justify-center items-center px-2 py-1 ">
             Filter
