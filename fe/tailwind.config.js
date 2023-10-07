@@ -21,8 +21,19 @@ module.exports = {
       greenpastel: '#C9F4AA',
       yellowpastel: '#FDFDBD',
       orange: '#FC513F',
+      pumpkin : '#FAA916',
+      purple : '#6D466B',
+      hotpink : '#DE369D',
+      brown : '#634133',
+      cyan : '#32A287',
+      salmon : '#DF7373',
+      indigo : '#8E94F2'
     },
-    extend: {},
+    extend: {
+      fontSize : {
+        '2xs' : ['0.625rem', '1rem']
+      }
+    },
     fontFamily: {
       poppins: ['Poppins', 'sans-serif'],
       caudex: ['Caudex', 'serif']
@@ -43,6 +54,7 @@ module.exports = {
       'xxl': '1400px',
       // => @media (min-width: 1400px) { ... }
     },
+    
   },
   plugins: [
     require('flowbite/plugin')
