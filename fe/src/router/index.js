@@ -6,6 +6,7 @@ import ProfilePage from '../views/ProfilePage.vue'
 import DiscussionPage from '../views/DiscussionPage.vue'
 import AMAPage from '../components/AMAPage.vue'
 import ExploreCitiesPage from '../views/ExploreCitiesPage.vue'
+import CitiesHomePage from '../views/CitiesHomePage.vue'
 
 import {useAuthStore} from '@/stores'
 
@@ -56,6 +57,11 @@ const router = createRouter({
       path:'/explorecitiespage',
       name: 'ExploreCitiesPage',
       component: ExploreCitiesPage
+    },
+    {
+      path:'/CitiesHomePage',
+      name: 'CitiesHomePage',
+      component: CitiesHomePage
     },
 
     // Otherwise, redirect to home
