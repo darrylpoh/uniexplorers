@@ -142,7 +142,7 @@ module.exports = app => {
 
             // generate trie
             let t = new Trie();
-            uni_words.forEach((uni_word) => t.insert(uni_word));
+            uni_words.forEach((uni_word) => t.insert(uni_word.toLowerCase()));
 
             cache['trie'] = t;
             // console.log("Trie stored into cache");
@@ -156,6 +156,7 @@ module.exports = app => {
             // pull all uni names
             const search = req.params.searchTerm;
             let searchArr = search.split(" ");
+            searchArr = searchArr.map(term => term.toLowerCase())
 
             console.log('searchArr: ', searchArr)
 
@@ -165,6 +166,10 @@ module.exports = app => {
             searchArr.forEach((split_word) => suggestions.push(...t.suggest(split_word)))
 
             console.log('suggestions: ', suggestions)
+
+            if (suggestions.length == 0) {
+                return res.json([])
+            }
 
             db
                 .select()

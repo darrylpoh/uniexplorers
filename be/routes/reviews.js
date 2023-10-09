@@ -1,6 +1,7 @@
 const db = require('../db/knex');
 const {authenticateToken} = require('../modules/jwt_utils.js');
 
+// TODO: review by university sort
 module.exports = app => { 
     app.route('/reviews')
         .get(authenticateToken, async (req, res) => {
