@@ -22,7 +22,9 @@ module.exports = app => {
                 }
             }
 
-            // console.log(taggedUnis);
+            const tags_by_uni = db.select('university_name', db.raw('string_agg(tag_name, \', \') as tags')).from('uni_tag')
+            .groupBy('university_name')
+            .as('TEMPtags')
 
             db.select().from('university').modify(
                 (queryBuilder) => {
@@ -50,7 +52,7 @@ module.exports = app => {
                         queryBuilder.where('location', reqLocation);
                     }
                 }
-            ).then(
+            ).leftJoin(tags_by_uni, 'TEMPtags.university_name', 'university.name').then(
                 (results) => {
                     res.json(results)
                 }
