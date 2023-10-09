@@ -94,7 +94,7 @@ module.exports = app => {
             res.status(200).json({updated: count});
         })
 
-        app.route('/forum/:university')
+    app.route('/forum/threads/:university')
         .get(async (req, res) => {
             const {university} = req.params;
 
