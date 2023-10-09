@@ -112,4 +112,27 @@ module.exports = app => {
                 field: 'name'
             });
         });
+
+    app.route('/users/:university')
+        .get(async (req, res) => {
+            const {university} = req.params;
+
+            db
+                .select()
+                .from('user')
+                .where('university_name', university)
+                .then(
+                    results => {
+                        res.json(results)
+                    }
+                )
+                .catch(err => res
+                    .status(404)
+                    .json({
+                        success: false,
+                        message: 'user database query failed',
+                        stack: err.stack,
+                    })
+                );
+        })
 }
