@@ -23,11 +23,11 @@ export default {
     return {
       GOOGLE_MAP_API_KEY: import.meta.env.VITE_GOOGLE_MAP_API_KEY,
       activeTab: null,
-      university: {},
+      city: {},
     };
   },
   async beforeMount() {
-    this.university.name = 'Singapore Management University'
+    this.city.name = 'Lucerne'
 
     await this.getCoordinates()
     this.nearbyHotelsData = await this.fetchData("lodging");
@@ -38,14 +38,14 @@ export default {
     console.log(this.nearbyRestaurantsData)
     this.activeTab = 'first'
 
-    let query = '?name=Singapore Management University'
-    axios.get(import.meta.env.VITE_BACKEND + '/universities/' + query).then((res) => {
-      this.university = res.data[0]
-    }).catch((err) => {
-      if (err.code == 'ERR_NETWORK') {
-        this.error = "DB Not Connected..."
-      }
-    })
+    // let query = '?name=Singapore Management University'
+    // axios.get(import.meta.env.VITE_BACKEND + '/universities/' + query).then((res) => {
+    //   this.university = res.data[0]
+    // }).catch((err) => {
+    //   if (err.code == 'ERR_NETWORK') {
+    //     this.error = "DB Not Connected..."
+    //   }
+    // })
 
     for (let i = 0; i < this.reviews.length; i++) {
       this.reviews[i].comment_trunc = this.truncate(this.reviews[i].comment, 40)
@@ -62,9 +62,10 @@ export default {
       return words.length > length ? words.slice(0, length).join(' ') + clamp : text;
     },
     async getCoordinates() {
-      const apiUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${this.university.name}&key=${this.GOOGLE_MAP_API_KEY}`;
+      const apiUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${this.city.name}&key=${this.GOOGLE_MAP_API_KEY}`;
       const response = await fetch(apiUrl);
       const data = await response.json();
+      console.log(data);
       if (data.results.length > 0) {
         this.latitude = data.results[0].geometry.location.lat;
         this.longitude = data.results[0].geometry.location.lng;
@@ -77,7 +78,6 @@ export default {
     },
 
     async fetchData(placeType) {
-      // const keyword = placeType !== 'lodging' ? placeType : "";
       const mapping = {'restaurant': 'food', 'tourist_attraction': 'tourist attraction', 'lodging': ''}
       const keyword = mapping[placeType]
 
@@ -131,38 +131,16 @@ export default {
           <img src="../../public/Imperial.png" alt="Imperial Logo" class="university-logo">
         </div>
         <div class="basis-2/3 ml-2 lg:basis-4/12 lg:ml-0">
-          <h2 class="font-bold text-lg lg:text-xl">{{ university.name }}</h2>
-        </div>
-        <div
-          class="basis-full lg:basis-1/2 location-gpa-semester prose-base lg:prose-lg flex gap-2 justify-center md:justify-start md:text-md md:gap-6">
-          <div class="location font-bold">
-            <svg class="svg-icon md:mr-1" viewBox="0 0 20 29" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path
-                d="M10 0C4.47143 0 0 4.5385 0 10.15C0 12.673 0.714285 15.0365 2.01429 17.168C3.37143 19.401 5.15714 21.315 6.52857 23.548C7.2 24.6355 7.68571 25.6505 8.2 26.825C8.57143 27.6225 8.87143 29 10 29C11.1286 29 11.4286 27.6225 11.7857 26.825C12.3143 25.6505 12.7857 24.6355 13.4571 23.548C14.8286 21.3295 16.6143 19.4155 17.9714 17.168C19.2857 15.0365 20 12.673 20 10.15C20 4.5385 15.5286 0 10 0ZM10 14.1375C8.02857 14.1375 6.42857 12.5135 6.42857 10.5125C6.42857 8.5115 8.02857 6.8875 10 6.8875C11.9714 6.8875 13.5714 8.5115 13.5714 10.5125C13.5714 12.5135 11.9714 14.1375 10 14.1375Z"
-                fill="#1E363E" />
-            </svg>
-            {{ university.continent }} • {{ university.location }}
-          </div>
-          <div class="gpa font-bold">
-            <svg class="svg-icon md:mr-1" viewBox="0 0 35 29" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path
-                d="M6.36364 16.4011V22.8456L17.5 29L28.6364 22.8456V16.4011L17.5 22.5556L6.36364 16.4011ZM17.5 0L0 9.66667L17.5 19.3333L31.8182 11.4228V22.5556H35V9.66667L17.5 0Z"
-                fill="black" />
-            </svg>
-            Min. GPA: {{ university.gpa }}
-          </div>
+          <h2 class="font-bold text-lg lg:text-xl">{{ city.name }}</h2>
         </div>
       </div>
 
-      <div class="mx-auto content h-auto lg:flex-nowrap">
-        <UniCarousel />
-      </div>
 
-      <!-- Get to Know Us Section -->
-      <div
+
+       <!-- Find out more about the city -->
+       <div
         class="mt-3 mx-auto px-5 py-5 content rounded-xl bg-white h-auto text-darkgreen flex flex-row flex-wrap lg:flex-nowrap lg:px-8">
         <div class="basis-full md:basis-2/5">
-
           <el-tabs v-model="activeTab" class="nearby-search-tabs" @tab-click="handleClick">
             <el-tab-pane label="Nearby Hotels" name="first">
               <NearbyPlaceTab :data="nearbyHotelsData"/>
@@ -174,9 +152,13 @@ export default {
               <NearbyPlaceTab :data="nearbyRestaurantsData"/>
             </el-tab-pane>
           </el-tabs>
-
         </div>
+      </div>
 
+
+      <!-- Google Map -->
+
+      <div class="mx-auto content h-auto lg:flex-nowrap">
         <div class="basis-full md:basis-3/5 p-5">
           <div class="google-maps">
             <GoogleMap :api-key="GOOGLE_MAP_API_KEY" style="width: 100%; height: 500px" :center="center" :zoom="15">
@@ -184,28 +166,8 @@ export default {
             </GoogleMap>
           </div>
         </div>
-
       </div>
 
-      <!-- Exchangers' Experience Section -->
-      <div class="mt-3 mx-2 px-5 md:px-8 py-5 content rounded-xl bg-white h-auto text-darkgreen flex flex-wrap">
-        <div class="basis-full sm:basis-3/5">
-          <h2 class="font-semibold text-lg md:text-xl">Exchangers' Experience</h2>
-          <hr class="solid">
-
-          <!-- <h2 class="font-semibold text-base lg:text-lg mt-2">All Experiences: Overwhelmingly Positive (100)</h2> -->
-        </div>
-
-        <div class="flex sm:basis-2/5 md:justify-end lg:justify-center md:my-2 lg:my-4">
-          <ReviewModal></ReviewModal>
-        </div>
-
-        <div class="basis-full mt-4 md:mt-8">
-          <div class="grid md:grid-cols-2 sm:grid-cols-1 gap-4">
-            <SingleReview v-for="review in reviews" :key="review" :review="review"></SingleReview>
-          </div>
-        </div>
-      </div>
     </div>
     <CtaBanner class="mt-12 md:mt-20"></CtaBanner>
 
