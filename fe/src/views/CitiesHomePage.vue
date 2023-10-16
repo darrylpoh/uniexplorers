@@ -24,16 +24,20 @@ export default {
       GOOGLE_MAP_API_KEY: import.meta.env.VITE_GOOGLE_MAP_API_KEY,
       activeTab: null,
       city: {},
-      selectedPlace: null, // Add a selectedPlace data property
-      value: null, // Initialize value for the select input
-      data: {}, // Initialize data as an empty object
+      continent: {},
+      selectedPlace: null,
+      value: null,
+      data: {},
       selectedPlaceType: null
     }
   },
   async beforeMount() {
-    this.city.name = 'London'
+    this.city.name = 'Singapore'
+    this.continent.name = 'Asia'
 
     await this.getCoordinates()
+
+    await this.getWikipedia()
 
     var places_dict = {
       atm: 'atm',
@@ -52,21 +56,31 @@ export default {
     for (let place in places_dict) {
       this.data[place] = await this.fetchData(place)
     }
-    console.log(this.data)
 
     for (let i = 0; i < this.reviews.length; i++) {
       this.reviews[i].comment_trunc = this.truncate(this.reviews[i].comment, 40)
     }
 
     this.columns = ['Name', 'Rating', 'Total Ratings']
-    this.width = 400
-    this.height = 400
+    this.width = 300
+    this.height = 300
   },
   methods: {
     truncate(text, length, clamp) {
       clamp = clamp || '...'
       let words = text.split(' ')
       return words.length > length ? words.slice(0, length).join(' ') + clamp : text
+    },
+    capitalizeFirstLetter(string) {
+      if (string.includes('_')) {
+        const words = string.split('_')
+        const capitalizedWords = words.map((word) =>
+          word.toLowerCase().replace(/\b\w/g, (char) => char.toUpperCase())
+        )
+        return capitalizedWords.join(' ')
+      } else {
+        return string.toLowerCase().replace(/\b\w/g, (char) => char.toUpperCase())
+      }
     },
     async getCoordinates() {
       const apiUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${this.city.name}&key=${this.GOOGLE_MAP_API_KEY}`
@@ -83,8 +97,23 @@ export default {
       }
     },
 
+    async getWikipedia() {
+      const wikiUrl = `http://localhost:8080/summary/${this.city.name}`
+      const response = await fetch(wikiUrl)
+      const data = await response.json()
+      if (data.length > 0) {
+        console.log(data)
+        let new_data = data.split(' ')
+        new_data = new_data.splice(0, 40)
+        new_data = new_data.join(' ')
+        this.wiki = new_data + '...'
+      }
+    },
+
     async fetchData(placeType) {
       const mapping = {
+        atm: '',
+        convenience_store: '',
         restaurant: 'food',
         tourist_attraction: 'tourist attraction',
         doctor: 'clinic',
@@ -95,10 +124,9 @@ export default {
       }
       const keyword = mapping[placeType]
 
-      const query = `?keyword=${keyword}&lat=${this.latitude}&lng=${this.longitude}&radius=1000&type=${placeType}`
+      const query = `?keyword=${keyword}&lat=${this.latitude}&lng=${this.longitude}&radius=5000&type=${placeType}`
       const res = await axios.get(import.meta.env.VITE_BACKEND + '/nearbysearch' + query)
       const results = res.data.results
-      // console.log(results);
       let processed_results = []
       for (let i = 1; i < results.length; i++) {
         if (
@@ -131,7 +159,7 @@ export default {
         // If ratings are equal, sort by number of ratings in descending order
         return b.user_ratings_total - a.user_ratings_total
       })
-      processed_results = processed_results.slice(0, 8)
+      processed_results = processed_results.slice(0, 5)
       return processed_results
     }
   },
@@ -152,11 +180,12 @@ export default {
       <div
         class="main card rounded-xl bg-white flex flex-wrap lg:flex-nowrap items-center text-darkgreen"
       >
-        <div class="basis-1/12 mt-2 lg:basis-1/12 lg:mt-0">
-          <img src="../../public/Imperial.png" alt="Imperial Logo" class="university-logo" />
+        <div class="basis-2/3 ml-2 lg:basis-4/12 lg:ml-0 pl-6">
+          <h2 class="font-bold text-lg lg:text-xl">{{ city.name }}, {{ continent.name }}</h2>
         </div>
-        <div class="basis-2/3 ml-2 lg:basis-4/12 lg:ml-0">
-          <h2 class="font-bold text-lg lg:text-xl">{{ city.name }}</h2>
+        <div class="mx-auto content h-auto lg:flex-nowrap px-6">
+          <p class="super-small">{{ wiki }}</p>
+          <a class="super-small" :href="'https://en.wikipedia.org/wiki/' + city.name">Read more</a>
         </div>
       </div>
 
@@ -170,13 +199,13 @@ export default {
             <el-option
               v-for="(placeData, placeType) in this.data"
               :key="placeType"
-              :label="placeType"
               :value="placeType"
               :data="this.data[placeType]"
+              :label="capitalizeFirstLetter(placeType)"
             />
           </el-select>
           <div v-if="filteredPlaceData.length">
-            <NearbyPlaceTab :data="filteredPlaceData" />
+            <NearbyPlaceTab :data="filteredPlaceData" class="nearby-place-table" />
           </div>
         </div>
 
@@ -202,21 +231,14 @@ export default {
 </template>
 
 <style scoped>
-/* CSS styles go here */
-.el-tabs__item.is-active {
-  color: #000 !important;
-}
-
 .main {
   width: 100%;
-  /* Ensure the card takes the full width of the page */
   display: flex;
-  /* justify-content: center; Center horizontally */
   align-items: center;
-  /* Center vertically */
   width: calc(100% - 20px);
   margin: 10px;
   height: 120px;
+  overflow: auto;
 }
 
 .content {
@@ -261,5 +283,13 @@ export default {
 
 hr.solid {
   border-top: 1.5px solid #333;
+}
+
+.super-small {
+  font-size: 12px;
+}
+
+.nearby-place-table {
+  overflow-y: auto;
 }
 </style>
