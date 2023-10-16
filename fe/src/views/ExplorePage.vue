@@ -11,7 +11,8 @@
     setup() {
       const searchStore = useSearchStore()
       var filterKey = 0
-      return { searchStore, filterKey }
+      var otherKey = 9999
+      return { searchStore, filterKey, otherKey }
     },
     mounted() {
 
@@ -97,6 +98,7 @@
           query = this.queryBuilder(filters)
         } else {
           this.filterKey++
+          this.otherKey--
         }
 
         this.searchStore.setSearchQuery(query)
@@ -112,9 +114,8 @@
 <!-- right-[6.25%] -->
 
 <!-- FILTER DISPLAY FOR SM SCREENS -->
-<!-- @scroll.prevent -->
     <Transition name="slide">
-      <div v-show="showfilter"  id="filter" class="dialogWrapper flex-col items-start pt-8" @click.self="toggleFilter">
+      <div v-if="mq.smMinus" v-show="showfilter"  id="filter" class="dialogWrapper flex-col items-start pt-8" @click.self="toggleFilter">
         <!-- [calc(100%-2rem)] -->
           <div class="filtersm relative cardWhite w-full text-darkgreen grow">
             <h2 class="text-xl font-bold"> Filter & Sort </h2>
@@ -125,25 +126,23 @@
     </Transition>
 <!-- FILTER DISPLAY FOR SM SCREENS -->
 
-
     <div :class="mq.smMinus ? 'flex-col items-center px-4' : 'flex-row justify-center px-8'" class="gap-4 text-darkgreen flex my-4 relative">
       <MqResponsive target="md+">
         <div style="box-shadow: rgba(30, 54, 62, 0.3) 0px 2px 4px;" id="filter" class="rounded-xl h-fit w-fit bg-white mx-2 p-4 flex flex-col gap-2">
-          <exploreFilter @filter="updateResult" @filterWidth="updateSpacer"/>
+          <exploreFilter :key="otherKey" @filter="updateResult" @filterWidth="updateSpacer"/>
         </div>
       </MqResponsive>
 
+<!-- FILTER DISPLAY FOR SM SCREENS -->
       <MqResponsive target="sm-" class="w-full h-10 flex items-center gap-2">
-          <!-- TODO: IMPLEMENT V MODEL -->
           <textSearch/>
-          <!-- <input type="text" class="relative top-2 h-full inline text-lg rounded-lg w-full pl-4 text-black " placeholder="University?" v-model="search"> -->
-
           <button @click="toggleFilter" class="rounded-lg text-darkgreen outline outline-1 outline-darkgreen bg-white h-full flex justify-center items-center px-2 py-1 ">
             Filter
             <svg class="inline m-auto h-6 rotate-90 ml-2" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="#000000"><path fill-rule="evenodd" clip-rule="evenodd" d="M3.5 2h-1v5h1V2zm6.1 5H6.4L6 6.45v-1L6.4 5h3.2l.4.5v1l-.4.5zm-5 3H1.4L1 9.5v-1l.4-.5h3.2l.4.5v1l-.4.5zm3.9-8h-1v2h1V2zm-1 6h1v6h-1V8zm-4 3h-1v3h1v-3zm7.9 0h3.19l.4-.5v-.95l-.4-.5H11.4l-.4.5v.95l.4.5zm2.1-9h-1v6h1V2zm-1 10h1v2h-1v-2z"/>
             </svg>
           </button>
       </MqResponsive>
+<!-- FILTER DISPLAY FOR SM SCREENS -->
 
       <div :class="mq.lgPlus ? 'w-auto' : 'w-full'" class="RESULTS rounded-xl flex flex-col justify-start gap-2 min-w-[50vw] min-h-[50vh]">
         
