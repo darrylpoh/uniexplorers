@@ -49,7 +49,7 @@ module.exports = app => {
                     );
             }
             
-            res.json(reviews);
+            // res.json(reviews);
         })
         .post(authenticateToken, async (req, res) => {
             const jwtEmail = req.jwt_object.email;
