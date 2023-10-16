@@ -23,7 +23,11 @@
                 continent : [],
                 faculty : [],
                 filtered : false,
+                tempKey : 439
             }
+        },
+        computed : {
+            gpaFixed() {return this.gpa.toFixed(2)}
         },
         methods : {
             doFilter() {
@@ -32,6 +36,13 @@
             },
             resetFilter() {
                 this.$emit('filter', 'reset');
+                this.slider = 200
+                this.gparaw = 4
+                this.gpa = 4
+                this.continent = []
+                this.faculty = []
+                this.filtered = false
+                this.tempKey++
             }
         },
         watch: {
@@ -63,7 +74,7 @@
         <div :class="mq.lgPlus ? 'text-lg' : 'text-base px-4'" class="font-semibold flex flex-col gap-2">
             <div class="font-semibold">
             Continent
-                <div class="flex flex-col ml-4 min-w-fit">
+                <div :key="tempKey" class="flex flex-col ml-4 min-w-fit">
                     <checkBox label="Asia" value="Asia" v-model="continent"/>
                     <checkBox label="Europe" value="Europe" v-model="continent"/>
                     <checkBox label="North America" value="North America" v-model="continent"/>
@@ -73,10 +84,10 @@
             </div>
             <!-- TODO: MANUALLY EDITABLE GPA -->
             <div class="font-semibold">
-                GPA up to {{ gpa.toFixed(2) }}
+                GPA up to {{ gpaFixed }}
                 <!-- <input type="text" :value="gpa.toFixed(2)" @change="(event) => {this.slider = event.target.value / 4 * 200}"> -->
                 <!-- @gpaFilter="(value) => {this.gparaw = value}" -->
-                <rangeSlider v-model="slider" :min="1.23" :max="4" @sliderValue="(value) => this.gparaw = value" @bgStyle=""/>
+                <rangeSlider :key="tempKey+10" v-model="slider" :min="1.23" :max="4" @sliderValue="(value) => this.gparaw = value" @bgStyle=""/>
             </div>
             <div class="font-semibold">
                 Faculty

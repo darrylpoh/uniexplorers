@@ -1,6 +1,9 @@
 const db = require('../db/knex');
 const bcrypt = require('bcrypt');
-const {authenticateToken} = require('../modules/jwt_utils.js');
+const identicon = require('identicon')
+const fs = require('fs')
+const {authenticateToken, generateAccessToken} = require('../modules/jwt_utils.js');
+const { dir } = require('console');
 
 module.exports = app => {
     app.route('/users')
@@ -28,22 +31,59 @@ module.exports = app => {
                 res.json(user);
             }
         })
-        .post(authenticateToken, async (req, res) => {
+        .post(async (req, res) => {
             // hash password
             const salt = await bcrypt.genSalt(10);
             const hashedPassword = await bcrypt.hash(req.body.password, salt);
             const token = generateAccessToken({email: req.body.email});
+
+            const test = await db.select().from('user').where('email', req.body.email).first();
+
+            if (test) {
+                res.status(409).json({
+                    "status": "Account exists already"
+                })
+                return
+            }
+
+            let dirToWrite = __dirname + `/../images/${req.body.email}.png`
+            let absoluteDir = `images/${req.body.email}.png`
             
             // insert user into db
-            const user = await db('user').insert({
-                email: req.body.email,
-                password: hashedPassword,
-            }).returning('*');
-            
-            res.status(201).json({
-                'user_data': user,
-                'token': token
-            });
+            const buffer = identicon.generateSync({id: req.body.email, size: 150})
+            fs.writeFileSync(dirToWrite, buffer)
+
+            const imageFilename = `${req.body.email}.png`
+            db
+                .insert({
+                    filename: imageFilename,
+                    filepath: `images/${imageFilename}`, 
+                    mimetype: 'image/png', 
+                    size: fs.lstatSync(absoluteDir).size
+                })
+                .into('image_file')
+                .then(() => {
+                    db('user').insert({
+                        email: req.body.email,
+                        password: hashedPassword,
+                        name: req.body.name,
+                        image_filename: imageFilename
+                    })
+                    .returning('*')
+                    .then((user_data) => {
+                            res.status(201).json({
+                                'user_data': user_data,
+                                'token': token
+                            })
+                        }
+                    );
+                    
+                })
+                .catch(err => res.json({
+                    success: false,
+                    message: 'upload failed',
+                    stack: err.stack,
+                }));
         });
     // change password
     app.route('/users/change_password')

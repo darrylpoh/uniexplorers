@@ -48,10 +48,11 @@ exports.up = function(knex) {
             table.string('email').primary().notNullable();
             table.string('name').notNullable();
             table.varchar('password', 255).notNullable();
+            table.string('flavor_text').notNullable().defaultTo("Life-long learner")
             // backend user info
-            table.boolean('is_admin').notNullable();
+            table.boolean('is_admin').notNullable().defaultTo(false);
             // default unset user info
-            table.string('image_filename').index().references('filename').inTable('image_file').defaultTo(null);
+            table.string('image_filename').index().references('filename').inTable('image_file').defaultTo('pikachu.png');
             table.boolean('is_alumni').defaultTo(false);
             table.integer('year_on_exchange').defaultTo(null);
             table.integer('exchange_duration').defaultTo(null);

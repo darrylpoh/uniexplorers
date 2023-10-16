@@ -48,7 +48,7 @@ module.exports = app => {
                     );
             }
             
-            res.json(threads);
+            // res.json(threads);
         })
         .post(authenticateToken, async (req, res) => {
             const jwtEmail = req.jwt_object.email;
