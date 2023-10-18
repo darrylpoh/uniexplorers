@@ -37,8 +37,9 @@ exports.up = function(knex) {
         .createTable('university', (table) => {
             table.string('name').primary();
             table.string('location').notNullable();
-            table.enum('continent', ['Asia', 'Africa', 'North America', 'South America', 'Europe', 'Australia']).defaultTo(null);
-            table.float('gpa');
+            table.enum('continent', ['Asia', 'Africa', 'North America', 'South America', 'Europe', 'Oceania', 'Middle East']).defaultTo(null);
+            table.float('gpa_10_percentile').defaultTo(null);
+            table.float('gpa_90_percentile').defaultTo(null);
             table.string('image_filename').index().references('filename').inTable('image_file').defaultTo('pikachu.png');
             table.text('flavor_text');
             table.dateTime('created').defaultTo(knex.fn.now());

@@ -43,7 +43,7 @@ module.exports = app => {
                         }
                     }
                     if (reqGpa) {
-                        queryBuilder.where('gpa', '<=', reqGpa);
+                        queryBuilder.where('gpa_10_percentile', '>=', reqGpa);
                     }
                     if (reqName) {
                         queryBuilder.where('name', 'ilike', `%${reqName}%`);

@@ -11,6 +11,8 @@ HOST=db
 PG_PORT=5432
 ```
 
+PUT THIS .env INSIDE /populate_db TOO
+
 Don't forget to add the `TOKEN_SECRET` too
 
 ## Running the backend
