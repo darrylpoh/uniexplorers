@@ -15,14 +15,14 @@ exports.seed = async (knex) => {
                     university_name: 'Singapore Management University',
                     duration: 6,
                 },
-                {
-                    university_name: 'National University of Singapore',
-                    duration: 3,
-                },
-                {
-                    university_name: 'National University of Singapore',
-                    duration: 6,
-                },
+                // {
+                //     university_name: 'National University of Singapore',
+                //     duration: 3,
+                // },
+                // {
+                //     university_name: 'National University of Singapore',
+                //     duration: 6,
+                // },
             ])
         }
     )

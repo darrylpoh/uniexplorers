@@ -25,6 +25,7 @@ services:
       POSTGRES_PASSWORD: 'postgres'
     volumes:
       - data:/var/lib/postgresql/data
+  
   seed_migration:
     build:
       context: .
@@ -33,6 +34,13 @@ services:
     depends_on:
       - db
     command: sh -c "npx knex migrate:latest && npx knex seed:run"
+  
+  ingestion:
+    build: ./populate_db
+    depends_on:
+      - db
+      - seed_migration
+    command: python ingest.py  # assuming your script is named ingest.py
   # nginx:
   #   build: ./nginx
   #   ports:

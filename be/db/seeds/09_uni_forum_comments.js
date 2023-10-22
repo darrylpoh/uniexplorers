@@ -18,11 +18,11 @@ exports.seed = async (knex) => {
                     user_email: 'jared@admin.com',
                     comment_text: 'Hello this is an admin test nested comment'
                 },
-                {
-                    thread_id: 2,
-                    user_email: 'jared@notadmin.com',
-                    comment_text: 'Hello this is an non-admin test comment'
-                },
+                // {
+                //     thread_id: 2,
+                //     user_email: 'jared@notadmin.com',
+                //     comment_text: 'Hello this is an non-admin test comment'
+                // },
             ])
         }
     )
