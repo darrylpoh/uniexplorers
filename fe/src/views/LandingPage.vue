@@ -20,10 +20,18 @@
                     <h1 v-else key="3891893" class="text-lightgreen heroText inline-block">Effortless <br> Exchange <br> Exploration</h1>
                 </Transition>
 
-                <!-- <p class="inline-block basis-1/2 text-lightgreen text-3xl pt-8">Find the University of Your Dreams</p> -->
             </div>
-            <div class="card bg-lightgreen p-8 rounded-lg ">
-                <loginForm/>
+            <div class="card bg-lightgreen p-8 rounded-lg">
+                <div class="form-switch-buttons">
+                <button :class="{ 'bg-darkgreen text-white': isLoginMode, 'bg-white text-darkgreen': !isLoginMode }" @click="toggleMode(true)" class="w-1/2 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+                    Login
+                </button>
+                <button :class="{ 'bg-darkgreen text-white': !isLoginMode, 'bg-white text-darkgreen': isLoginMode }" @click="toggleMode(false)" class="w-1/2 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+                    Signup
+                </button>
+                </div>
+                <loginForm v-if="isLoginMode" />
+                <signupForm v-else />
             </div>
         </div>
 
@@ -47,6 +55,7 @@
 <script setup>
 import { onMounted, ref } from 'vue';
 import loginForm from '@/components/loginForm.vue'
+import signupForm from '@/components/signupForm.vue'
 import Rellax from 'rellax'
 
 onMounted(() => {
@@ -210,6 +219,12 @@ function swapImages() {
             transform-origin: top;
     opacity: 0;
   }
+}
+
+.form-switch-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
 }
 
 
