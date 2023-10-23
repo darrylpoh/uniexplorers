@@ -34,6 +34,13 @@ exports.up = function(knex) {
             table.string('mimetype').notNullable();
             table.bigInteger('size').notNullable();
         })
+        .createTable('course_mapping', (table) => {
+            table.increments('id').primary();
+            table.string('course_title').notNullable();
+            table.string('university').notNullable();
+            table.string('country').notNullable();
+            table.string('course_area').notNullable();
+        })
         .createTable('university', (table) => {
             table.string('name').primary();
             table.string('location').notNullable();
@@ -91,7 +98,9 @@ exports.up = function(knex) {
             table.increments('id').primary();
             table.string('university_name').index().references('name').inTable('university');
             table.string('user_email').index().references('email').inTable('user');
+            table.text('forum_title').notNullable();
             table.text('forum_text').notNullable();
+            table.text('forum_text_raw').notNullable()
             table.dateTime('created').defaultTo(knex.fn.now());
             table.dateTime('updated');
         })
@@ -100,7 +109,10 @@ exports.up = function(knex) {
             table.string('user_email').index().references('email').inTable('user');
             table.integer('thread_id').index().references('id').inTable('uni_forum_thread').notNullable();
             table.integer('parent_id').index().references('id').inTable('uni_forum_comment');
+            table.integer('num_likes').defaultTo(0);
+            table.integer('num_dislikes').defaultTo(0);
             table.text('comment_text').notNullable();
+            table.text('comment_text_raw').notNullable();
             table.dateTime('created').defaultTo(knex.fn.now());
             table.dateTime('updated');
         })

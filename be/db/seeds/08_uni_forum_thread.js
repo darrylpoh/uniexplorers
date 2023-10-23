@@ -15,7 +15,16 @@ exports.seed = async (knex) => {
                 { // thread ID 1
                     university_name: 'Singapore Management University',
                     user_email: 'jared@notadmin.com',
-                    forum_text: 'Hello this is an non-admin test post'
+                    forum_title: 'TEST THREAD 1',
+                    forum_text: 'Hello this is an non-admin test post',
+                    forum_text_raw: 'Hello this is an non-admin test post'
+                },
+                { // thread ID 2
+                    university_name: 'Singapore Management University',
+                    user_email: 'jared@admin.com',
+                    forum_title: 'TEST THREAD 2',
+                    forum_text: 'Hello this is an admin test post',
+                    forum_text_raw: 'Hello this is an admin test post'
                 },
             ])
         }
