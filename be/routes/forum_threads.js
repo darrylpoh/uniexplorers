@@ -52,10 +52,16 @@ module.exports = app => {
         })
         .post(authenticateToken, async (req, res) => {
             const jwtEmail = req.jwt_object.email;
+            const reqForumPostTitle = req.body.forum_title;
             const reqForumPostText = req.body.forum_text;
+            const reqForumPostTextRaw = req.body.forum_text_raw;
 
             if (!reqForumPostText) {
                 return res.status(400).send('Missing forum text field');
+            }
+
+            if (!reqForumPostTitle) {
+                return res.status(400).send('Missing forum title field');
             }
 
             const user = await db.select().from('user').where('email', jwtEmail).first();
@@ -65,7 +71,8 @@ module.exports = app => {
             const thread_obj = await db('uni_forum_thread').insert({
                 user_email: user_email,
                 university_name: user_university,
-                forum_text: reqForumPostText
+                forum_text: reqForumPostText,
+                forum_text_raw: reqForumPostTextRaw
             }).returning("*");
 
             res.status(201).json(thread_obj);
@@ -74,6 +81,7 @@ module.exports = app => {
             const jwtEmail = req.jwt_object.email;
             const threadId = req.body.thread_id;
             const newThread = req.body.forum_text;
+            const newThreadRaw = req.body.forum_text_raw;
 
             const user = await db.select().from('user').where('email', jwtEmail).first();
             const threadObj = await db.select().from('uni_forum_thread').where('id', threadId).first();
@@ -88,6 +96,7 @@ module.exports = app => {
 
             const count = await db('uni_forum_thread').where('id', threadId).update({
                 forum_text: newThread,
+                forum_text_raw: newThreadRaw,
                 updated: db.fn.now()
             })
 
@@ -96,24 +105,44 @@ module.exports = app => {
 
     app.route('/forum/threads/:university')
         .get(async (req, res) => {
-            const {university} = req.params;
+            const university_name = req.params.university;
+            // const universityName = 'Your University Name'; // replace this with the desired university name
 
-            db
-                .select()
-                .from('uni_forum_thread')
-                .where('university_name', university)
-                .then(
-                    results => {
-                        res.json(results)
-                    }
+            db('uni_forum_thread')
+                .select(
+                    'uni_forum_thread.id as thread_id',
+                    'uni_forum_thread.forum_title',
+                    'uni_forum_thread.forum_text',
+                    'uni_forum_thread.created as thread_created',
+                    'uni_forum_thread.updated as thread_updated',
                 )
+                // .select(
+                //     'uni_forum_thread.id as thread_id',
+                //     'uni_forum_thread.forum_title',
+                //     'uni_forum_thread.forum_text',
+                //     'uni_forum_thread.created as thread_created',
+                //     'uni_forum_thread.updated as thread_updated',
+                //     'uni_forum_comment.id as comment_id',
+                //     'uni_forum_comment.user_email as comment_user_email',
+                //     'uni_forum_comment.comment_text',
+                //     'uni_forum_comment.num_likes',
+                //     'uni_forum_comment.num_dislikes',
+                //     'uni_forum_comment.created as comment_created',
+                //     'uni_forum_comment.updated as comment_updated',
+                // )
+                // // .from('uni_forum_thread')
+                // .leftJoin('uni_forum_comment', 'uni_forum_thread.id', 'uni_forum_comment.thread_id')
+                .where('uni_forum_thread.university_name', university_name)
+                .orderBy('uni_forum_thread.created', 'desc')
+                .then(data => {
+                    res.json(data)
+                })
                 .catch(err => res
                     .status(404)
                     .json({
                         success: false,
-                        message: 'user database query failed',
-                        stack: err.stack,
-                    })
-                );
+                        message: 'forum thread query failed',
+                        stack: err.stack
+                }))
         })
     };

@@ -4,6 +4,7 @@ from pathlib import Path
 
 UNI_GPAS_XLSX_PATH: Path = Path("ingestion_data/gpas.xlsx")
 UNI_COURSES_CSV_PATH: Path = Path("ingestion_data/data.csv")
+DONE_INDICATOR: Path = Path("./done")
 
 COLUMN_RENAME_MAPPING: Dict[str, str] = {
     "Region": "continent",

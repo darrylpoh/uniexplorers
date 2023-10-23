@@ -104,4 +104,54 @@ module.exports = app => {
 
             res.status(200).json({updated: count});
         });
+    app.route('/forum/comments/:thread_id')
+        .get(async (req, res) => {
+            // list all threads
+            // const jwtEmail = req.jwt_object.email;
+
+            // const user = await db.select().from('user').where('email', jwtEmail).first(); // get user
+                // console.log('User goes to', uni_name);
+
+            const {thread_id} = req.params;
+            db
+                .select()
+                .from('uni_forum_comment')
+                // .where('user_email', user_email)
+                .where('thread_id', thread_id)
+                .then(
+                    // results => {
+                    //     res.json(results)
+                    // }
+                    results => {
+                        const map = {};
+                        results.forEach(comment => {
+                            comment.children = []; // initialize children array for each comment
+                            map[comment.id] = comment;
+                        });
+
+                        // Construct the nested structure
+                        const result = [];
+                        results.forEach(comment => {
+                            if (comment.parent_id === null) {
+                                // Root comment
+                                result.push(comment);
+                            } else if (map[comment.parent_id]) {
+                                // Nested comment
+                                map[comment.parent_id].children.push(comment);
+                            }
+                        });
+
+                        res.json(result)
+                    }
+                )
+                .catch(err => res
+                    .status(404)
+                    .json({
+                        success: false,
+                        message: 'uni forum comment database query failed',
+                        stack: err.stack,
+                    })
+                );
+            }
+        )
 }

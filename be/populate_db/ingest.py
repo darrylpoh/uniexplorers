@@ -1,5 +1,6 @@
 # pip install pandas openpyxl python-dotenv sqlalchemy psycopg2
 import os
+from pathlib import Path
 
 import pandas as pd
 from dotenv import load_dotenv, find_dotenv
@@ -98,8 +99,16 @@ uni_tags_df = uni_tags_df.explode("applicable_to")
 # Rename columns
 uni_tags_df = uni_tags_df.rename(columns=TAG_COLUMN_RENAME_MAPPING)
 
-insert_uni_data(uni_gpas_df, get_connstring())
-insert_tag_data(uni_tags_df, get_connstring())
+try:
+    if not DONE_INDICATOR.is_file():
+        insert_uni_data(uni_gpas_df, get_connstring())
+        insert_tag_data(uni_tags_df, get_connstring())
+
+        DONE_INDICATOR.touch()
+except:
+    print("Ingestion failed")
+
+
 
 
 # print(uni_gpas_df["applicable_to"].unique())
