@@ -6,6 +6,14 @@ UNI_GPAS_XLSX_PATH: Path = Path("ingestion_data/gpas.xlsx")
 UNI_COURSES_CSV_PATH: Path = Path("ingestion_data/data.csv")
 DONE_INDICATOR: Path = Path("./done")
 
+# Course Title,University,Country,Course Area
+COURSE_MAPPING_COLUMN: Dict[str, str] = {
+    "Course Title": "course_title",
+    "University": "university",
+    "Country": "country",
+    "Course Area": "course_area"
+}
+
 COLUMN_RENAME_MAPPING: Dict[str, str] = {
     "Region": "continent",
     "Region/ Country": "location",

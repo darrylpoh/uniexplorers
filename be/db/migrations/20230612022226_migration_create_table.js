@@ -34,6 +34,13 @@ exports.up = function(knex) {
             table.string('mimetype').notNullable();
             table.bigInteger('size').notNullable();
         })
+        .createTable('course_mapping', (table) => {
+            table.increments('id').primary();
+            table.string('course_title').notNullable();
+            table.string('university').notNullable();
+            table.string('country').notNullable();
+            table.string('course_area').notNullable();
+        })
         .createTable('university', (table) => {
             table.string('name').primary();
             table.string('location').notNullable();

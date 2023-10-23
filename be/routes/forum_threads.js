@@ -81,7 +81,7 @@ module.exports = app => {
             const jwtEmail = req.jwt_object.email;
             const threadId = req.body.thread_id;
             const newThread = req.body.forum_text;
-            const newThreadRaw = req.body.forum_text_raw;
+            const newThreadRaw = req.body.forum_text;
 
             const user = await db.select().from('user').where('email', jwtEmail).first();
             const threadObj = await db.select().from('uni_forum_thread').where('id', threadId).first();
@@ -109,40 +109,121 @@ module.exports = app => {
             // const universityName = 'Your University Name'; // replace this with the desired university name
 
             db('uni_forum_thread')
-                .select(
-                    'uni_forum_thread.id as thread_id',
-                    'uni_forum_thread.forum_title',
-                    'uni_forum_thread.forum_text',
-                    'uni_forum_thread.created as thread_created',
-                    'uni_forum_thread.updated as thread_updated',
+            .select(
+                'uni_forum_thread.id as thread_id',
+                'uni_forum_thread.university_name',
+                'uni_forum_thread.forum_title',
+                'uni_forum_thread.forum_text',
+                'uni_forum_thread.forum_text_raw',
+                'uni_forum_thread.created as thread_created',
+                'uni_forum_thread.updated as thread_updated',
+                db.raw('COUNT(DISTINCT uni_forum_comment.id) as comment_count'),
+                db.raw(`
+                (
+                    SELECT CONCAT(u.name, 'Ɠ', c.comment_text) 
+                    FROM uni_forum_comment c
+                    JOIN "user" u ON c.user_email = u.email
+                    WHERE c.thread_id = uni_forum_thread.id 
+                    ORDER BY c.created 
+                    LIMIT 1
+                ) as first_comment_text_with_name`
                 )
-                // .select(
-                //     'uni_forum_thread.id as thread_id',
-                //     'uni_forum_thread.forum_title',
-                //     'uni_forum_thread.forum_text',
-                //     'uni_forum_thread.created as thread_created',
-                //     'uni_forum_thread.updated as thread_updated',
-                //     'uni_forum_comment.id as comment_id',
-                //     'uni_forum_comment.user_email as comment_user_email',
-                //     'uni_forum_comment.comment_text',
-                //     'uni_forum_comment.num_likes',
-                //     'uni_forum_comment.num_dislikes',
-                //     'uni_forum_comment.created as comment_created',
-                //     'uni_forum_comment.updated as comment_updated',
-                // )
-                // // .from('uni_forum_thread')
-                // .leftJoin('uni_forum_comment', 'uni_forum_thread.id', 'uni_forum_comment.thread_id')
-                .where('uni_forum_thread.university_name', university_name)
-                .orderBy('uni_forum_thread.created', 'desc')
-                .then(data => {
-                    res.json(data)
-                })
-                .catch(err => res
-                    .status(404)
-                    .json({
-                        success: false,
-                        message: 'forum thread query failed',
-                        stack: err.stack
-                }))
+            )
+            .leftJoin('uni_forum_comment', 'uni_forum_thread.id', 'uni_forum_comment.thread_id')
+            .groupBy('uni_forum_thread.id', 'uni_forum_thread.university_name', 'uni_forum_thread.forum_title', 'uni_forum_thread.forum_text', 'uni_forum_thread.forum_text_raw', 'uni_forum_thread.created', 'uni_forum_thread.updated')
+            .then(data => {
+                res.json(data)
+            })
+            .catch(error => {
+                console.error(error);
+            });
+
+
+            // db('uni_forum_thread')
+            // .select(
+            //     'uni_forum_thread.id as thread_id',
+            //     'uni_forum_thread.university_name',
+            //     'uni_forum_thread.forum_title',
+            //     'uni_forum_thread.forum_text',
+            //     'uni_forum_thread.forum_text_raw',
+            //     'uni_forum_thread.created as thread_created',
+            //     'uni_forum_thread.updated as thread_updated',
+            //     db.raw('COUNT(DISTINCT uni_forum_comment.id) as comment_count'),
+            //     // U+0193
+            //     db.raw(`(
+            //         SELECT CONCAT(user.name, 'Ɠ', uni_forum_comment.comment_text) 
+            //         FROM uni_forum_comment 
+            //         JOIN "user" ON uni_forum_comment.user_email = "user".email
+            //         WHERE uni_forum_comment.thread_id = uni_forum_thread.id 
+            //         ORDER BY uni_forum_comment.created 
+            //         LIMIT 1
+            //     ) as first_comment_text_with_name`)
+            // )
+            // .leftJoin('uni_forum_comment', 'uni_forum_thread.id', 'uni_forum_comment.thread_id')
+            // .groupBy('uni_forum_thread.id', 'uni_forum_thread.university_name', 'uni_forum_thread.forum_title', 'uni_forum_thread.forum_text', 'uni_forum_thread.forum_text_raw', 'uni_forum_thread.created', 'uni_forum_thread.updated')
+            // .then(data => {
+            //     res.json(data);
+            // })
+            // .catch(error => {
+            //     console.error(error);
+            // });
+
+            // db('uni_forum_thread')
+            // .select(
+            //     'uni_forum_thread.id as thread_id',
+            //     'uni_forum_thread.university_name',
+            //     'uni_forum_thread.forum_title',
+            //     'uni_forum_thread.forum_text',
+            //     'uni_forum_thread.forum_text_raw',
+            //     'uni_forum_thread.created as thread_created',
+            //     'uni_forum_thread.updated as thread_updated',
+            //     db.raw('COUNT(DISTINCT uni_forum_comment.id) as comment_count'),
+            //     db.raw('(SELECT comment_text FROM uni_forum_comment WHERE uni_forum_comment.thread_id = uni_forum_thread.id ORDER BY created LIMIT 1) as first_comment_text')
+            // )
+            // .leftJoin('uni_forum_comment', 'uni_forum_thread.id', 'uni_forum_comment.thread_id')
+            // .groupBy('uni_forum_thread.id', 'uni_forum_thread.university_name', 'uni_forum_thread.forum_title', 'uni_forum_thread.forum_text', 'uni_forum_thread.forum_text_raw', 'uni_forum_thread.created', 'uni_forum_thread.updated')
+            // .then(data => {
+            //     res.json(data)
+            // })
+            // .catch(error => {
+            //     console.error(error);
+            // });
+
+            // db('uni_forum_thread')
+            //     .select(
+            //         'uni_forum_thread.id as thread_id',
+            //         'uni_forum_thread.forum_title',
+            //         'uni_forum_thread.forum_text',
+            //         'uni_forum_thread.created as thread_created',
+            //         'uni_forum_thread.updated as thread_updated',
+            //     )
+            //     // .select(
+            //     //     'uni_forum_thread.id as thread_id',
+            //     //     'uni_forum_thread.forum_title',
+            //     //     'uni_forum_thread.forum_text',
+            //     //     'uni_forum_thread.created as thread_created',
+            //     //     'uni_forum_thread.updated as thread_updated',
+            //     //     'uni_forum_comment.id as comment_id',
+            //     //     'uni_forum_comment.user_email as comment_user_email',
+            //     //     'uni_forum_comment.comment_text',
+            //     //     'uni_forum_comment.num_likes',
+            //     //     'uni_forum_comment.num_dislikes',
+            //     //     'uni_forum_comment.created as comment_created',
+            //     //     'uni_forum_comment.updated as comment_updated',
+            //     // )
+            //     // // .from('uni_forum_thread')
+            //     // .leftJoin('uni_forum_comment', 'uni_forum_thread.id', 'uni_forum_comment.thread_id')
+            //     .where('uni_forum_thread.university_name', university_name)
+            //     .orderBy('uni_forum_thread.created', 'desc')
+            //     .then(data => {
+            //         res.json(data)
+            //     })
+            //     .catch(err => res
+            //         .status(404)
+            //         .json({
+            //             success: false,
+            //             message: 'forum thread query failed',
+            //             stack: err.stack
+            //     }))
         })
     };

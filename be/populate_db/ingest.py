@@ -43,6 +43,12 @@ def insert_tag_data(uni_tags_df: pd.DataFrame, connstring: str) -> None:
     print("University tags inserted")
 
 
+def insert_course_mapping(course_mapping_df: pd.DataFrame, connstring: str) -> None:
+    conn = create_engine(connstring)
+    course_mapping_df.to_sql('course_mapping', con=conn, if_exists="append", index=False)
+    print("Course mapping inserted")
+
+
 '''
 GPAs to-do
 - OHE GPAs for diff degrees
@@ -99,10 +105,14 @@ uni_tags_df = uni_tags_df.explode("applicable_to")
 # Rename columns
 uni_tags_df = uni_tags_df.rename(columns=TAG_COLUMN_RENAME_MAPPING)
 
+course_mapping_df: pd.DataFrame = pd.read_csv(UNI_COURSES_CSV_PATH)
+course_mapping_df = course_mapping_df.rename(columns=COURSE_MAPPING_COLUMN)
+
 try:
     if not DONE_INDICATOR.is_file():
         insert_uni_data(uni_gpas_df, get_connstring())
         insert_tag_data(uni_tags_df, get_connstring())
+        insert_course_mapping(course_mapping_df, get_connstring())
 
         DONE_INDICATOR.touch()
 except:
