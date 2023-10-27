@@ -20,17 +20,26 @@ exports.seed = async (knex) => {
                     tag_name: 'Computer Science', //  CS
                 },
                 {
-                    university_name: 'National University of Singapore', // NUS
-                    tag_name: 'Information Systems', //  IS
+                    university_name: 'Singapore Management University', // SMU
+                    tag_name: 'Law', //  CS
                 },
                 {
-                    university_name: 'National University of Singapore', // NUS
-                    tag_name: 'Business', //  Biz
+                    university_name: 'Singapore Management University', // SMU
+                    tag_name: 'Accountancy', //  CS
                 },
                 {
-                    university_name: 'National University of Singapore', // NUS
-                    tag_name: 'Computer Science', //  CS
+                    university_name: 'Singapore Management University', // SMU
+                    tag_name: 'Economics', //  CS
                 },
+                {
+                    university_name: 'Singapore Management University', // SMU
+                    tag_name: 'Computing & Law', //  CS
+                },
+                {
+                    university_name: 'Singapore Management University', // SMU
+                    tag_name: 'Social Sciences', //  CS
+                },
+
             ])
         }
     )

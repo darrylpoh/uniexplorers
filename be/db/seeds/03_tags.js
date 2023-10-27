@@ -1,7 +1,7 @@
-/**
- * @param { import("knex").Knex } knex
- * @returns { Promise<void> } 
- */
+// /**
+//  * @param { import("knex").Knex } knex
+//  * @returns { Promise<void> } 
+//  */
 
 exports.seed = async (knex) => {
     return knex('tag').del().then(
@@ -18,6 +18,18 @@ exports.seed = async (knex) => {
                 },
                 {
                     name: 'Accountancy',
+                },
+                {
+                    name: 'Social Sciences',
+                },
+                {
+                    name: 'Computing & Law',
+                },
+                {
+                    name: 'Law',
+                },
+                {
+                    name: 'Economics',
                 },
             ])
         }

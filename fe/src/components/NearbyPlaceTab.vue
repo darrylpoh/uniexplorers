@@ -6,14 +6,14 @@ export default {
 
 <template>
   <div style="height: 400px">
-    <el-table :data="data" height="auto" style="width: 100%">
-      <el-table-column prop="name" label="Name" width="300">
+    <el-table :data="data" height="auto" class="custom-table">
+      <el-table-column prop="name" label="Name" width="140">
         <template #default="scope">
           <a class="" :href="`https://www.google.com/maps/search/?api=1&query=${scope.row.name}`" 
           target="_blank">{{ scope.row.name }}</a>
         </template>
       </el-table-column>
-      <el-table-column prop="rating" label="Reviews" width="250">
+      <el-table-column prop="rating" label="Reviews" width="180">
         <template #default="scope">
           <span>{{ scope.row.rating }}</span>
           <el-icon style="vertical-align: middle; margin-left: 0.1em; padding-bottom: 0.2em;" :size="18" color="#ff9900">
@@ -33,4 +33,5 @@ export default {
 .el-tabs__active-bar.is-top {
   background-color: #036b4e;
 }
+
 </style>
