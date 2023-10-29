@@ -24,7 +24,7 @@
         methods : {
             goToResult(name) {
                 this.showResults = false
-                this.$router.push('uni/' + name.replaceAll(' ', '-').toLowerCase())
+                this.$router.push('uni/' + name)
             },
             debouncedSearch() {
                 if (this.debounceTimeout) {

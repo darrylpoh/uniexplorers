@@ -52,6 +52,9 @@ export default {
     this.university = res.data[0]
     await this.getCoordinates()
 
+    res = await axios.get(import.meta.env.VITE_BACKEND + '/reviews/' + name)
+    this.reviews = res.data
+
     var places_dict = {
       atm: 'atm',
       bakery: 'bread',
@@ -72,7 +75,6 @@ export default {
     }
 
     this.selectedPlaceType = Object.keys(this.data)[0]
-
   },
   methods: {
     async getCoordinates() {
@@ -249,7 +251,7 @@ export default {
         </div>
 
         <div class="flex sm:basis-2/5 md:justify-end lg:justify-center md:my-2 lg:my-4">
-          <ReviewModal></ReviewModal>
+          <ReviewModal :uni-name="university.name"></ReviewModal>
         </div>
 
         <div class="basis-full mt-4 md:mt-8">
