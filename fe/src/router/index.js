@@ -4,7 +4,7 @@ import ExplorePage from '../views/ExplorePage.vue'
 import UniHomepage from '../views/UniHomepage.vue'
 import ProfilePage from '../views/ProfilePage.vue'
 import DiscussionPage from '../views/DiscussionPage.vue'
-import AMAPage from '../components/AMAPage.vue'
+import ThreadPage from '../views/ThreadPage.vue'
 import ExploreCitiesPage from '../views/ExploreCitiesPage.vue'
 import CitiesHomePage from '../views/CitiesHomePage.vue'
 
@@ -41,7 +41,7 @@ const router = createRouter({
     {
       path: "/AMApage",
       name: "AMA",
-      component: AMAPage
+      component: ThreadPage
     },
     {
       path: '/uni/:uniName/discussions',
@@ -51,7 +51,7 @@ const router = createRouter({
     {
       path: "/uni/:uniName/discussions/:thread",
       name: "uniDiscussionsThread",
-      component: AMAPage
+      component: ThreadPage
     },
     {
       path:'/explorecitiespage',
@@ -72,20 +72,20 @@ const router = createRouter({
   ]
 })
 
-router.beforeEach(async (to) => {
-  // redirect to login page if not logged in and trying to access a restricted page
-  const publicPages = ['/'];
-  const authRequired = !publicPages.includes(to.path);
-  const auth = useAuthStore();
+// router.beforeEach(async (to) => {
+//   // redirect to login page if not logged in and trying to access a restricted page
+//   const publicPages = ['/'];
+//   const authRequired = !publicPages.includes(to.path);
+//   const auth = useAuthStore();
 
-  if (authRequired && !auth.user) {
-      auth.returnUrl = to.fullPath;
-      return '/login';
-  }
+//   if (authRequired && !auth.user) {
+//       auth.returnUrl = to.fullPath;
+//       return '/login';
+//   }
   
-  if (auth.user && to.path == '/') {
-    return '/explore'
-  }
-});
+//   if (auth.user && to.path == '/') {
+//     return '/explore'
+//   }
+// });
 
 export default router
