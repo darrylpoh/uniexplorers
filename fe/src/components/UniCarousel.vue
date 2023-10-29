@@ -31,4 +31,9 @@ for (const url of urls) {
   object-fit: cover;
   height: 100%;
 }
+
+#default-carousel div, #default-carousel button {
+  z-index: 1;
+}
+
 </style>
