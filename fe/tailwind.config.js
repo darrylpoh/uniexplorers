@@ -36,7 +36,8 @@ module.exports = {
     },
     fontFamily: {
       poppins: ['Poppins', 'sans-serif'],
-      caudex: ['Caudex', 'serif']
+      caudex: ['Caudex', 'serif'],
+      display: ['Gabarito', 'sans-serif']
     },
     screens: {
       'sm': '576px',
