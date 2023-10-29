@@ -32,8 +32,8 @@ export default {
     }
   },
   async beforeMount() {
-    this.city.name = 'Singapore'
-    this.continent.name = 'Asia'
+    this.city.name = this.$route.params.cityName
+    this.continent.name = this.$route.params.continent
 
     await this.getCoordinates()
 
