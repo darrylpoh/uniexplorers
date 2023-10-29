@@ -1,32 +1,32 @@
 <template>
-  <div class="flex my-24">
-    <div class="bg-white mr-10 flex flex-col justify-center items-center w-1/5 mx-auto rounded-lg">
-      <img src="../../public/Profile Female.png" alt="" class="mb-24">
-      <p class="mb-16">Singapore Management University</p>
-      <p>6 Reviews</p>
+  <div class="lg:flex lg:my-24">
+    <div class="bg-white lg:mr-10 flex flex-col justify-center items-center w-3/5 my-12 lg:my-0 lg:w-1/5 mx-auto rounded-lg p-12">
+      <img src="../../public/Profile Female.png" alt="" class="lg:mb-24 my-12">
+      <p class="lg:mb-16 mb-12 text-center">Singapore Management University</p>
+      <p class="mb-12 lg:mb-0">6 Reviews</p>
     </div>
     <div class="w-3/5 bg-white mx-auto rounded-lg p-10">
       <form action="" class="relative">
         <label for="">Name</label>
-        <input type="text" v-model="name" @keydown="inputChange">
+        <input type="text" v-model="name" @keydown="inputChange" class="rounded lg:w-2/5 w-4/5">
         
         <label for="">Email</label>
-        <input type="email" v-model="email" disabled>
+        <input type="email" v-model="email" disabled class="rounded lg:w-2/5 w-4/5">
         
         <label for="">New Password</label>
-        <input type="password" v-model="password"  @keydown="inputChange">
+        <input type="password" v-model="password"  @keydown="inputChange" class="rounded lg:w-2/5 w-4/5">
         
         <label for="">Confirm New Password</label>
-        <input type="password" v-model="newPassword">
+        <input type="password" v-model="newPassword" class="rounded lg:w-2/5 w-4/5">
         
         <label for="">Status</label>
-        <select name="" id="" v-model="status"  @change="inputChange">
+        <select name="" id="" v-model="status"  @change="inputChange" class="rounded lg:w-2/5 w-4/5">
           <option value="alumni">Alumni</option>
           <option value="student">Student</option>
         </select>
         
         <label for="">Exchange School</label>
-        <select name="" id="" v-model="exchangeSchool" class="mb-16"  @change="inputChange">
+        <select name="" id="" v-model="exchangeSchool" class="mb-16 rounded lg:w-2/5 w-4/5"  @change="inputChange">
           <option value="bocconi">Bocconi University</option>
           <option value="chattahoochee">Chattahoochee Valley Community College</option>
         </select>

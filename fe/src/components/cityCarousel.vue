@@ -56,7 +56,8 @@
       },
     }
     let currentSlide = ref(0)
-    showFullCity.value = true
+
+    // showFullCity.value = true
     // city.value = cities[0]
 
     const props = defineProps({ area: String, cities: Array })
