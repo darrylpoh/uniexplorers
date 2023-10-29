@@ -54,6 +54,7 @@ module.exports = app => {
         .post(authenticateToken, async (req, res) => {
             const jwtEmail = req.jwt_object.email;
             const reqReviewText = req.body.review_text;
+            const reqReviewUni = req.body.university;
 
             if (!reqReviewText) {
                 return res.status(400).send('Missing review field');
@@ -61,15 +62,23 @@ module.exports = app => {
 
             const user = await db.select().from('user').where('email', jwtEmail).first();
             const user_email = user.email;
-            const user_university = user.university;
 
-            const review_obj = await db('review').insert({
+            db('review').insert({
                 user_email: user_email,
-                university_name: user_university,
+                university_name: reqReviewUni,
                 review_text: reqReviewText
-            }).returning("*");
-
-            res.status(201).json(review_obj);
+            }).returning("*")
+            .then(
+                review_obj => res.status(201).json(review_obj)
+            )
+            .catch(err => res
+                .status(404)
+                .json({
+                    success: false,
+                    message: 'review database insert failed',
+                    stack: err.stack,
+                })
+            );
         })
         .patch(authenticateToken, async (req, res) => {
             const jwtEmail = req.jwt_object.email;
