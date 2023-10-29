@@ -61,6 +61,8 @@ export default {
       }
     }
 
+    this.selectedPlaceType = Object.keys(this.data)[0]
+
     this.columns = ['Name', 'Rating', 'Total Ratings']
     this.width = 300
     this.height = 300
@@ -104,7 +106,6 @@ export default {
       } else {
         this.latitude = null
         this.longitude = null
-        // console.log('Unable to get coordinates.')
       }
     },
 
