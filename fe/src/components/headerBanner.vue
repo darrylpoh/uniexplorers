@@ -17,7 +17,7 @@
     },
     methods : {
       goToProfile() {
-        this.$router.push('/profilepage')
+        this.$router.push('/profile/:handle')
       },
       goToHome() {
         this.$router.push('/explore')

@@ -1,11 +1,11 @@
 <template>
-  <div class="lg:flex lg:my-24">
-    <div class="bg-white lg:mr-10 flex flex-col justify-center items-center w-3/5 my-12 lg:my-0 lg:w-1/5 mx-auto rounded-lg p-12">
+  <div class="lg:flex lg:my-24 my-12">
+    <div class="bg-white lg:mr-10 flex flex-col justify-center items-center w-3/4 mb-12 lg:my-0 lg:w-1/5 mx-auto rounded-lg p-12">
       <img src="../../public/Profile Female.png" alt="" class="lg:mb-24 my-12">
-      <p class="lg:mb-16 mb-12 text-center">Singapore Management University</p>
-      <p class="mb-12 lg:mb-0">6 Reviews</p>
+      <p class="lg:mb-16 mb-6 text-center name font-bold">Jared</p>
+      <p class="mb-12 lg:mb-0">Singapore Management University</p>
     </div>
-    <div class="w-3/5 bg-white mx-auto rounded-lg p-10">
+    <div class="lg:w-3/5 w-3/4 bg-white mx-auto rounded-lg p-10">
       <form action="" class="relative">
         <label for="">Name</label>
         <input type="text" v-model="name" @keydown="inputChange" class="rounded lg:w-2/5 w-4/5">
@@ -44,8 +44,8 @@
 export default {
   data() {
     return {
-      name: 'Mario',
-      email: 'mario@gmail.com',
+      name: 'Jared',
+      email: 'jared@admin.com',
       password: '12345678',
       newPassword: '',
       status: 'alumni',
@@ -77,7 +77,7 @@ export default {
     border-width: 1px;
     border-color: #979393;
     border-radius: 10px;
-    margin: 5px 0 20px
+    margin: 5px 0 20px;
   }
   button {
     padding: 10px 20px;
@@ -87,7 +87,6 @@ export default {
   }
   button:disabled {
     background-color: #908d8d;
-
   }
 </style>
 
@@ -96,4 +95,8 @@ p {
     color: #aba5a5;
     font-size: 1.2em;
   }
+
+.name {
+  font-size: 3em;
+}
 </style>
