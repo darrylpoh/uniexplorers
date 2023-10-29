@@ -18,9 +18,9 @@
     <!-- Title of discussion -->
 
     <div class="topic-card bg-white border-2 rounded-xl text-darkgreen">
-      <h2 class="title font-bold text-darkgreen">AMA School</h2>
+      <h2 class="title font-bold text-darkgreen">{{ forum_title }}</h2>
       <p class="mb-8">
-        descripton of the damn thing here
+        {{ forum_text }}
       </p>
       <!-- Nav -->
 
@@ -44,7 +44,7 @@
           <img :src="profile" alt="" class="avatar">
         </div>
         <!-- <textInputQuill :identifier="'make'"/> -->
-        <textAreaInput name="make" />
+        <textAreaInput @posted="handlePost" name="make" :thread_id="parseInt($route.params.thread)"/>
       </div>
 
       <!-- Display each question card separately -->
@@ -94,11 +94,16 @@
 import textAreaInput from '@/components/textAreaInput/textAreaInput.vue';
 import axios from 'axios'
 import comment from '@/components/comment.vue';
+import { useThreadStore } from '@/stores/threadStore'
 
 export default {
   components: {
     textAreaInput,
     comment
+  },
+  setup() {
+    const threadStore = useThreadStore()
+    return {threadStore}
   },
   data() {
     return {
@@ -107,14 +112,17 @@ export default {
       profile: '../../public/Profile Female.png',
       focus: false,
 
-      // USED props
-
-      questionsList : []
-
-    };
+      questionsList : [],
+      forum_text : 'NO PROPER DATA MADE. ASSUMED TO BE DEV WORK.',
+      forum_title : 'NO PROPER DATA MADE. ASSUMED TO BE DEV WORK.'
+    }
   },
   mounted() {
-    axios.get(import.meta.env.VITE_BACKEND + '/forum/comments/1').then(res => {
+    this.threadStore.setCurrentThread(this.$route.params.thread)
+    this.forum_text = this.threadStore.current.forum_text
+    this.forum_title = this.threadStore.current.forum_title
+
+    axios.get(import.meta.env.VITE_BACKEND + '/forum/comments/' + this.$route.params.thread).then(res => {
       console.log(res.data);
       this.questionsList = res.data
 
@@ -165,6 +173,12 @@ export default {
       this.newQuestion = '';
     },
 
+    handlePost(postData) {
+      axios.post(import.meta.env.VITE_BACKEND + '/forum/comments', {
+        
+      })
+    },
+
     postComment(question) {
       if (question.newComment.trim() === '') {
         return; // Do not post a comment if the input is empty
@@ -193,56 +207,6 @@ export default {
       question.reply = !question.reply
     },
 
-    getTime(question) {
-      const currentDate = [new Date().getDate(), new Date().getMonth() + 1, new Date().getFullYear()]
-      const questionDate = question.date
-      let result = ''
-
-      let index = 2
-      let timestamp = 'year'
-      while (index >= 0) {
-        if (currentDate[index] - questionDate[index] > 0) {
-          if (currentDate[index] - questionDate[index] > 1) {
-            result = (currentDate[index] - questionDate[index]) + ' ' + timestamp + 's ago'
-          } else {
-            result = (currentDate[index] - questionDate[index]) + ' ' + timestamp + ' ago'
-          }
-          break
-        } 
-        index--
-        if (index == 1) {
-          timestamp = 'month'
-        } else {
-          timestamp = 'day'
-        }
-      }
-      
-      return result ? result : 'Today'
-    },
-
-    updateVote(icon, question) { 
-      if (icon === 'upvote') {
-        question.upvoteFill = !question.upvoteFill
-        question.upvoteFill ? ++question.upvote : --question.upvote
-        if (question.downvoteFill) {
-          question.downvoteFill = !question.downvoteFill
-          question.downvoteFill ? ++question.downvote : --question.downvote
-        }
-      } else {
-        question.downvoteFill = !question.downvoteFill
-        question.downvoteFill ? ++question.downvote : --question.downvote
-        if (question.upvoteFill) {
-          question.upvoteFill = !question.upvoteFill
-          question.upvoteFill ? ++question.upvote : --question.upvote
-        }
-      }
-    },
-
-    editQuestion(question) {
-      question.edit = false
-      const txt = question.text
-      question.text = txt
-    },
   },
 };
 </script>

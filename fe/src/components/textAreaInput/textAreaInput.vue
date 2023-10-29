@@ -47,15 +47,15 @@
                 this.content_raw = this.editor.getText() ? this.editor.root.innerHTML : ''
             },
             handleSubmit() {
-                axios.post(import.meta.env.VITE_BACKEND + '/forum/comments', {
-                    comment_text : this.content_raw,
-                    thread_id : this.thread_id,
-                    comment_id : this.comment_id
-                }).then(res => {
-                    console.log(res.data)
-                })
+                // axios.post(import.meta.env.VITE_BACKEND + '/forum/comments', {
+                //     comment_text : this.content_raw,
+                //     thread_id : this.thread_id,
+                //     comment_id : this.comment_id
+                // }).then(res => {
+                //     console.log(res.data)
+                // })
                 
-                this.$emit('submit', {
+                this.$emit('posted', {
                     user_email : 'TEMPEMAILTOBEHERE@',
                     children : [],
                     comment_text : '',
@@ -64,7 +64,6 @@
                     num_likes : 0,
                     num_dislikes : 0,
                 })
-                console.log(this.content_raw);
             }
         },
 
