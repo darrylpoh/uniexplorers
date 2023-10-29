@@ -1,5 +1,6 @@
 <template>
   <div class="lg:flex lg:my-24 my-12">
+    <textSearch class="mb-12 w-3/4 mx-auto md:hidden"/>
     <div class="bg-white lg:mr-10 flex flex-col justify-center items-center w-3/4 mb-12 lg:my-0 lg:w-1/5 mx-auto rounded-lg p-12">
       <img src="../../public/Profile Female.png" alt="" class="lg:mb-24 my-12">
       <p class="lg:mb-16 mb-6 text-center name font-bold">Jared</p>
@@ -41,6 +42,7 @@
 </template>
 
 <script>
+import textSearch from '../components/textSearch.vue'
 export default {
   data() {
     return {
@@ -52,6 +54,9 @@ export default {
       exchangeSchool: 'bocconi',
       noChangesMade: true,
     }
+  },
+  components: {
+    textSearch,
   },
   methods: {
     inputChange() {
