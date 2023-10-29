@@ -7,32 +7,33 @@ module.exports = {
     'node_modules/flowbite/**/*.{js,jsx,ts,tsx}'
   ],
   theme: {
-    colors: {
-      content : '#333333',
-      darkgreen: '#1E363E',
-      lightgreen: '#DAE3DD',
-      grey: '#3f3f46',
-      lightgrey: '#666666',
-      lightergrey : '#F0F0F0',
-      white: '#FFFFFF',
-      redtw: '#D21312',
-      darkredtw: '#AA1312',
-      bluepastel: '#9ADCFF',
-      greenpastel: '#C9F4AA',
-      yellowpastel: '#FDFDBD',
-      orange: '#FC513F',
-      pumpkin : '#FAA916',
-      purple : '#6D466B',
-      hotpink : '#DE369D',
-      brown : '#634133',
-      cyan : '#32A287',
-      salmon : '#DF7373',
-      indigo : '#8E94F2'
-    },
     extend: {
       fontSize : {
         '2xs' : ['0.625rem', '1rem']
-      }
+      },
+      colors: {
+        content : '#333333',
+        darkgreen: '#1E363E',
+        lightgreen: '#DAE3DD',
+        lightgreenshadow: '#C4CCC6',
+        grey: '#3f3f46',
+        lightgrey: '#666666',
+        lightergrey : '#F0F0F0',
+        white: '#FFFFFF',
+        red: '#D21312',
+        darkred: '#AA1312',
+        bluepastel: '#9ADCFF',
+        greenpastel: '#C9F4AA',
+        yellowpastel: '#FDFDBD',
+        orange: '#FC513F',
+        pumpkin : '#FAA916',
+        purple : '#6D466B',
+        hotpink : '#DE369D',
+        brown : '#634133',
+        cyan : '#32A287',
+        salmon : '#DF7373',
+        indigo : '#8E94F2'
+      },
     },
     fontFamily: {
       poppins: ['Poppins', 'sans-serif'],

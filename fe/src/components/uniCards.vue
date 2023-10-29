@@ -10,11 +10,17 @@
             axios.get(import.meta.env.VITE_BACKEND + '/images/pikachu.png', {responseType : 'blob'}).then(res => {
                 this.img = URL.createObjectURL(new Blob([res.data]))
             })
+
+            axios.get(import.meta.env.VITE_BACKEND + `/reviews/${this.uniData.name}`).then(res => {
+                this.displayedReview = res.data[0]
+                console.log(this.displayedReview)
+            })
         },
         data() {
             return {
                 name : 'BOB',
-                img : ''
+                img : '',
+                displayedReview : null
             }
         },
         props : {
@@ -60,7 +66,7 @@
             <img class="w-16 h-16 flex-none" src="" alt=""  style="outline: red dashed 1px;">
             <div>
                 <p class="reviewtext text-lightgrey text-sm">
-                    “ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut fermentum arcu mauris, id tempor urna pulvinar id. Donec lobortis lacinia quam, eu faucibus ante viverra in. “
+                    “ {{ displayedReview ? displayedReview.review_text : ''}} “
                     <span class="text-sm font-medium "> - Bob, Y2 Exchange Student</span>
                 </p> 
             </div>

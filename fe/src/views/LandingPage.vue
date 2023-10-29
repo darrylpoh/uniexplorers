@@ -62,8 +62,46 @@
     </div>
   </div>
 
-  <div data-rellax-speed="7" class="rellax moreCopyContent min-h-screen bg-darkgreen">
+  <div data-rellax-speed="7" class="rellax moreCopyContent min-h-screen bg-lightgreen">
     <!-- TODO: Add more copy writing content -->
+
+        <div class="flex space-around gap-16 h-[50vh] p-12">
+            <entryAnimator transitiondelay="0.2s">
+                <div class="card bg-white/30 flex-grow px-8 p-16 pt-12 border-none shadow-md">
+                    <h2>
+                        Tailor your <br/> Academic Experience
+                    </h2>
+                    <p class="text-content text-2xl opacity-60">
+                        Map your mods quickly, discover your ideal environment and connect with fellow exchangers
+                    </p>
+                </div>
+            </entryAnimator>
+            <entryAnimator >
+                <div class="card bg-white/30 flex-grow px-8 p-16 pt-12 border-none shadow-md">
+                    <h2>
+                        Exploration <br/> Made Easy
+                    </h2>
+                    <p class="text-content text-2xl opacity-60">
+                        View recommended places by us and the community, embrace your wanderlust
+                    </p>
+                </div>
+            </entryAnimator>
+            <entryAnimator transitiondelay="0.3s">
+                <div class="card bg-white/30 flex-grow p-16 pt-12 border-none shadow-md">
+                    <h2>
+                        Real Stories, <br/> Real Experiences
+                    </h2>
+                    <p class="text-content text-2xl opacity-60">
+                        Trusted testimonies by the alumnis and
+                        have a chat with them to experience their journey
+                    </p>
+                </div>
+            </entryAnimator>
+        </div>
+
+        <article>
+            
+        </article>
     EYO BOB
   </div>
 
@@ -95,6 +133,7 @@ import signupForm from '@/components/signupForm.vue'
 import Rellax from 'rellax'
 import * as d3 from 'd3'
 import world_json from '@/assets/world.json'
+import entryAnimator from '../components/entryAnimator.vue';
 
 onMounted(() => {
   let rellax = new Rellax('.rellax')
@@ -319,4 +358,8 @@ function swapImages() {
   justify-content: space-between;
   margin-bottom: 20px;
 }
+div p {
+    line-height: 2em;
+}
+
 </style>
