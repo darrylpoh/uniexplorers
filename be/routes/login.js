@@ -14,7 +14,14 @@ module.exports = app => {
                 return res.status(400).send("Either username or password missing");
             }
 
-            const user = await db.select().from('user').where('email', reqEmail).first();
+            const user = await db.select(
+                "email",
+                "name",
+                "password",
+                "created",
+                "updated",
+                "is_admin"
+            ).from('user').where('email', reqEmail).first();
 
             // check if user exists
             if (!user) {
@@ -30,6 +37,8 @@ module.exports = app => {
             }
 
             const token = generateAccessToken(req.body.email);
+
+            delete user.password
 
             res.json({
                 'token': token,
