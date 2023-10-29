@@ -52,8 +52,8 @@ export default {
     this.university = res.data[0]
     await this.getCoordinates()
 
-    // query = '?university_name=' + name
-    // res = await axios.get(import.meta.env.VITE_BACKEND + '/reviews/' + query)
+    res = await axios.get(import.meta.env.VITE_BACKEND + '/reviews/' + name)
+    this.reviews = res.data
 
     var places_dict = {
       atm: 'atm',
@@ -75,7 +75,6 @@ export default {
     }
 
     this.selectedPlaceType = Object.keys(this.data)[0]
-
   },
   methods: {
     async getCoordinates() {
@@ -119,7 +118,6 @@ export default {
           results[i].geometry.location.lat === undefined ||
           results[i].geometry.location.lng === undefined
         ) {
-          console.log("SKIP");
           continue;
         }
 
@@ -143,7 +141,7 @@ export default {
         // If ratings are equal, sort by number of ratings in descending order
         return b.user_ratings_total - a.user_ratings_total;
       });
-      processed_results = processed_results.slice(0, 5);
+      processed_results = processed_results.slice(0, 8);
       return processed_results
     },
 
@@ -154,6 +152,7 @@ export default {
         let marker = { 'center': curr[p].center, 'name': curr[p].name, 'rating': curr[p].rating }
         markers.push(marker)
       }
+      console.log(markers);
       return markers
     },
     capitalizeFirstLetter(string) {
@@ -176,6 +175,7 @@ export default {
       return []
     },
     markers() {
+      console.log(this.getMarkers(this.selectedPlaceType));
       return this.getMarkers(this.selectedPlaceType)
     }
   }
@@ -251,7 +251,7 @@ export default {
         </div>
 
         <div class="flex sm:basis-2/5 md:justify-end lg:justify-center md:my-2 lg:my-4">
-          <ReviewModal></ReviewModal>
+          <ReviewModal :uni-name="university.name"></ReviewModal>
         </div>
 
         <div class="basis-full mt-4 md:mt-8">
