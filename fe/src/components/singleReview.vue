@@ -1,15 +1,21 @@
 <script setup>
-import { ref, reactive, computed } from 'vue';
+import { ref } from 'vue';
 
 const props = defineProps(['review'])
-console.log(props.review)
 
 let showmore = false
-let comment = ref(props.review.comment_trunc)
+let comment_trunc = truncate(props.review.comment, 40)
+let comment = ref(comment_trunc)
+
+function truncate(text, length, clamp) {
+	clamp = clamp || "...";
+	let words = text.split(' ');
+	return words.length > length ? words.slice(0, length).join(' ') + clamp : text;
+}
 
 function onClickShow() {
 	showmore = !showmore
-	comment.value = showmore ? props.review.comment : props.review.comment_trunc
+	comment.value = showmore ? props.review.comment : comment_trunc
 }
 
 </script>
@@ -25,9 +31,11 @@ function onClickShow() {
 		</div>
 		<div class="lg:basis-11/12 mb-3">
 			<p class="text-gray-500 text-sm md:text-md">{{ comment }}</p>
-			
-			<p class="mt-2 font-semibold underline underline-offset-4 text-sm md:text-md text-gray-700 cursor-pointer" v-if="!showmore" @click="onClickShow">Show More</p>
-			<p class="mt-2 font-semibold underline underline-offset-4 text-sm md:text-md text-gray-700 cursor-pointer" v-else @click="onClickShow">Show Less</p>
+
+			<p class="mt-2 font-semibold underline underline-offset-4 text-sm md:text-md text-gray-700 cursor-pointer"
+				v-if="!showmore" @click="onClickShow">Show More</p>
+			<p class="mt-2 font-semibold underline underline-offset-4 text-sm md:text-md text-gray-700 cursor-pointer" v-else
+				@click="onClickShow">Show Less</p>
 		</div>
 	</div>
 </template>
