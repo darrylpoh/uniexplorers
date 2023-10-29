@@ -7,7 +7,7 @@ export default {
 <template>
   <div style="height: 400px">
     <el-table :data="data" height="auto" class="custom-table">
-      <el-table-column prop="name" label="Name" width="140">
+      <el-table-column prop="name" label="Name" width="300">
         <template #default="scope">
           <a class="" :href="`https://www.google.com/maps/search/?api=1&query=${scope.row.name}`" 
           target="_blank">{{ scope.row.name }}</a>

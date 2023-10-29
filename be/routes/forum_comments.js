@@ -114,9 +114,14 @@ module.exports = app => {
 
             const {thread_id} = req.params;
             db
-                .select()
+                .select(
+                    'uni_forum_comment.*', 
+                    'user.name as user_name', 
+                    'user.image_filename as user_image_filename'
+                )
                 .from('uni_forum_comment')
                 // .where('user_email', user_email)
+                .leftJoin('user', 'uni_forum_comment.user_email', 'user.email')
                 .where('thread_id', thread_id)
                 .then(
                     // results => {

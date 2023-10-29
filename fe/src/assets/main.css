@@ -17,6 +17,11 @@
 }
 
 @layer components {
+
+  h1 {
+    @apply font-caudex text-4xl font-bold text-darkgreen my-4;
+  }
+
   .heroText {
     @apply font-caudex text-5xl md:text-7xl xl:text-6xl font-bold text-darkgreen
   }
@@ -29,8 +34,8 @@
     @apply fixed top-0 z-10 backdrop-blur bg-darkgreen/50 w-screen min-h-screen flex justify-center items-center
   }
 
-  .cardWhite {
-    @apply rounded-lg bg-white p-4 border-2 border-lightgrey
+  .card {
+    @apply rounded-lg p-4 border-2 border-lightgrey
   }
 
   .wrapper {

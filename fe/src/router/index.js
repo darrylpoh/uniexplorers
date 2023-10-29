@@ -59,7 +59,7 @@ const router = createRouter({
       component: ExploreCitiesPage
     },
     {
-      path:'/CitiesHomePage',
+      path: '/city/:continent/:cityName',
       name: 'CitiesHomePage',
       component: CitiesHomePage
     },

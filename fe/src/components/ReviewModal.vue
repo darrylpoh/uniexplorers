@@ -2,24 +2,31 @@
 import { Modal } from 'flowbite-vue'
 import { ref } from 'vue'
 import { Form, Field, ErrorMessage } from 'vee-validate';
-
+import { fetchWrapper } from '@/helpers';
+import { useAuthStore } from '@/stores';
 import * as yup from 'yup';
+
+const store = useAuthStore()
 
 const rating = ref()
 const comment = ref()
+const props = defineProps(['uniName'])
 let submitted = ref(false)
 
 const initialErrors = {
   Rating: 'Please select a rating',
-  Comment: 'Please enter a',
+  Comment: 'Please enter a comment',
 };
 
 const schema = yup.object({
   Rating: yup.number().required().min(1),
   Comment: yup.string().required().min(1),
 });
-function onSubmit(values, { resetForm }) {
+async function onSubmit(values, { resetForm }) {
   // Submit values to API...
+  let query = {'review_text': comment.value, 'university': props.uniName}
+  await fetchWrapper.post(`${import.meta.env.VITE_BACKEND}/reviews`, query)
+
   resetForm();
   rating.value = null;
   closeModal();

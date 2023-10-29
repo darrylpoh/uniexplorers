@@ -31,8 +31,8 @@
       </div>
     </div>
 
-    <div class="discussionContentWrapper grid grid-cols-12">
-      <div class="discussionsWrapper flex flex-col gap-1 col-span-12 md:col-span-8 xxl:col-span-6 md:col-start-2 xl:col-start-2 xxl:col-start-2 ">
+    <div class="discussionContentWrapper grid grid-cols-12 mb-16">
+      <div class="discussionsWrapper flex flex-col gap-2 col-span-12 md:col-span-8 xxl:col-span-6 md:col-start-2 xl:col-start-2 xxl:col-start-2 ">
       <!-- AMA -->
         <DiscussCard title="AMA about {schoolName}">
           <!-- Content for AMA card -->

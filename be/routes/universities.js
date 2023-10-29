@@ -125,51 +125,54 @@ module.exports = app => {
                 );
         })
 
-    var cache = {};
+    // var cache = {};
 
-    const trieCache = async (req, res, next) => {
-        if (!cache['trie']) {
-            // console.log("Generating trie")
-            const unis = await db
-                .select('name')
-                .from('university')
-                .pluck('name');
+    // const trieCache = async (req, res, next) => {
+    //     if (!cache['trie']) {
+    //         // console.log("Generating trie")
+    //         const unis = await db
+    //             .select('name')
+    //             .from('university')
+    //             .pluck('name');
 
-            let uni_words = [];
-            unis.forEach((uni) => uni_words.push(...uni.split(" ")))
+    //         // let uni_words = [];
+    //         // unis.forEach((uni) => uni_words.push(...uni.split(" ")))
 
-            // const numReturn = req.params.count;
+    //         // const numReturn = req.params.count;
 
-            // generate trie
-            let t = new Trie();
-            uni_words.forEach((uni_word) => t.insert(uni_word.toLowerCase()));
+    //         // generate trie
+    //         let t = new Trie();
+    //         // uni_words.forEach((uni_word) => t.insert(uni_word.toLowerCase()));
+    //         unis.forEach((uni) => t.insert(uni))
 
-            cache['trie'] = t;
-            // console.log("Trie stored into cache");
-        }
+    //         cache['trie'] = t;
+    //         // console.log("Trie stored into cache");
+    //     }
         
-        next();
-    }
+    //     next();
+    // }
 
     app.route('/universities/search/:searchTerm')
-        .get(trieCache, async (req, res) => {
+        .get(async (req, res) => {
             // pull all uni names
             const search = req.params.searchTerm;
             let searchArr = search.split(" ");
-            searchArr = searchArr.map(term => term.toLowerCase())
+            // searchArr = searchArr.map(term => term.toLowerCase())
 
-            console.log('searchArr: ', searchArr)
+            // console.log('searchArr: ', searchArr)
 
-            t = cache['trie'];
+            // t = cache['trie'];
 
-            let suggestions = [];
-            searchArr.forEach((split_word) => suggestions.push(...t.suggest(split_word)))
+            // let suggestions = [];
+            // searchArr.forEach((split_word) => suggestions.push(...t.suggest(split_word)))
 
-            console.log('suggestions: ', suggestions)
+            // let suggestions = t.suggest(search)
 
-            if (suggestions.length == 0) {
-                return res.json([])
-            }
+            // console.log('suggestions: ', suggestions)
+
+            // if (suggestions.length == 0) {
+            //     return res.json([])
+            // }
 
             db
                 .select()
@@ -178,8 +181,8 @@ module.exports = app => {
                 // .whereIn('name', suggestions)
                 // .whereIn("name", "ilike", )
                 .where((builder) => {
-                    for (let suggestion of suggestions) {
-                        builder.orWhere('name', 'ilike', `%${suggestion}%`)
+                    for (let searchTerm of searchArr) {
+                        builder.orWhere('name', 'ilike', `%${searchTerm}%`)
                     }
                 })
                 .then(universities =>
