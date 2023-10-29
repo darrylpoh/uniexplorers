@@ -17,6 +17,7 @@ module.exports = app => {
             const user = await db.select(
                 "email",
                 "name",
+                "password",
                 "created",
                 "updated",
                 "is_admin"
@@ -36,6 +37,8 @@ module.exports = app => {
             }
 
             const token = generateAccessToken(req.body.email);
+
+            delete user.password
 
             res.json({
                 'token': token,
