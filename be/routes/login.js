@@ -14,7 +14,13 @@ module.exports = app => {
                 return res.status(400).send("Either username or password missing");
             }
 
-            const user = await db.select().from('user').where('email', reqEmail).first();
+            const user = await db.select(
+                "email",
+                "name",
+                "created",
+                "updated",
+                "is_admin"
+            ).from('user').where('email', reqEmail).first();
 
             // check if user exists
             if (!user) {
