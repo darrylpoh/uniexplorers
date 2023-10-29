@@ -44,23 +44,26 @@
                     return
                 }
 
-                axios.get( import.meta.env.VITE_BACKEND + '/universities/search/' + this.search)
-                .then(res => {
-                    
-                    if (enter) {
-                        this.searchStore.setSearchResults(res.data)
-                        this.showResults = false
-                    } else {
-                        this.showResults = true
-                    }
-                    
-                    this.results = res.data
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                })
+                axios.get(import.meta.env.VITE_BACKEND + '/universities/search/' + this.search)
+                    .then(res => {
+                        // Get the first 5 results
+                        const firstEightResults = res.data.slice(0, 5);
+                        
+                        if (enter) {
+                            this.searchStore.setSearchResults(firstEightResults);
+                            this.showResults = false;
+                        } else {
+                            this.showResults = true;
+                        }
 
-                this.searched = true
+                        // Update results with the first 8 items
+                        this.results = firstEightResults; 
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+
+                this.searched = true;
             },
             updateExplorePage() {
                 return this.performSearch(true)
@@ -83,7 +86,7 @@
                 </svg>
             </div>
         </div>
-        <div v-if="searched && showResults" class="wrapper h-auto cardWhite overflow-hidden shadow-md rounded-t-none">
+        <div v-if="searched && showResults" class="wrapper h-auto bg-white overflow-hidden shadow-md rounded-t-none">
             <div v-if="results.length > 0" v-for="result, idx in results" @click="goToResult(result.name)" class="relative shadow-inner w-full min-h-16 py-2 hover:bg-gray-100 hover:cursor-pointer active:border active:border-darkgreen transition-all duration-75" :class="[idx != results.length - 1 ? 'border-b border-lightgray' : '']">
                 <h2 class="text-darkgreen pl-4 text-lg font-medium text-left">{{result.name}}</h2>
         
@@ -116,6 +119,4 @@
 
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>
