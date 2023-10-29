@@ -19,6 +19,10 @@
             commentData : {
                 type : Object,
                 required : true
+            },
+            child : {
+                type : Boolean,
+                default : false
             }
         },
         methods : {
@@ -125,7 +129,7 @@
             </svg>
             <span>{{ commentData.num_dislikes + downvoteFill ? 1 : 0 }}</span>
         </li>
-        <li class="li-text" @click="reply = true">Reply</li>
+            <li v-if="!child" class="li-text" @click="reply = true">Reply</li>
         </ul>
 
         <!-- Craft Comment -->
@@ -140,7 +144,7 @@
 
         <!-- Children comments -->
         <div v-for="child in commentData.children">
-            <comment :commentData="child"/>
+            <comment :commentData="child" :child="true"/>
         </div>
 
     </div>
