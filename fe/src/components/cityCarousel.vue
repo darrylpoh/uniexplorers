@@ -1,15 +1,15 @@
 <template>
-    <div class="min-w-[1200px]">
+    <div class="w-full">
         <p class="text-2xl">{{ area }}</p>
 
         <Carousel 
             ref="carousel" 
             v-model="currentSlide"
-            :items-to-show="5" 
             :items-to-scroll="1"
             :wrap-around="true"
             :transition="500"
             snapAlign="start"
+            :breakpoints="breakpoints"
         >
             <Slide 
                 v-for="slide, index in cities" 
@@ -20,6 +20,7 @@
             :class="
                 currentSlide !== index ? 'border-4 border-transparent' : 'border-4 border-white'
             "
+
         >
                     <img 
                         class="object-cover w-96 h-60" 
@@ -44,8 +45,19 @@
     const useCity = useCitiesStore()
     const { city, showFullCity } = storeToRefs(useCity)
 
-
+    const breakpoints = {
+      // 700px and up
+      700: {
+        itemsToShow: 2,
+      },
+      // 1024 and up
+      1024: {
+        itemsToShow: 5,
+      },
+    }
     let currentSlide = ref(0)
+    showFullCity.value = true
+    // city.value = cities[0]
 
     const props = defineProps({ area: String, cities: Array })
     const { cities, area } = toRefs(props)
