@@ -52,9 +52,6 @@ export default {
     this.university = res.data[0]
     await this.getCoordinates()
 
-    // query = '?university_name=' + name
-    // res = await axios.get(import.meta.env.VITE_BACKEND + '/reviews/' + query)
-
     var places_dict = {
       atm: 'atm',
       bakery: 'bread',
@@ -119,7 +116,6 @@ export default {
           results[i].geometry.location.lat === undefined ||
           results[i].geometry.location.lng === undefined
         ) {
-          console.log("SKIP");
           continue;
         }
 
@@ -143,7 +139,7 @@ export default {
         // If ratings are equal, sort by number of ratings in descending order
         return b.user_ratings_total - a.user_ratings_total;
       });
-      processed_results = processed_results.slice(0, 5);
+      processed_results = processed_results.slice(0, 8);
       return processed_results
     },
 
@@ -154,6 +150,7 @@ export default {
         let marker = { 'center': curr[p].center, 'name': curr[p].name, 'rating': curr[p].rating }
         markers.push(marker)
       }
+      console.log(markers);
       return markers
     },
     capitalizeFirstLetter(string) {
@@ -176,6 +173,7 @@ export default {
       return []
     },
     markers() {
+      console.log(this.getMarkers(this.selectedPlaceType));
       return this.getMarkers(this.selectedPlaceType)
     }
   }
