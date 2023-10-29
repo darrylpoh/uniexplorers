@@ -117,7 +117,7 @@
     <Transition name="slide">
       <div v-if="mq.smMinus" v-show="showfilter"  id="filter" class="dialogWrapper flex-col items-start pt-8" @click.self="toggleFilter">
         <!-- [calc(100%-2rem)] -->
-          <div class="filtersm relative cardWhite w-full text-darkgreen grow">
+          <div class="filtersm relative card bg-white w-full text-darkgreen grow">
             <h2 class="text-xl font-bold"> Filter & Sort </h2>
             <hr class="mb-2"/>
             <exploreFilter :key="filterKey" @filter="updateResult"/>
