@@ -1,5 +1,5 @@
 {
-  "0": [
+  "Europe": [
     {
       "name": "Paris",
       "country": "France", 
@@ -31,7 +31,7 @@
       "image": "../../public/cities/athens.jpg"
     }
   ],
-  "1": [
+  "Asia": [
     {
       "name": "Tokyo",
       "country": "Japan",
@@ -64,7 +64,7 @@
     }
   ],
   
-  "2": [
+  "America": [
     {
       "name": "New York City",
       "state": "New York",
