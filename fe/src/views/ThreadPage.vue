@@ -1,0 +1,371 @@
+<template>
+  <!-- - AMA page [isabelle]
+  - indent to the answers(comments)
+  - bold the qns
+  - add in description for ama about school (below ama about school)  -->
+  <!-- maybe we should add a breadcrumb like home > uni page > forum > discussion -->
+  <div class="main overflow-y-auto">
+
+    <!-- Menu -->
+    <div class="menu-card bg-white border-2 rounded-xl text-darkgreen">
+      <p class="menu">Menu</p>
+      <router-link to="/explore" class="menu-link font-bold">Home</router-link>
+      <router-link to="/unihomepage" class="menu-link font-bold">University</router-link>
+      <router-link to="discussionpage" class="menu-link font-bold">Discussion</router-link>
+      <router-link to="explorecitiespage" class="menu-link font-bold">City</router-link>
+    </div>
+
+    <!-- Title of discussion -->
+
+    <div class="topic-card bg-white border-2 rounded-xl text-darkgreen">
+      <h2 class="title font-bold text-darkgreen">AMA School</h2>
+      <p class="mb-8">
+        descripton of the damn thing here
+      </p>
+      <!-- Nav -->
+
+      <div class="nav-container">
+        <ul class="comment-nav">
+          <li class="comment-count">
+            {{ questionsList.length }}
+            comments
+          </li>
+          <li class="comment-username">
+            <svg style="color: rgb(30, 54, 62);" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chat-fill chat-icon" viewBox="0 0 16 16"> <path d="M8 15c4.418 0 8-3.134 8-7s-3.582-7-8-7-8 3.134-8 7c0 1.76.743 3.37 1.97 4.6-.097 1.016-.417 2.13-.771 2.966-.079.186.074.394.273.362 2.256-.37 3.597-.938 4.18-1.234A9.06 9.06 0 0 0 8 15z" fill="#1e363e"></path> </svg>
+            <span class="user">{{ username }}</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Input field and "Create" button for asking questions -->
+      
+      <div class="create-section">
+        <div>
+          <img :src="profile" alt="" class="avatar">
+        </div>
+        <!-- <textInputQuill :identifier="'make'"/> -->
+        <textAreaInput name="make" />
+      </div>
+
+      <!-- Display each question card separately -->
+
+      <div class="USING COMMENT COMPONENT">
+
+        <div v-for="question in questionsList" class="my-8">
+          <comment :commentData="question"/>
+          <hr>
+        </div>
+
+      </div>
+      
+    </div>
+
+    <!-- University Information Card -->
+    <div class="university-info-card rounded-xl bg-white border-2 text-darkgreen">
+      <img src="../../public/Imperial.png" alt="Imperial Logo" class="university-logo">
+      <div class="university-info break-words text-center">
+          <h2>IMPERIAL COLLEGE LONDON</h2>
+      </div>
+      <div class="location-gpa-semester">
+        <div class="font-bold info">
+            <svg class="svg-icon" viewBox="0 0 20 29" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 0C4.47143 0 0 4.5385 0 10.15C0 12.673 0.714285 15.0365 2.01429 17.168C3.37143 19.401 5.15714 21.315 6.52857 23.548C7.2 24.6355 7.68571 25.6505 8.2 26.825C8.57143 27.6225 8.87143 29 10 29C11.1286 29 11.4286 27.6225 11.7857 26.825C12.3143 25.6505 12.7857 24.6355 13.4571 23.548C14.8286 21.3295 16.6143 19.4155 17.9714 17.168C19.2857 15.0365 20 12.673 20 10.15C20 4.5385 15.5286 0 10 0ZM10 14.1375C8.02857 14.1375 6.42857 12.5135 6.42857 10.5125C6.42857 8.5115 8.02857 6.8875 10 6.8875C11.9714 6.8875 13.5714 8.5115 13.5714 10.5125C13.5714 12.5135 11.9714 14.1375 10 14.1375Z" fill="#1E363E"/>
+            </svg>
+            London, UK
+        </div>
+        <div class="font-bold info">
+            <svg class="svg-icon" viewBox="0 0 35 29" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M6.36364 16.4011V22.8456L17.5 29L28.6364 22.8456V16.4011L17.5 22.5556L6.36364 16.4011ZM17.5 0L0 9.66667L17.5 19.3333L31.8182 11.4228V22.5556H35V9.66667L17.5 0Z" fill="black"/>
+            </svg>
+            3.7 GPA
+        </div>
+        <div class="font-bold info">
+            <svg class="svg-icon" viewBox="0 0 29 29" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20.648 8.352C18.9515 6.6555 16.733 5.8 14.5 5.8V14.5L8.352 20.648C11.745 24.041 17.255 24.041 20.6625 20.648C24.0555 17.255 24.0555 11.745 20.648 8.352ZM14.5 0C6.496 0 0 6.496 0 14.5C0 22.504 6.496 29 14.5 29C22.504 29 29 22.504 29 14.5C29 6.496 22.504 0 14.5 0ZM14.5 26.1C8.091 26.1 2.9 20.909 2.9 14.5C2.9 8.091 8.091 2.9 14.5 2.9C20.909 2.9 26.1 8.091 26.1 14.5C26.1 20.909 20.909 26.1 14.5 26.1Z" fill="black"/>
+            </svg>
+            1 Semester
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import textAreaInput from '@/components/textAreaInput/textAreaInput.vue';
+import axios from 'axios'
+import comment from '@/components/comment.vue';
+
+export default {
+  components: {
+    textAreaInput,
+    comment
+  },
+  data() {
+    return {
+      newQuestion: '', // Holds the user's new question input
+      username: 'Jared',
+      profile: '../../public/Profile Female.png',
+      focus: false,
+
+      // USED props
+
+      questionsList : []
+
+    };
+  },
+  mounted() {
+    axios.get(import.meta.env.VITE_BACKEND + '/forum/comments/1').then(res => {
+      console.log(res.data);
+      this.questionsList = res.data
+
+      var questions = {
+        children : [],
+        comment_text : '',
+        comment_text_raw : '',
+        created : '',
+        id : '',
+        parent_id : '',
+        thread_id : '',
+        user_email : '',
+        num_likes : 2,
+        num_dislikes : 3,
+      }
+    })
+    
+  },
+
+  methods: {
+    createQuestion() {
+      if (this.newQuestion.trim() === '') {
+        return; // Do not create a question if the input is empty
+      }
+
+      // Create a new question card object
+      const newQuestionCard = {
+        username: this.username, // Replace this with the actual username of the user
+        text: this.newQuestion.trim(),
+        profile: this.profile,
+        newComment: '', // To store the comment input temporarily
+        comments: [],   // Array to store comments for the question
+        date: [new Date().getDate(), new Date().getMonth() + 1, new Date().getFullYear()],
+        upvote: 0,
+        downvote: 0,
+        upvoteFill: false,
+        downvoteFill: false,
+        edit: false,
+        reply: false,
+      };
+
+      // Add the new question card to the top of the questions array
+      this.questions.unshift(newQuestionCard);
+
+      console.log(newQuestionCard)
+
+      // Clear the input field after creating the question
+      this.newQuestion = '';
+    },
+
+    postComment(question) {
+      if (question.newComment.trim() === '') {
+        return; // Do not post a comment if the input is empty
+      }
+
+      // Create a new comment object
+      const newComment = {
+        username: this.username, // Replace this with the actual username of the user
+        profile: this.profile,
+        text: question.newComment.trim(),
+        date: [new Date().getDate(), new Date().getMonth() + 1, new Date().getFullYear()],
+        upvote: 0,
+        downvote: 0,
+        upvoteFill: false,
+        downvoteFill: false,
+        edit: false,
+        reply: false,
+      };
+
+      // Push the new comment to the comments array of the corresponding question
+      question.comments.push(newComment);
+
+      // Clear the comment input field after posting the comment
+      question.newComment = '';
+
+      question.reply = !question.reply
+    },
+
+    getTime(question) {
+      const currentDate = [new Date().getDate(), new Date().getMonth() + 1, new Date().getFullYear()]
+      const questionDate = question.date
+      let result = ''
+
+      let index = 2
+      let timestamp = 'year'
+      while (index >= 0) {
+        if (currentDate[index] - questionDate[index] > 0) {
+          if (currentDate[index] - questionDate[index] > 1) {
+            result = (currentDate[index] - questionDate[index]) + ' ' + timestamp + 's ago'
+          } else {
+            result = (currentDate[index] - questionDate[index]) + ' ' + timestamp + ' ago'
+          }
+          break
+        } 
+        index--
+        if (index == 1) {
+          timestamp = 'month'
+        } else {
+          timestamp = 'day'
+        }
+      }
+      
+      return result ? result : 'Today'
+    },
+
+    updateVote(icon, question) { 
+      if (icon === 'upvote') {
+        question.upvoteFill = !question.upvoteFill
+        question.upvoteFill ? ++question.upvote : --question.upvote
+        if (question.downvoteFill) {
+          question.downvoteFill = !question.downvoteFill
+          question.downvoteFill ? ++question.downvote : --question.downvote
+        }
+      } else {
+        question.downvoteFill = !question.downvoteFill
+        question.downvoteFill ? ++question.downvote : --question.downvote
+        if (question.upvoteFill) {
+          question.upvoteFill = !question.upvoteFill
+          question.upvoteFill ? ++question.upvote : --question.upvote
+        }
+      }
+    },
+
+    editQuestion(question) {
+      question.edit = false
+      const txt = question.text
+      question.text = txt
+    },
+  },
+};
+</script>
+
+<style scoped>
+/* Your existing styles */
+.main {
+  display: flex;
+  flex-direction: row;
+  margin: 20px
+}
+.menu-card {
+  margin: 10px;
+  margin-right: 20px;
+  padding: 30px 50px 30px 50px;
+  display: flex;
+  flex-direction: column;
+  height: fit-content;
+}
+
+.menu-link {
+  font-size: 1.3rem;
+  margin-top: 10px;
+}
+.university-info-card { /* Ensure the card takes the full width of the page */
+  display: flex;
+  flex-direction: column;
+  /* justify-content: center; Center horizontally */
+  align-items: center; /* Center vertically */
+  width: 20%;
+  margin: 10px;
+  margin-left: 20px;
+  height: fit-content;
+  padding: 30px 0 30px 0;
+}
+
+.university-logo {
+  width: 100px;
+  height: auto;
+  margin-bottom: 10px
+}
+.university-info {
+  font-weight: bold;
+  font-size: 2rem;
+}
+.location-gpa-semester {
+  gap: 1rem;
+  margin-left: 20px;
+  flex-direction: flex-start;
+}
+.info {
+  margin-top: 20px;
+  font-size: 1rem;
+}
+.svg-icon {
+  display: inline;
+  width: auto;
+  height: 2em;
+}
+
+.topic-card {
+  padding: 20px; /* Add padding to the topic card */
+  width: 70%;
+  margin: 10px;
+}
+.post-comment-button {
+  padding: 10px 20px; /* Add padding to the "Post Comment" button */
+  border-radius: 0.5rem; /* Change the background color to a pleasing green */
+  color: white; /* Change text color to white */
+  font-weight: bold;
+  border: none; /* Remove the button border */
+  cursor: pointer; /* Show a pointer cursor on hover */
+  display: block;
+}
+.title {
+  text-align: center;
+  font-size: 3rem;
+}
+
+.nav-container {
+  border-bottom: 2px solid #e7e9ee;
+  margin-bottom: 24px;
+}
+
+.comment-nav {
+  list-style: none;
+  display: inline-block;
+  width: 100%;
+}
+
+.chat-icon {
+  height: 1em;
+  width: auto;
+  display: inline;
+}
+
+.comment-count {
+  font-weight: 500;
+  float: left;
+}
+
+.user {
+  font-weight: 500;
+  float: right;
+  margin-top: 2px;
+  margin-left: 4px;
+}
+
+.comment-username {
+  float: right;
+  font-weight: 500;
+}
+
+.create-section {
+  display: flex;
+  align-items: flex-start;
+  cursor: text
+}
+
+.avatar {
+  width: 52px;
+  height: 52px;
+  border-radius: 16px;
+}
+
+</style>
