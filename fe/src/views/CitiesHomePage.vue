@@ -5,7 +5,7 @@ import SingleReview from '../components/singleReview.vue'
 import CtaBanner from '../components/ctaBanner.vue'
 import UniCarousel from '../components/UniCarousel.vue'
 import ReviewModal from '../components/ReviewModal.vue'
-import { GoogleMap, Marker } from 'vue3-google-map'
+import { GoogleMap, InfoWindow, Marker } from 'vue3-google-map'
 import NearbyPlaceTab from '../components/NearbyPlaceTab.vue'
 
 export default {
@@ -17,6 +17,7 @@ export default {
     ReviewModal,
     GoogleMap,
     Marker,
+    InfoWindow,
     NearbyPlaceTab
   },
   data() {
@@ -54,12 +55,13 @@ export default {
     this.data = {}
 
     for (let place in places_dict) {
-      this.data[place] = await this.fetchData(place)
+      let d = await this.fetchData(place)
+      if (d.length > 0) {
+        this.data[place] = d
+      }
     }
 
-    for (let i = 0; i < this.reviews.length; i++) {
-      this.reviews[i].comment_trunc = this.truncate(this.reviews[i].comment, 40)
-    }
+    this.selectedPlaceType = Object.keys(this.data)[0]
 
     this.columns = ['Name', 'Rating', 'Total Ratings']
     this.width = 300
@@ -70,6 +72,17 @@ export default {
       clamp = clamp || '...'
       let words = text.split(' ')
       return words.length > length ? words.slice(0, length).join(' ') + clamp : text
+    },
+    getMarkers(activeTab) {
+      let markers = []
+      let curr = this.data[activeTab]
+      console.log(this.data[activeTab])
+      for (const p in curr) {
+        let marker = { 'center': curr[p].center, 'name': curr[p].name, 'rating': curr[p].rating }
+        markers.push(marker)
+      }
+      console.log(markers);
+      return markers
     },
     capitalizeFirstLetter(string) {
       if (string.includes('_')) {
@@ -93,7 +106,6 @@ export default {
       } else {
         this.latitude = null
         this.longitude = null
-        console.log('Unable to get coordinates.')
       }
     },
 
@@ -102,7 +114,6 @@ export default {
       const response = await fetch(wikiUrl)
       const data = await response.json()
       if (data.length > 0) {
-        console.log(data)
         let new_data = data.split(' ')
         new_data = new_data.splice(0, 40)
         new_data = new_data.join(' ')
@@ -136,7 +147,6 @@ export default {
           results[i].geometry.location.lat === undefined ||
           results[i].geometry.location.lng === undefined
         ) {
-          console.log('SKIP')
           continue
         }
 
@@ -148,6 +158,7 @@ export default {
           latitude: results[i].geometry.location.lat,
           longitude: results[i].geometry.location.lng
         }
+        row.center = { lat: row.latitude, lng: row.longitude }
         processed_results.push(row)
       }
 
@@ -159,7 +170,7 @@ export default {
         // If ratings are equal, sort by number of ratings in descending order
         return b.user_ratings_total - a.user_ratings_total
       })
-      processed_results = processed_results.slice(0, 5)
+      processed_results = processed_results.slice(0, 8)
       return processed_results
     }
   },
@@ -169,6 +180,9 @@ export default {
         return this.data[this.selectedPlaceType]
       }
       return []
+    },
+    markers() {
+      return this.getMarkers(this.selectedPlaceType)
     }
   }
 }
@@ -210,18 +224,21 @@ export default {
         </div>
 
         <!-- Google Map -->
-        <div class="mx-auto content h-auto lg:flex-nowrap">
-          <div class="basis-full md:basis-3/5 p-5">
-            <div class="google-maps">
-              <GoogleMap
-                :api-key="GOOGLE_MAP_API_KEY"
-                style="width: 100%; height: 500px"
-                :center="center"
-                :zoom="15"
-              >
-                <Marker :options="{ position: center }" />
-              </GoogleMap>
-            </div>
+        <div class="basis-full lg:basis-3/5 p-5">
+          <div class="google-maps">
+            <GoogleMap :api-key="GOOGLE_MAP_API_KEY" style="width: 100%; height: 500px" :center="center" :zoom="12">
+              <Marker :options="{ position: center }" />
+              <div v-for="marker in markers" :key="marker">
+                <Marker
+                  :options="{ position: marker.center, icon: { url: 'https://maps.google.com/mapfiles/ms/icons/orange-dot.png' } }">
+                  <InfoWindow v-model="opened">
+                    <div id="content">
+                      {{ marker.name }}
+                    </div>
+                  </InfoWindow>
+                </Marker>
+              </div>
+            </GoogleMap>
           </div>
         </div>
       </div>
