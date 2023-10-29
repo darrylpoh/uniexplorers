@@ -128,7 +128,7 @@
 
     <div :class="mq.smMinus ? 'flex-col items-center px-4' : 'flex-row justify-center px-8'" class="gap-4 text-darkgreen flex my-4 relative">
       <MqResponsive target="md+">
-        <div style="box-shadow: rgba(30, 54, 62, 0.3) 0px 2px 4px;" id="filter" class="rounded-xl h-fit w-fit bg-white mx-2 p-4 flex flex-col gap-2">
+        <div style="box-shadow: rgba(30, 54, 62, 0.3) 0px 2px 4px;" id="filter" class="rounded-xl h-fit w-fit bg-white mx-2 p-2 lg:p-4 flex flex-col gap-2">
           <exploreFilter :key="otherKey" @filter="updateResult" @filterWidth="updateSpacer"/>
         </div>
       </MqResponsive>

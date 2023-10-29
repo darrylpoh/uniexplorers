@@ -62,10 +62,6 @@ export default {
 </script>
 
 <style>
-  p {
-    color: #aba5a5;
-    font-size: 1.2em;
-  }
   label, input, select {
     display: block;
     font-weight: bold;
@@ -92,5 +88,12 @@ export default {
   button:disabled {
     background-color: #908d8d;
 
+  }
+</style>
+
+<style scoped>
+p {
+    color: #aba5a5;
+    font-size: 1.2em;
   }
 </style>

@@ -17,7 +17,7 @@ export const useTagsStore = defineStore('tags', {
         font : 'white'
       },
       'Computer Science' : {
-        background : 'redtw',
+        background : 'red',
         font : 'white'
       },
     }

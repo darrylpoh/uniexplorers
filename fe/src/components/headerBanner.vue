@@ -29,11 +29,11 @@
 
 <template>
   <div :class="mq.mdPlus ? 'px-16' : (mq.smPlus ? 'px-8' : '')" class="z-10 sticky top-0 w-screen bg-darkgreen h-20 flex items-center justify-around border-0 border-b-2 border-gray-500">
-    <div class="logo lg:w-1/4 xl:w-1/3 overflow-visible">
+    <div class="logo w-1/6 lg:w-1/4 overflow-visible">
       <img @click="goToHome" src="/Light Logo.png" :class="mq.lgPlus ? 'h-20' : 'h-16'" class="left-1/4 cursor-pointer transition-all" title="Back to Home">
     </div>
     
-    <div v-if="mq.mdPlus" :class="mq.smPlus ? 'flex-grow px-4' : 'w-1/2'" class="searchBar relative h-10 z-10">
+    <div v-if="mq.mdPlus" class="searchBar relative h-10 z-10 flex-grow">
       <textSearch/>
     </div>
 

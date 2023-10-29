@@ -33,7 +33,7 @@
 <template>
     <!-- TODO: Dyanmically change width-->
     <!-- outline outline-1 outline-darkgreen -->
-<div style="box-shadow: rgba(30, 54, 62, 0.3) 0px 2px 4px;" @click="$router.push('/uni/' + this.uniData.name.replaceAll(' ', '-').toLowerCase())" class="card xl:max-w-[50vw] rounded-xl min-w-min h-min bg-white flex items-center  text-darkgreen transition-all hover:scale-[101%]  hover:cursor-pointer hover:outline-2 hover:outline-offset-2 active:scale-100 active:brightness-90 active:outline-offset-0">
+<div style="box-shadow: rgba(30, 54, 62, 0.3) 0px 2px 4px;" @click="$router.push('/uni/' + this.uniData.name.replaceAll(' ', '-').toLowerCase())" class="card border-darkgreen/30 xl:max-w-[50vw] rounded-xl min-w-min h-min bg-white flex items-center text-darkgreen transition-all hover:scale-[101%]  hover:cursor-pointer hover:outline-2 hover:outline-offset-2 active:scale-100 active:brightness-90 active:outline-offset-0">
     <img v-if="mq.lgPlus" :src="img" alt="UNI HERE" class="w-48 h-48 flex-none">
     <div class="info flex flex-1 flex-col my-2 mx-4">
         <h2 :class="mq.xlPlus ? 'w-3/4' : 'w-full', mq.lgPlus ? 'text-xl' : 'text-base'" class="font-bold border-b-2"> {{ uniData.name }} </h2>
@@ -48,7 +48,7 @@
                 <svg :class="mq.lgPlus ? 'w-6 mx-2' : 'w-4 scale-105 mr-1.5'" class="inline relative" viewBox="0 0 35 29" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M6.36364 16.4011V22.8456L17.5 29L28.6364 22.8456V16.4011L17.5 22.5556L6.36364 16.4011ZM17.5 0L0 9.66667L17.5 19.3333L31.8182 11.4228V22.5556H35V9.66667L17.5 0Z" fill="black"/>
                 </svg>
-                {{ uniData.gpa }} GPA
+                {{ uniData.gpa_10_percentile }} - {{ uniData.gpa_90_percentile }} GPA
             </div>
             <div class="time font-bold flex items-center min-w-fit mr-4">
                 <svg :class="mq.lgPlus ? 'w-5 mx-2' : 'w-3.5 scale-105 mr-1.5'" class="inline relative" viewBox="0 0 29 29" fill="none" xmlns="http://www.w3.org/2000/svg">

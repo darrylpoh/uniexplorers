@@ -1,6 +1,6 @@
 <template>
   <div class="coverBg rellax h-screen w-screen absolute bg-darkgreen overflow-x-hidden">
-    <div class="imagesContainer flex w-full h-auto opacity-50">
+    <div class="imagesContainer flex min-w-full w-full h-auto min-h-full opacity-50">
       <Transition mode="out-in" name="fade-zoom">
         <img
           class="inline-block object-cover w-full"
@@ -41,7 +41,7 @@
               'bg-white text-darkgreen': !isLoginMode
             }"
             @click="toggleMode(true)"
-            class="w-1/2 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+            class="w-1/2 transition-all focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
           >
             Login
           </button>
@@ -51,7 +51,7 @@
               'bg-white text-darkgreen': isLoginMode
             }"
             @click="toggleMode(false)"
-            class="w-1/2 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+            class="w-1/2 transition-all focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
           >
             Signup
           </button>
