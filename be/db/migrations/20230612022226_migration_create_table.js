@@ -116,6 +116,11 @@ exports.up = function(knex) {
             table.dateTime('created').defaultTo(knex.fn.now());
             table.dateTime('updated');
         })
+        .createTable('university_image', (table) => {
+            table.string('university_name').index().references('name').inTable('university');
+            table.string('image_filename').index().references('filename').inTable('image_file');
+            table.primary(['university_name', 'image_filename']);
+        })
         ;
 };
 
@@ -134,5 +139,6 @@ exports.down = function(knex) {
         .dropTableIfExists('uni_user')
         .dropTableIfExists('image_file')
         .dropTableIfExists('uni_forum_thread')
-        .dropTableIfExists('uni_forum_comment');
+        .dropTableIfExists('uni_forum_comment')
+        .dropTableIfExists('university_image');
 };

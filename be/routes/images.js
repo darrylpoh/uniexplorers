@@ -59,4 +59,60 @@ module.exports = app => {
                 );
             
         });
+
+    app.route('/images/university/:university_name')
+        .get(async (req, res) => {
+            const { university_name } = req.params;
+
+            db
+                .select()
+                .from('university_image')
+                .where('university_name', university_name)
+                .then(
+                    (filenames) => {
+                        res.json(filenames)
+                    }
+                )
+                .catch(
+                    err => res.json(
+                        {
+                            success: false,
+                            message: 'upload failed',
+                            stack: err.stack,
+                        }
+                    )
+                )
+        })
+
+        .post(imageUpload.single('image'), async (req, res) => {
+            // console.log(req.file);
+            const { filename, mimetype, size } = req.file;
+            const { university_name } = req.params; 
+            const filepath = req.file.path;
+
+            const resp = await db.insert({
+                filename, filepath, mimetype, size
+            })
+            .into('image_file')
+            .returning("filename")
+
+            let image_filename = resp[0].filename
+
+            db
+                .insert({
+                    university_name, image_filename
+                })
+                .into('university_image')
+                .then(() => res.json({
+                    success: true,
+                    university_name: university_name,
+                    image_filename: image_filename
+
+                }))
+                .catch(err => res.json({
+                    success: false,
+                    message: 'upload failed',
+                    stack: err.stack,
+                }));
+        });
 }

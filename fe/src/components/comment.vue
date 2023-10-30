@@ -54,6 +54,10 @@
                 question.reply = !question.reply
             },
 
+            handlePost(postData) {
+                console.log(postData);
+            },
+
             getTime(questionDate) {
                 const [year, month, day] = new Date(questionDate).toISOString().split('T')[0].split('-').map(Number);
                 questionDate = [day, month, year]
@@ -138,7 +142,7 @@
             <img :src="profile" alt="" class="avatar">
         </div>
         <div class="flex flex-grow">
-            <textAreaInput name="reply" value="THIS IS THE EBST REPLIY" textCTA="Reply"/>
+            <textAreaInput :thread_id="commentData.thread_id" :comment_id="commentData.id" @posted="handlePost" name="reply" value="THIS IS THE EBST REPLIY" textCTA="Reply"/>
         </div>
         </div>
 

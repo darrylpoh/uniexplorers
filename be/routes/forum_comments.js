@@ -53,6 +53,8 @@ module.exports = app => {
         .post(authenticateToken, async (req, res) => {
             const jwtEmail = req.jwt_object.email;
             const reqCommentText = req.body.comment_text;
+            const reqCommentTextRaw = req.body.comment_text_raw;
+            const parentId = req.body.parent_id;
             const threadId = req.body.thread_id;
 
             if (!reqCommentText) {
@@ -73,13 +75,25 @@ module.exports = app => {
             const user_email = user.email;
             // const user_university = user.university;
 
-            const thread_obj = await db('uni_forum_comment').insert({
-                user_email: user_email,
-                thread_id: threadId,
-                comment_text: reqCommentText
-            }).returning("*");
+            if (!parentId) {
+                const thread_obj = await db('uni_forum_comment').insert({
+                    user_email: user_email,
+                    thread_id: threadId,
+                    comment_text: reqCommentText
+                }).returning("*");
 
-            res.status(201).json(thread_obj);
+                res.status(201).json(thread_obj);
+            } else {
+                const thread_obj = await db('uni_forum_comment').insert({
+                    user_email: user_email,
+                    thread_id: threadId,
+                    parent_id: parentId,
+                    comment_text: reqCommentText
+                }).returning("*");
+
+                res.status(201).json(thread_obj);
+            }
+
         })
         .patch(authenticateToken, async (req, res) => {
             const jwtEmail = req.jwt_object.email;
@@ -123,6 +137,7 @@ module.exports = app => {
                 // .where('user_email', user_email)
                 .leftJoin('user', 'uni_forum_comment.user_email', 'user.email')
                 .where('thread_id', thread_id)
+                .orderBy("created", "desc")
                 .then(
                     // results => {
                     //     res.json(results)
@@ -145,6 +160,10 @@ module.exports = app => {
                                 map[comment.parent_id].children.push(comment);
                             }
                         });
+
+                        Object.values(map).forEach(comment => {
+                            comment.children.sort((a, b) => b.created - a.created);
+                        });                
 
                         res.json(result)
                     }

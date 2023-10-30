@@ -15,7 +15,11 @@ export default {
         return {
             email: '',
             password: '',
-            remember: false
+            remember: false,
+            errors: {  
+                email: '',
+                password: '',
+            }
         }
     },
     props: {
@@ -26,6 +30,23 @@ export default {
 
         },
         onSubmit() {
+            this.errors.email = '';
+            this.errors.password = '';
+
+            if (!this.email || !this.password) {
+                if (!this.email) {
+                    this.errors.email = 'Email is required.';
+                }
+                if (!this.password) {
+                    this.errors.password = 'Password is required.';
+                }
+                return;
+            }
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(this.email.trim())) {
+                this.errors.email = 'Invalid email address.';
+                return;
+            }
             console.log(this.email, this.password)
             
             const authStore = useAuthStore();
@@ -57,7 +78,15 @@ export default {
             class="w-full text-white bg-darkgreen hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-green-600 dark:hover:bg-green-700 text-darkgreen">
             Login
         </button>
+        <div v-if="errors.email" class="error-message">{{ errors.email }}</div>
+        <div v-if="errors.password" class="error-message">{{ errors.password }}</div>
     </form>
 </template>
 
-<style scoped></style>
+<style scoped>
+.error-message {
+    color: red;
+    font-size: 14px;
+    margin-top: 5px;
+}
+</style>

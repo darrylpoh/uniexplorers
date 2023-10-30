@@ -86,7 +86,7 @@
                 </svg>
             </div>
         </div>
-        <div v-if="searched && showResults" class="wrapper h-auto bg-white overflow-hidden shadow-md rounded-t-none">
+        <div v-if="searched && showResults" class="wrapper h-auto bg-white overflow-hidden shadow-md rounded-lg rounded-t-none border border-2 border-darkgreen/30">
             <div v-if="results.length > 0" v-for="result, idx in results" @click="goToResult(result.name)" class="relative shadow-inner w-full min-h-16 py-2 hover:bg-gray-100 hover:cursor-pointer active:border active:border-darkgreen transition-all duration-75" :class="[idx != results.length - 1 ? 'border-b border-lightgray' : '']">
                 <h2 class="text-darkgreen pl-4 text-lg font-medium text-left">{{result.name}}</h2>
         

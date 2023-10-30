@@ -32,8 +32,12 @@
           <option value="chattahoochee">Chattahoochee Valley Community College</option>
         </select>
 
-        <div class="flex justify-end">
-          <button :disabled="noChangesMade" class="">Save Changes <span class="text-orange text-2xl align-middle">&#62;</span></button>
+        <div class="flex justify-end items-center mb-4">
+          <button :disabled="noChangesMade" class="mr-4">Save Changes <span class="text-orange text-2xl align-middle">&#62;</span></button>
+        </div>
+
+        <div class="flex justify-end items-center mb-4">
+          <button @click="logout" class="mr-4 bg-red-500 hover:bg-red-700 text-white py-2 px-4 rounded">Logout</button>
         </div>
         
       </form>
@@ -43,6 +47,7 @@
 
 <script>
 import textSearch from '../components/textSearch.vue'
+import { useAuthStore } from '../stores/auth.store.js';
 export default {
   data() {
     return {
@@ -61,6 +66,10 @@ export default {
   methods: {
     inputChange() {
       this.noChangesMade = false
+    },
+    logout() {
+      const authStore = useAuthStore();
+      authStore.logout();
     },
   }
 }
