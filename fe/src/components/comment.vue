@@ -1,6 +1,6 @@
 <script>
 
-    import axios from 'axios'
+    import { fetchWrapper } from '@/helpers';
     import textAreaInput from './textAreaInput/textAreaInput.vue';
     import { useCacheStore } from '@/stores/CacheStore'
 
@@ -46,17 +46,13 @@
         methods : {
 
             handlePost(postData) {
-                axios.post(import.meta.env.VITE_BACKEND + '/forum/comments', {
+                
+                fetchWrapper.post(import.meta.env.VITE_BACKEND + '/forum/comments', {
                     comment_text: postData.comment_text,
                     comment_text_raw: postData.comment_text_raw,
                     thread_id: this.$route.params.thread,
                     parent_id: this.commentData.id
-                }, {
-                    headers: {
-                    Authorization: `Bearer ${JSON.parse(localStorage.getItem('user')).token}`,
-                    'Content-Type': 'application/json',
-                    },
-                }).then(res => {
+                }).then(data => {
                     // console.log('this is from comment', res.data)
                     // var comment_body = res.data[0]
                     // comment_body = {...comment_body, user_image_filename : res.data.user_image_filename}

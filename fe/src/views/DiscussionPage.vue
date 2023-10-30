@@ -45,7 +45,7 @@
 
   <script>
   import DiscussCard from "@/components/DiscussCard.vue";
-  import axios from 'axios'
+  import { fetchWrapper } from '@/helpers'
   import { useCacheStore } from '@/stores/CacheStore'
 
   export default {
@@ -63,10 +63,9 @@
       }
     },
     mounted() {
-      axios.get(import.meta.env.VITE_BACKEND + '/forum/threads/' + this.$route.params.uniName).then(res => {
-        console.log(res.data);
-        this.threads = res.data
-        this.CacheStore.setThreads(res.data)
+      fetchWrapper.get(import.meta.env.VITE_BACKEND + '/forum/threads/' + this.$route.params.uniName).then(data => {
+        this.threads = data
+        this.CacheStore.setThreads(data)
       })
     }
   };

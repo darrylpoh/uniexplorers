@@ -1,10 +1,9 @@
 
 <script>
 import textAreaInput from '@/components/textAreaInput/textAreaInput.vue';
-import axios from 'axios'
+import { fetchWrapper } from '../helpers/fetch-wrapper';
 import comment from '@/components/comment.vue';
 import { useCacheStore } from '@/stores/CacheStore'
-// import { useCacheStore } from '@/stores/CacheStore'
 
 export default {
   components: {
@@ -56,23 +55,17 @@ export default {
 
   methods: {
     getComments() {
-      axios.get(import.meta.env.VITE_BACKEND + '/forum/comments/' + this.$route.params.thread).then(res => {
-        this.questionsList = []
-        this.questionsList = res.data
-        console.log(this.questionsList);
+      this.questionsList = []
+      fetchWrapper.get(import.meta.env.VITE_BACKEND + '/forum/comments/' + this.$route.params.thread).then(data => {
+        this.questionsList = data
       })
     },
     handlePost(postData) {
-      axios.post(import.meta.env.VITE_BACKEND + '/forum/comments', {
+      fetchWrapper.post(import.meta.env.VITE_BACKEND + '/forum/comments', {
         comment_text: postData.comment_text,
         comment_text_raw: postData.comment_text_raw,
         thread_id: this.$route.params.thread,
-      }, {
-        headers: {
-          Authorization: `Bearer ${JSON.parse(localStorage.getItem('user')).token}`,
-          'Content-Type': 'application/json',
-        },
-      }).then(res => {
+      }).then(data => {
         return this.getComments()
         // console.log('after posting', res.data)
         // var comment_body = res.data[0]

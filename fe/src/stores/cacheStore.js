@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
+import { fetchWrapper } from '../helpers/fetch-wrapper'
 
 export const useCacheStore = defineStore({
   id: 'cache',
@@ -12,8 +13,8 @@ export const useCacheStore = defineStore({
   actions: {
     async setCurrentThread(thread_id) {
         if (this.threads === [] || !this.current) {
-            return axios.get(import.meta.env.VITE_BACKEND + '/forum/' + thread_id).then(res => {
-              this.current = res.data[0]
+            return fetchWrapper.get(import.meta.env.VITE_BACKEND + '/forum/' + thread_id).then(data => {
+              this.current = data[0]
               console.log(this.current)
               return this.current
             })

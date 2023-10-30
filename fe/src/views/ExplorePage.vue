@@ -1,5 +1,5 @@
 <script>
-  import axios from 'axios';
+  import { fetchWrapper } from '../helpers/fetch-wrapper';
   import uniCards from '../components/uniCards.vue';
   import exploreFilter from '../components/exploreFilter.vue';
   import textSearch from '../components/textSearch.vue';
@@ -15,11 +15,10 @@
       return { searchStore, filterKey, otherKey }
     },
     mounted() {
-
       if (this.searchStore.searchResults.length == 0) {
-        axios.get(import.meta.env.VITE_BACKEND + '/universities').then((res) => {
-          this.searchStore.setSearchResults(res.data)
-        }).catch((err) => {
+        fetchWrapper.get(import.meta.env.VITE_BACKEND + '/universities').then(data => {
+          this.searchStore.setSearchResults(data)
+        }).catch(err => {
             if (err.code == 'ERR_NETWORK') {
               this.error = "DB Not Connected..."
             }
@@ -102,8 +101,8 @@
         }
 
         this.searchStore.setSearchQuery(query)
-        axios.get(import.meta.env.VITE_BACKEND + '/universities' + query).then((res) => {
-          this.searchStore.setSearchResults(res.data)
+        fetchWrapper.get(import.meta.env.VITE_BACKEND + '/universities' + query).then(data => {
+          this.searchStore.setSearchResults(data)
         })
       }
     }
