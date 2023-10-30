@@ -2,6 +2,7 @@
 
     import { useSearchStore } from '@/stores/searchStore'
     import axios from 'axios'
+    // import { useRouter } from 'vue-router';
 
 
     export default {
@@ -26,6 +27,12 @@
                 this.showResults = false
                 this.$router.push('uni/' + name)
             },
+
+            // goToResult(name) {
+            //     this.showResults = false;
+            //     this.$router.push({ name: 'UniHomePage', params: { uniName: name } });
+            // },
+
             debouncedSearch() {
                 if (this.debounceTimeout) {
                     clearTimeout(this.debounceTimeout);
