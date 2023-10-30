@@ -14,24 +14,43 @@
             }
         },
         props : {
-
+            textCTA : {
+                type : String,
+                default : 'Post!'
+            },
+            defaulttextContent : {
+                type : String,
+                default : ''
+            },
+            identifier : {
+                type : String,
+                required : true
+            }
+        },
+        mounted() {
+            if (this.defaulttextContent) {
+                this.textContent = this.defaulttextContent
+            }
         },
         methods : {
             handleSubmit() {
+                // all's g
                 console.log(this.textContent)
                 console.log('SBMITTED')
+                this.$emit('posted', true)
             }
-        }
+        },
+        emits : ['posted']
     }
 </script>
 
 <template>
 
 <div class="ml-4 flex flex-col-reverse flex-grow">
-    <QuillEditor v-model:content="textContent" theme="snow" style="border: 1px solid #d1d5db; border-bottom: none;" toolbar="#my-toolbar">
+    <QuillEditor :id="identifier + '-editor'" v-model:content="textContent" contentType="html" theme="snow" style="border: 1px solid #d1d5db; border-bottom: none;" toolbar="">
     
     <template #toolbar>
-      <div id="my-toolbar" style="display: flex; align-items: center;">
+      <div :id="'#'+identifier+'-toolbar'" style="display: flex; align-items: center;">
         <!-- Basic Formatting -->
         <span class="ql-formats">
           <button class="ql-bold"></button>
@@ -60,7 +79,7 @@
         <!-- Include the custom button you defined earlier -->
         <span class="ql-formats" style="margin-left: auto;">
             <button id="ql-my-custom-button" @click="handleSubmit">
-                Post!
+                {{ textCTA }}
             </button>
         </span>
       </div>
@@ -79,7 +98,5 @@
     float: right;
     padding: 8px 16px;
 }
-
-
 
 </style>

@@ -7,6 +7,7 @@ import ReviewModal from '../components/ReviewModal.vue';
 import { GoogleMap, Marker, InfoWindow } from "vue3-google-map";
 import NearbyPlaceTab from '../components/NearbyPlaceTab.vue';
 import CourseMapping from '../components/CourseMapping.vue';
+import textSearch from '../components/textSearch.vue';
 
 export default {
   components: {
@@ -18,7 +19,8 @@ export default {
     Marker,
     InfoWindow,
     NearbyPlaceTab,
-    CourseMapping
+    CourseMapping,
+    textSearch,
   },
   data() {
     return {
@@ -189,6 +191,7 @@ export default {
 <template>
   <div>
     <div class="container md:max-w-96 mx-auto">
+      <textSearch class="my-5 md:hidden main mx-auto"/>
       <div class="main rounded-xl flex flex-wrap lg:my-8 my-5 lg:flex-nowrap items-center text-darkgreen">
         <div class="basis-full lg:basis-1/2 xl:basis-5/12 md:ml-4 ml-4">
           <h2 class="font-bold font-display lg:text-2xl md:text-xl">{{ university.name }}</h2>
