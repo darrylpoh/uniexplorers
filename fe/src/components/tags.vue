@@ -13,19 +13,11 @@
             const tagsStore = useTagsStore()
             return { tagsStore }
         },
-        computed : {
-            backgroundColor() {
-                return 'bg-' + this.tagsStore.tags[this.tagName].background
-            },
-            fontColor() {
-                return 'text-' + this.tagsStore.tags[this.tagName].font
-            }
-        }
     }
 </script>
 
 <template>
-<div :class="[backgroundColor, fontColor]" class="tag text-2xs lg:text-xs font-semibold w-fit px-4 py-1 rounded-xl">
+<div :class="[...tagsStore.getTag(this.tagName)]" class="tag text-2xs lg:text-xs font-semibold w-fit px-4 py-1 rounded-xl">
     {{ tagName }}
 </div>
 </template>

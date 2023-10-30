@@ -60,5 +60,10 @@ module.exports = {
   },
   plugins: [
     require('flowbite/plugin')
+  ],
+  safelist: [
+    {
+      pattern: /text-.+/,
+    }
   ]
 }
