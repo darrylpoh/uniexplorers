@@ -60,41 +60,59 @@ module.exports = app => {
             
         });
 
-    app.route('/images/:university')
+    app.route('/images/university/:university_name')
+        .get(async (req, res) => {
+            const { university_name } = req.params;
+
+            db
+                .select()
+                .from('university_image')
+                .where('university_name', university_name)
+                .then(
+                    (filenames) => {
+                        res.json(filenames)
+                    }
+                )
+                .catch(
+                    err => res.json(
+                        {
+                            success: false,
+                            message: 'upload failed',
+                            stack: err.stack,
+                        }
+                    )
+                )
+        })
+
         .post(imageUpload.single('image'), async (req, res) => {
             // console.log(req.file);
             const { filename, mimetype, size } = req.file;
-            const { university } = req.params; 
+            const { university_name } = req.params; 
             const filepath = req.file.path;
 
-            console.log(university);
-
-            const resp_filename = await db.insert({
+            const resp = await db.insert({
                 filename, filepath, mimetype, size
             })
             .into('image_file')
             .returning("filename")
 
-            // db
-            //     .insert({
-            //         filename
-            //     })
+            let image_filename = resp[0].filename
 
-            res.json(resp_filename);
+            db
+                .insert({
+                    university_name, image_filename
+                })
+                .into('university_image')
+                .then(() => res.json({
+                    success: true,
+                    university_name: university_name,
+                    image_filename: image_filename
 
-            // db
-            //     .insert({
-            //         filename, filepath, mimetype, size
-            //     })
-            //     .into('image_file')
-            //     .then(() => res.json({
-            //         success: true,
-            //         filename
-            //     }))
-            //     .catch(err => res.json({
-            //         success: false,
-            //         message: 'upload failed',
-            //         stack: err.stack,
-            //     }));
+                }))
+                .catch(err => res.json({
+                    success: false,
+                    message: 'upload failed',
+                    stack: err.stack,
+                }));
         });
 }

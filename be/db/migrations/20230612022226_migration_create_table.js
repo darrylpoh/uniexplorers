@@ -139,5 +139,6 @@ exports.down = function(knex) {
         .dropTableIfExists('uni_user')
         .dropTableIfExists('image_file')
         .dropTableIfExists('uni_forum_thread')
-        .dropTableIfExists('uni_forum_comment');
+        .dropTableIfExists('uni_forum_comment')
+        .dropTableIfExists('university_image');
 };

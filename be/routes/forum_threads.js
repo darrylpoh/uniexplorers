@@ -226,4 +226,27 @@ module.exports = app => {
             //             stack: err.stack
             //     }))
         })
+
+    app.route('/forum/:thread_id')
+        .get(async (req, res) => {
+            const {thread_id} = req.params;
+
+            db
+                    .select()
+                    .from('uni_forum_thread')
+                    .where('id', thread_id)
+                    .then(
+                        results => {
+                            res.json(results)
+                        }
+                    )
+                    .catch(err => res
+                        .status(404)
+                        .json({
+                            success: false,
+                            message: 'uni forum thread database query failed',
+                            stack: err.stack,
+                        })
+                    );
+        })
     };

@@ -3,10 +3,7 @@ import { Modal } from 'flowbite-vue'
 import { ref } from 'vue'
 import { Form, Field, ErrorMessage } from 'vee-validate';
 import { fetchWrapper } from '@/helpers';
-import { useAuthStore } from '@/stores';
 import * as yup from 'yup';
-
-const store = useAuthStore()
 
 const rating = ref()
 const comment = ref()
@@ -48,7 +45,7 @@ function showModal() {
 
 <template>
   <button @click="showModal" type="button" class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 
-    font-medium rounded-lg text-sm px-6 py-4">
+    font-medium rounded-lg text-sm px-4 py-3 mt-2 lg:mt-0 lg:px-6 lg:py-4">
     Leave a Review
   </button>
   <Modal v-if="isShowModal" @close="closeModal">

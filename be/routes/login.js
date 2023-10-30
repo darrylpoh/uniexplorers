@@ -20,7 +20,8 @@ module.exports = app => {
                 "password",
                 "created",
                 "updated",
-                "is_admin"
+                "is_admin",
+                "image_filename"
             ).from('user').where('email', reqEmail).first();
 
             // check if user exists

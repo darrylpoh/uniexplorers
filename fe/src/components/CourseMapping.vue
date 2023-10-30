@@ -9,7 +9,9 @@ export default {
       filters: [],
       filterOptions: [],
       filterOptionsCurr: [],
-      query: ''
+      query: '',
+      itemsPerPage: 10,
+      page: 0
     }
   },
   async beforeMount() {
@@ -55,18 +57,18 @@ export default {
       this.filterOptions.push(opt)
     }
 
-    this.pagination = {}
-    let perpage = 10
-    let total = this.data.length
-    let page_count = Math.ceil(total / 10)
-    let start = 0
-    let end = start + perpage
-    for (let i = 0; i < page_count; i++) {
-      this.pagination[i] = this.data.slice(start, end)
-      start += perpage
-      end = start + perpage
-    }
-    this.pageData = this.pagination[0]
+    // this.pagination = {}
+    // let perpage = 10
+    // let total = this.data.length
+    // let page_count = Math.ceil(total / 10)
+    // let start = 0
+    // let end = start + perpage
+    // for (let i = 0; i < page_count; i++) {
+    //   this.pagination[i] = this.data.slice(start, end)
+    //   start += perpage
+    //   end = start + perpage
+    // }
+    // this.pageData = this.pagination[0]
     
     this.clearFilter()
   },
@@ -74,12 +76,14 @@ export default {
     clearFilter() {
       this.filters = []
       this.filterOptionsCurr = this.filterOptions.slice(0)
+      this.page = 0
     },
     handleSelect(item) {
       this.filters.push(item.value)
       this.filterOptionsCurr = this.filterOptionsCurr.filter((x) => {return x.value !== item.value})
       this.query = ''
       document.getElementById('query').blur()
+      this.page = 0
     },
     handleRemove(filter) {
       this.filters = this.filters.filter((x) => {
@@ -88,8 +92,18 @@ export default {
       this.filterOptionsCurr.push({'label': filter, 'value': filter})
     },
     onNext(pager) {
-      this.pageData = this.pagination[pager]
-    }
+      this.page = pager-1
+      // this.pageData = this.pagination[pager]
+    },
+    onPrev(pager) {
+      this.page = pager-1
+    },
+    onPageChange(pager) {
+      this.page = pager-1
+    },
+    paginate() {
+      return this.filteredData.slice(this.page*this.itemsPerPage, this.itemsPerPage * this.page + this.itemsPerPage)        
+    },
   },
   computed: {
     filteredData() {
@@ -99,6 +113,15 @@ export default {
         })
       }
       return this.data
+    },
+    numPages() {
+      return Math.ceil(this.filteredData.length / this.itemsPerPage)
+    },
+    paginateData() {
+      return this.paginate()
+    },
+    currentPage() {
+      return this.page + 1
     }
   },
 }
@@ -130,7 +153,7 @@ export default {
         {{ filter }}
       </el-tag>
     </div>
-    <el-table :data="filteredData" :default-sort="{ prop: 'course_area', order: 'ascending' }" height="auto"
+    <el-table :data="paginateData" :default-sort="{ prop: 'course_area', order: 'ascending' }" height="auto" width="auto"
       class="custom-table basis-full mt-2">
       <el-table-column prop="course_title" label="Course Title">
         <template #default="scope">
@@ -143,7 +166,7 @@ export default {
         </template>
       </el-table-column>
     </el-table>
-    <el-pagination background layout="prev, pager, next" :total="data.length" @next-click="onNext"/>
+    <el-pagination class="mt-5" v-model:current-page="currentPage" background layout="prev, pager, next" :total="filteredData.length" @next-click="onNext" @prev-click="onPrev" @current-change="onPageChange"/>
   </div>
 </template>
 
