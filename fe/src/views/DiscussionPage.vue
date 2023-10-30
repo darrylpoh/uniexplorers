@@ -46,7 +46,7 @@
   <script>
   import DiscussCard from "@/components/DiscussCard.vue";
   import axios from 'axios'
-  import { useThreadStore } from '@/stores/threadStore'
+  import { useCacheStore } from '@/stores/CacheStore'
 
   export default {
     name: "App",
@@ -54,8 +54,8 @@
       DiscussCard,
     },
     setup() {
-      const threadStore = useThreadStore()
-      return {threadStore}
+      const CacheStore = useCacheStore()
+      return {CacheStore}
     },
     data() {
       return {
@@ -66,7 +66,7 @@
       axios.get(import.meta.env.VITE_BACKEND + '/forum/threads/' + this.$route.params.uniName).then(res => {
         console.log(res.data);
         this.threads = res.data
-        this.threadStore.setThreads(res.data)
+        this.CacheStore.setThreads(res.data)
       })
     }
   };

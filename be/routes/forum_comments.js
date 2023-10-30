@@ -87,7 +87,7 @@ module.exports = app => {
                 comment_obj.parent_id = parentId
             }
 
-            const thread_obj = await db('uni_forum_comment').insert(comment_obj).returning("*")[0];
+            const thread_obj = await db('uni_forum_comment').insert(comment_obj).returning("*");
 
             res.status(201).json({
                 ...thread_obj,

@@ -9,7 +9,6 @@
 <script>
 	import Quill from 'quill'
 	import quillToolbar from './quillToolbar.vue'
-    import axios from 'axios'
 
     export default {
         props: {
@@ -44,26 +43,22 @@
 
         methods: {
 			update() {
-                this.content_raw = this.editor.getText() ? this.editor.root.innerHTML : ''
+                this.content_raw = this.editor.root.innerHTML
+                this.content = this.editor.getText()
             },
             handleSubmit() {
-                // axios.post(import.meta.env.VITE_BACKEND + '/forum/comments', {
-                //     comment_text : this.content_raw,
-                //     thread_id : this.thread_id,
-                //     comment_id : this.comment_id
-                // }).then(res => {
-                //     console.log(res.data)
-                // })
-                
+
                 this.$emit('posted', {
-                    user_email : 'TEMPEMAILTOBEHERE@',
+                    user_email : JSON.parse(localStorage.getItem('user')).user_data.email,
                     children : [],
-                    comment_text : '',
+                    comment_text : this.content,
                     comment_text_raw : this.content_raw,
                     created : new Date().toString(),
                     num_likes : 0,
                     num_dislikes : 0,
                 })
+
+                this.editor.root.innerHTML = ''
             }
         },
 
