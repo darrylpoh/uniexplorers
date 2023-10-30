@@ -94,7 +94,6 @@ export default {
           let img = {'src': url, 'alt': ''}
           this.images.push(img)
         }
-        // console.log(this.images)
       }
     },
 
