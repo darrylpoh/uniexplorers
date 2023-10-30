@@ -59,4 +59,42 @@ module.exports = app => {
                 );
             
         });
+
+    app.route('/images/:university')
+        .post(imageUpload.single('image'), async (req, res) => {
+            // console.log(req.file);
+            const { filename, mimetype, size } = req.file;
+            const { university } = req.params; 
+            const filepath = req.file.path;
+
+            console.log(university);
+
+            const resp_filename = await db.insert({
+                filename, filepath, mimetype, size
+            })
+            .into('image_file')
+            .returning("filename")
+
+            // db
+            //     .insert({
+            //         filename
+            //     })
+
+            res.json(resp_filename);
+
+            // db
+            //     .insert({
+            //         filename, filepath, mimetype, size
+            //     })
+            //     .into('image_file')
+            //     .then(() => res.json({
+            //         success: true,
+            //         filename
+            //     }))
+            //     .catch(err => res.json({
+            //         success: false,
+            //         message: 'upload failed',
+            //         stack: err.stack,
+            //     }));
+        });
 }
