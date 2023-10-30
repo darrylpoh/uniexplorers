@@ -73,26 +73,26 @@ module.exports = app => {
 
             const user = await db.select().from('user').where('email', jwtEmail).first();
             const user_email = user.email;
+            const user_image_filename = user.image_filename;
             // const user_university = user.university;
 
-            if (!parentId) {
-                const thread_obj = await db('uni_forum_comment').insert({
-                    user_email: user_email,
-                    thread_id: threadId,
-                    comment_text: reqCommentText
-                }).returning("*");
-
-                res.status(201).json(thread_obj);
-            } else {
-                const thread_obj = await db('uni_forum_comment').insert({
-                    user_email: user_email,
-                    thread_id: threadId,
-                    parent_id: parentId,
-                    comment_text: reqCommentText
-                }).returning("*");
-
-                res.status(201).json(thread_obj);
+            const comment_obj = {
+                user_email: user_email,
+                thread_id: threadId,
+                comment_text: reqCommentText,
+                comment_text_raw: reqCommentTextRaw
             }
+
+            if (parentId) {
+                comment_obj.parent_id = parentId
+            }
+
+            const thread_obj = await db('uni_forum_comment').insert(comment_obj).returning("*");
+
+            res.status(201).json({
+                ...thread_obj,
+                user_image_filename
+            });
 
         })
         .patch(authenticateToken, async (req, res) => {
