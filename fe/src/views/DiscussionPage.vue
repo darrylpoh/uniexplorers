@@ -33,38 +33,42 @@
 
     <div class="discussionContentWrapper grid grid-cols-12 mb-16">
       <div class="discussionsWrapper flex flex-col gap-2 col-span-12 md:col-span-8 xxl:col-span-6 md:col-start-2 xl:col-start-2 xxl:col-start-2 ">
-      <!-- AMA -->
-        <DiscussCard title="AMA about {schoolName}">
-          <!-- Content for AMA card -->
-        </DiscussCard>
-      <!-- Accoms -->
-      <DiscussCard title="Accommodation">
-        <!-- Content for Accoms card -->
-      </DiscussCard>
-      <!-- Budget -->
-      <DiscussCard title="Budget">
-        <!-- Content for Budget card -->
-      </DiscussCard>
-      <!-- To Do -->
-      <DiscussCard title="What to do in this city (Maybe can pull the city name)?">
-        <!-- Content for Living card -->
-      </DiscussCard>
-      <!-- Discuss Card 5 -->
-      <DiscussCard title="Who's Going to {schoolName}">
-        <!-- Content for Who's Going card -->
-      </DiscussCard>
+        <DiscussCard v-for="thread in threads" :title="thread.forum_title" :forum_text="thread.forum_text" :thread_id="thread.thread_id" :count="thread.comment_count"/>
+      <!-- <DiscussCard title="AMA about {schoolName}"/>
+      <DiscussCard title="Accommodation"/>
+      <DiscussCard title="Budget"/>
+      <DiscussCard title="What to do in this city (Maybe can pull the city name)?"/>
+      <DiscussCard title="Who's Going to {schoolName}"/> -->
       </div>
     </div>
   </template>
 
   <script>
   import DiscussCard from "@/components/DiscussCard.vue";
+  import axios from 'axios'
+  import { useThreadStore } from '@/stores/threadStore'
 
   export default {
     name: "App",
     components: {
       DiscussCard,
     },
+    setup() {
+      const threadStore = useThreadStore()
+      return {threadStore}
+    },
+    data() {
+      return {
+        threads : []
+      }
+    },
+    mounted() {
+      axios.get(import.meta.env.VITE_BACKEND + '/forum/threads/' + this.$route.params.uniName).then(res => {
+        console.log(res.data);
+        this.threads = res.data
+        this.threadStore.setThreads(res.data)
+      })
+    }
   };
   </script>
 

@@ -16,8 +16,11 @@
       // authStore: useAuthStore()
     },
     methods : {
+      goToCities() {
+        this.$router.push('/explorecitiespage')
+      },
       goToProfile() {
-        this.$router.push('/profilepage')
+        this.$router.push('/profile/:handle')
       },
       goToHome() {
         this.$router.push('/explore')
@@ -38,7 +41,7 @@
     </div>
 
     <div class="links flex w-1/3 h-9 justify-end">
-      <button class="exploreCities bg-[#FFFFFF] rounded-lg h-full w-fit flex items-center px-4 py-2 outline outline-2 outline-lightgrey hover:brightness-90 hover:outline-lightgreen hover:outline-offset-2 hover:scale-105 transition-all active:scale-100 active:outline-offset-0">
+      <button class="exploreCities bg-[#FFFFFF] rounded-lg h-full w-fit flex items-center px-4 py-2 outline outline-2 outline-lightgrey hover:brightness-90 hover:outline-lightgreen hover:outline-offset-2 hover:scale-105 transition-all active:scale-100 active:outline-offset-0" @click="goToCities">
         <p class="text-darkgreen m-0 p-0 text-base">{{ mq.xlPlus ? 'Explore' : ''}} Cities</p>
       </button>
       <button @click="goToProfile" class="flex items-center px-2 ml-2 rounded-lg border border-2 border-darkgreen hover:border-lightgreen transition-all">
