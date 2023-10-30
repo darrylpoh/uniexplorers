@@ -187,7 +187,7 @@ export default {
 <template>
   <div>
     <div class="container md:max-w-96 mx-auto">
-      <textSearch class="my-5 md:hidden main mx-auto"/>
+      <textSearch class="my-5 md:hidden search mx-auto"/>
       <div class="main rounded-xl flex flex-wrap lg:my-8 my-5 lg:flex-nowrap items-center text-darkgreen">
         <div class="basis-full lg:basis-1/2 xl:basis-5/12 md:ml-4 ml-4">
           <h2 class="font-bold font-display lg:text-2xl md:text-xl">{{ university.name }}</h2>
@@ -295,6 +295,10 @@ export default {
   /* justify-content: center; Center horizontally */
   align-items: center;
   /* Center vertically */
+  width: calc(100% - 20px);
+}
+
+.search {
   width: calc(100% - 20px);
 }
 
