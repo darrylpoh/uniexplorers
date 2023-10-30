@@ -79,7 +79,8 @@ module.exports = app => {
                 const thread_obj = await db('uni_forum_comment').insert({
                     user_email: user_email,
                     thread_id: threadId,
-                    comment_text: reqCommentText
+                    comment_text: reqCommentText,
+                    comment_text_raw: reqCommentTextRaw
                 }).returning("*");
 
                 res.status(201).json(thread_obj);
@@ -88,7 +89,8 @@ module.exports = app => {
                     user_email: user_email,
                     thread_id: threadId,
                     parent_id: parentId,
-                    comment_text: reqCommentText
+                    comment_text: reqCommentText,
+                    comment_text_raw: reqCommentTextRaw
                 }).returning("*");
 
                 res.status(201).json(thread_obj);
