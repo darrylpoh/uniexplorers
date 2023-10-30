@@ -28,9 +28,11 @@
                 this.$router.push('uni/' + name)
             },
 
+            // fix for router not fully func
             // goToResult(name) {
             //     this.showResults = false;
-            //     this.$router.push({ name: 'UniHomePage', params: { uniName: name } });
+            //     this.$router.push({ name: 'UniHomePage', params: { uniName: name }});
+            //     // this.$router.go()
             // },
 
             debouncedSearch() {
