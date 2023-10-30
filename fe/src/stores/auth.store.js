@@ -25,6 +25,15 @@ export const useAuthStore = defineStore({
             // redirect to previous url or default to home page
             router.push('/explore');
         },
+        async signup(email, password) {
+            const user = await fetchWrapper.post(`${baseUrl}/users`, { email, password });
+
+            // update pinia state
+            this.user = user;
+
+            // redirect to previous url or default to home page
+            router.push('/login');
+        },
         logout() {
             this.user = null;
             localStorage.removeItem('user');
