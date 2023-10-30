@@ -2,11 +2,10 @@
 
     import { useSearchStore } from '@/stores/searchStore'
     import axios from 'axios'
-    // import { useRouter } from 'vue-router';
-
 
     export default {
         name: 'textSearch',
+
         setup() {
             const searchStore = useSearchStore()
 
@@ -22,18 +21,18 @@
                 showResults : false
             }
         },
+        watch: {
+            '$route'() {
+                window.location.reload(true);
+            }
+        },
         methods : {
-            goToResult(name) {
-                this.showResults = false
-                this.$router.push('uni/' + name)
-            },
 
-            // fix for router not fully func
-            // goToResult(name) {
-            //     this.showResults = false;
-            //     this.$router.push({ name: 'UniHomePage', params: { uniName: name }});
-            //     // this.$router.go()
-            // },
+            goToResult(name) {
+                this.showResults = false;
+                this.$router.push({ name: 'UniHomePage', params: { uniName: name }});
+                console.log(name);
+            },
 
             debouncedSearch() {
                 if (this.debounceTimeout) {
