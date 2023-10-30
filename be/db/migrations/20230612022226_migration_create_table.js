@@ -116,6 +116,11 @@ exports.up = function(knex) {
             table.dateTime('created').defaultTo(knex.fn.now());
             table.dateTime('updated');
         })
+        .createTable('university_image', (table) => {
+            table.string('university_name').index().references('name').inTable('university');
+            table.string('image_filename').index().references('filename').inTable('image_file');
+            table.primary(['university_name', 'image_filename']);
+        })
         ;
 };
 
