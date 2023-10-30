@@ -120,6 +120,7 @@ module.exports = app => {
 
             res.status(200).json({updated: count});
         });
+    
     app.route('/forum/comments/:thread_id')
         .get(async (req, res) => {
             // list all threads
@@ -180,4 +181,46 @@ module.exports = app => {
                 );
             }
         )
+
+    app.route('/forum/comments/like/:comment_id')
+        .patch(async (req, res) => {
+            const {comment_id} = req.params;
+
+            db('uni_forum_comment')
+                .where('id', comment_id)
+                .increment('num_likes', 1)
+            .then(
+                (resp) => res.json(resp)
+            )
+            .catch(
+                err => res
+                    .status(404)
+                    .json({
+                        success: false,
+                        message: 'uni forum comment database like increment failed',
+                        stack: err.stack,
+                })
+            )
+        })
+
+    app.route('/forum/comments/dislike/:comment_id')
+        .patch(async (req, res) => {
+            const {comment_id} = req.params;
+
+            db('uni_forum_comment')
+                .where('id', comment_id)
+                .increment('num_dislikes', 1)
+            .then(
+                (resp) => res.json(resp)
+            )
+            .catch(
+                err => res
+                    .status(404)
+                    .json({
+                        success: false,
+                        message: 'uni forum comment database dislike increment failed',
+                        stack: err.stack,
+                })
+            )
+        })
 }
