@@ -29,19 +29,6 @@ export default {
       value: null,
       data: {},
       selectedPlaceType: null,
-      courses: ["COR-IS1702 - Computational Thinking", "IS112 - Data Management", "COR3001 - Big Questions"],
-      reviews: [
-        {
-          "name": "Oliver OG",
-          "date": "10 May 2023",
-          "comment": "Studying at Imperial College London through the exchange program was an incredible experience. The university's commitment to academic excellence and cutting-edge research truly impressed me. The professors were highly knowledgeable and approachable, and the coursework challenged me to expand my knowledge and skills. The campus itself is vibrant and multicultural, providing a welcoming and inclusive environment. I highly recommend the Imperial College London exchange program!"
-        },
-        {
-          "name": "Emily Smith",
-          "date": "2 June 2023",
-          "comment": "My time at Imperial College London was unforgettable. The exchange program offered a wide range of courses, and I had the opportunity to learn from world-renowned experts in my field of study. The campus facilities were state-of-the-art, and the university's emphasis on practical learning enhanced my academic journey. Moreover, the city of London provided countless cultural and social opportunities. I made lifelong friends from different corners of the globe. I am grateful for the incredible experiences I had during my exchange at Imperial College London."
-        }
-      ]
     };
   },
   async beforeMount() {
@@ -51,6 +38,7 @@ export default {
     let res = await axios.get(import.meta.env.VITE_BACKEND + '/universities/' + query)
     this.university = res.data[0]
     await this.getCoordinates()
+    // await this.getImages()
 
     res = await axios.get(import.meta.env.VITE_BACKEND + '/reviews/' + name)
     this.reviews = res.data
@@ -85,10 +73,26 @@ export default {
         this.latitude = data.results[0].geometry.location.lat;
         this.longitude = data.results[0].geometry.location.lng;
         this.center = { lat: this.latitude, lng: this.longitude };
+        this.place_id = data.results[0].place_id
       } else {
         this.latitude = null;
         this.longitude = null;
         console.log("Unable to get coordinates.");
+      }
+    },
+    async getImages() {
+      if (this.place_id) {
+        const query = '?place_id=' + this.place_id;
+        const res = await axios.get(import.meta.env.VITE_BACKEND + '/place_photos' + query);
+        const photo_refs = res.data
+
+        this.images = []
+        for (const ref of photo_refs) {
+          const url = `https://maps.googleapis.com/maps/api/place/photo?maxwidth=1280&maxheight=720&photo_reference=${ref}&key=${this.GOOGLE_MAP_API_KEY}`
+          let img = {'src': url, 'alt': ''}
+          this.images.push(img)
+        }
+        // console.log(this.images)
       }
     },
 
@@ -152,7 +156,7 @@ export default {
         let marker = { 'center': curr[p].center, 'name': curr[p].name, 'rating': curr[p].rating }
         markers.push(marker)
       }
-      console.log(markers);
+      // console.log(markers);
       return markers
     },
     capitalizeFirstLetter(string) {
@@ -175,7 +179,7 @@ export default {
       return []
     },
     markers() {
-      console.log(this.getMarkers(this.selectedPlaceType));
+      // console.log(this.getMarkers(this.selectedPlaceType));
       return this.getMarkers(this.selectedPlaceType)
     }
   }
@@ -203,7 +207,7 @@ export default {
       </div>
 
       <div class="mx-auto content h-auto lg:flex-nowrap">
-        <UniCarousel />
+        <UniCarousel :images="images" />
       </div>
 
       <!-- Get to Know Us Section -->
@@ -241,6 +245,19 @@ export default {
 
       </div>
 
+      <!-- Module Mappings -->
+      <div class="mt-3 mx-2 px-5 md:px-8 py-5 content rounded-xl bg-white h-auto text-darkgreen flex flex-wrap">
+        <div class="basis-full sm:basis-3/5">
+          <h2 class="font-semibold text-lg md:text-xl">Module Mappings</h2>
+          <hr class="solid">
+        </div>
+
+        <div class="basis-full">
+          <CourseMapping></CourseMapping>
+        </div>
+
+      </div>
+
       <!-- Exchangers' Experience Section -->
       <div class="mt-3 mx-2 px-5 md:px-8 py-5 content rounded-xl bg-white h-auto text-darkgreen flex flex-wrap">
         <div class="basis-full sm:basis-3/5">
@@ -258,19 +275,11 @@ export default {
           <div class="grid md:grid-cols-2 sm:grid-cols-1 gap-4">
             <SingleReview v-for="review in reviews" :key="review" :review="review"></SingleReview>
           </div>
-        </div>
-      </div>
-      <!-- Module Mappings -->
-      <div class="mt-3 mx-2 px-5 md:px-8 py-5 content rounded-xl bg-white h-auto text-darkgreen flex flex-wrap">
-        <div class="basis-full sm:basis-3/5">
-          <h2 class="font-semibold text-lg md:text-xl">Module Mappings</h2>
-          <hr class="solid">
-        </div>
 
-        <div class="basis-full">
-          <CourseMapping></CourseMapping>
+          <div class="grid justify-center text-lg text-darkgreen font-medium" v-if="reviews.length == 0">
+            Be the first to leave a review today!
+          </div>
         </div>
-        
       </div>
     </div>
 
