@@ -17,6 +17,7 @@
                 results : [],
                 debounceTimeout : null,
                 searched : false,
+                returnedresults : false,
                 showResults : false,
                 selectedIdx : -1
             }
@@ -55,6 +56,7 @@
                     this.results = [];
                     this.showResults = false
                     this.searched = false
+                    this.returnedresults = false
                     return
                 }
 
@@ -62,16 +64,18 @@
                     .then(res => {
                         // Get the first 5 results
                         const firstEightResults = res.data.slice(0, 5);
+                        this.results = firstEightResults;
+                        this.returnedresults = true
                         
                         if (enter) {
                             this.searchStore.setSearchResults(firstEightResults);
                             this.showResults = false;
+                            this.returnedresults = false
                         } else {
                             this.showResults = true;
                         }
 
                         // Update results with the first 8 items
-                        this.results = firstEightResults; 
                     })
                     .catch(error => {
                         console.error('Error:', error);
@@ -112,7 +116,7 @@
 
     <div class="wrapper" v-click-outside="unFocus">
         <div class="wrapper">
-            <input @input="debouncedSearch" @keydown.enter="updateExplorePage" @focus="showResults = true" type="text" class="relative rounded-xl w-full h-full pl-4 m-0 text-black"
+            <input @input="debouncedSearch" @keydown.enter="updateExplorePage" @focus="showResults = true" type="text" :class="{'rounded-b-xl' : !returnedresults }" class="relative rounded-t-xl w-full h-full pl-4 m-0 text-black"
                 placeholder="University?"
                 v-model="search"
                 @keydown.down.prevent="navResult('down')"
