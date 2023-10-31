@@ -2,11 +2,10 @@
 
     import { useSearchStore } from '@/stores/searchStore'
     import axios from 'axios'
-    // import { useRouter } from 'vue-router';
-
 
     export default {
         name: 'textSearch',
+
         setup() {
             const searchStore = useSearchStore()
             return { searchStore }
@@ -22,10 +21,16 @@
                 selectedIdx : -1
             }
         },
+        watch: {
+            '$route'() {
+                window.location.reload(true);
+            }
+        },
         methods : {
-            goToResult(name) {
+            async goToResult(name) {
                 this.showResults = false
-                this.$router.push('uni/' + name)
+                await this.$router.push({path: '/uni/' + name, replace: true})
+                await this.$router.go(0)
             },
 
             // fix for router not fully func

@@ -92,11 +92,11 @@ export default {
       this.filterOptionsCurr.push({'label': filter, 'value': filter})
     },
     onNext(pager) {
-      this.page = pager-1
+      this.page = pager
       // this.pageData = this.pagination[pager]
     },
     onPrev(pager) {
-      this.page = pager-1
+      this.page = pager-2
     },
     onPageChange(pager) {
       this.page = pager-1
