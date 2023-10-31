@@ -9,7 +9,6 @@
         name: 'textSearch',
         setup() {
             const searchStore = useSearchStore()
-
             return { searchStore }
         },
         inject : ['mq'],
@@ -19,7 +18,8 @@
                 results : [],
                 debounceTimeout : null,
                 searched : false,
-                showResults : false
+                showResults : false,
+                selectedIdx : -1
             }
         },
         methods : {
@@ -75,7 +75,26 @@
                 this.searched = true;
             },
             updateExplorePage() {
-                return this.performSearch(true)
+                if (this.selectedIdx > -1) {
+                    return this.goToResult(this.results[this.selectedIdx].name)
+                } else {
+                    return this.performSearch(true)
+                }
+            },
+            navResult(key) {
+                switch (key) {
+                    case 'up':
+                        console.log('up was pressed');
+                        this.selectedIdx = Math.max(-1, this.selectedIdx - 1)
+                        console.log(this.selectedIdx);
+                        break;
+                
+                    case 'down':
+                        console.log('down was pressed');
+                        this.selectedIdx = Math.min(this.results.length - 1, this.selectedIdx + 1)
+                        console.log(this.selectedIdx);
+                        break;
+                }
             },
             unFocus() {
                 this.showResults = false
@@ -88,7 +107,12 @@
 
     <div class="wrapper" v-click-outside="unFocus">
         <div class="wrapper">
-            <input @input="debouncedSearch" @keydown.enter="updateExplorePage" @focus="showResults = true" type="text" class="relative rounded-xl w-full h-full pl-4 m-0 text-black" placeholder="University?" v-model="search" >
+            <input @input="debouncedSearch" @keydown.enter="updateExplorePage" @focus="showResults = true" type="text" class="relative rounded-xl w-full h-full pl-4 m-0 text-black"
+                placeholder="University?"
+                v-model="search"
+                @keydown.down.prevent="navResult('down')"
+                @keydown.up.prevent="navResult('up')"
+                >
             <div class="searchIcon w-auto h-full px-2 absolute flex items-center right-0 top-0 cursor-pointer hover:scale-110">
                 <svg width="30" height="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path fill-rule="evenodd" clip-rule="evenodd" d="M10 18C5.58172 18 2 14.4183 2 10C2 5.58172 5.58172 2 10 2C14.4183 2 18 5.58172 18 10C18 11.8487 17.3729 13.551 16.3199 14.9056L21.7071 20.2929L20.2929 21.7071L14.9056 16.3199C13.551 17.3729 11.8487 18 10 18ZM16 10C16 13.3137 13.3137 16 10 16C6.68629 16 4 13.3137 4 10C4 6.68629 6.68629 4 10 4C13.3137 4 16 6.68629 16 10Z" fill="black"/>
@@ -96,7 +120,7 @@
             </div>
         </div>
         <div v-if="searched && showResults" class="wrapper h-auto bg-white overflow-hidden shadow-md rounded-lg rounded-t-none border border-2 border-darkgreen/30">
-            <div v-if="results.length > 0" v-for="result, idx in results" @click="goToResult(result.name)" class="relative shadow-inner w-full min-h-16 py-2 hover:bg-gray-100 hover:cursor-pointer active:border active:border-darkgreen transition-all duration-75" :class="[idx != results.length - 1 ? 'border-b border-lightgray' : '']">
+            <div v-if="results.length > 0" v-for="result, idx in results" @click="goToResult(result.name)" @mouseleave="selectedIdx = -1" @mouseenter="selectedIdx = idx" class="relative shadow-inner w-full min-h-16 py-2 hover:cursor-pointer active:border active:border-darkgreen transition-all duration-75" :class="[idx != results.length - 1 && 'border-b border-lightgray', selectedIdx == idx && 'selected']">
                 <h2 class="text-darkgreen pl-4 text-lg font-medium text-left">{{result.name}}</h2>
         
                 <div class="text-sm w-full flex flex-row my-2 mx-4 text-lightgrey">
@@ -128,4 +152,8 @@
 
 </template>
 
-<style scoped></style>
+<style scoped>
+.selected {
+    background-color: rgb(243, 244, 246)
+}
+</style>
