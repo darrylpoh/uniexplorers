@@ -3,3 +3,4 @@ export * from "./users.store";
 export * from "./searchStore";
 export * from "./threadStore";
 export * from "./uni.store"
+export * from "./cacheStore";

@@ -1,3 +1,92 @@
+
+<script>
+import textAreaInput from '@/components/textAreaInput/textAreaInput.vue';
+import { fetchWrapper } from '../helpers/fetch-wrapper';
+import comment from '@/components/comment.vue';
+import { useCacheStore } from '@/stores/CacheStore'
+
+export default {
+  components: {
+    textAreaInput,
+    comment
+  },
+  setup() {
+    const CacheStore = useCacheStore()
+    return {CacheStore}
+  },
+  data() {
+    return {
+      img : null,
+      name : null,
+      questionsList : [],
+      forum_text : 'NO PROPER DATA MADE. ASSUMED TO BE DEV WORK.',
+      forum_title : 'NO PROPER DATA MADE. ASSUMED TO BE DEV WORK.'
+    }
+  },
+  mounted() {
+    this.name = JSON.parse(localStorage.getItem('user')).user_data.name
+    this.CacheStore.setCurrentThread(this.$route.params.thread).then(res => {
+      this.forum_text = res.forum_text
+      this.forum_title = res.forum_title
+    })
+
+    this.CacheStore.getImg(JSON.parse(localStorage.getItem('user')).user_data.image_filename).then(res => {
+      this.img = res
+    })
+
+
+    // if (this.forum_title == 'NO PROPER DATA MADE. ASSUMED TO BE DEV WORK.') {
+    //   console.log('bro what the fuck');
+    //   axios.get(import.meta.env.VITE_BACKEND + '/forum/' + this.$route.params.thread).then(res => {
+    //     const thread = res.data[0]
+    //     console.log(res);
+    //     this.forum_text = thread.forum_text
+    //     this.forum_title = thread.forum_title
+    //   })
+    // }
+
+
+    this.getComments()
+    // axios.get(import.meta.env.VITE_BACKEND + '/forum/comments/' + this.$route.params.thread).then(res => {
+    //   this.questionsList = res.data
+    // })
+    
+  },
+
+  methods: {
+    getComments() {
+      this.questionsList = []
+      fetchWrapper.get(import.meta.env.VITE_BACKEND + '/forum/comments/' + this.$route.params.thread).then(data => {
+        this.questionsList = data
+      })
+    },
+    handlePost(postData) {
+      fetchWrapper.post(import.meta.env.VITE_BACKEND + '/forum/comments', {
+        comment_text: postData.comment_text,
+        comment_text_raw: postData.comment_text_raw,
+        thread_id: this.$route.params.thread,
+      }).then(data => {
+        return this.getComments()
+        // console.log('after posting', res.data)
+        // var comment_body = res.data[0]
+        // comment_body = {...comment_body, user_image_filename : res.data.user_image_filename}
+        // console.log(comment_body);
+        // if (this.questionsList.length > 0) {
+        //   this.questionsList = [comment_body, ...this.questionsList]
+        // } else {
+        //   this.questionsList.push(comment_body)
+        // }
+
+      }).catch(err => {
+        console.log(err);
+      })
+    },
+
+  },
+};
+</script>
+
+
 <template>
   <!-- - AMA page [isabelle]
   - indent to the answers(comments)
@@ -32,7 +121,7 @@
           </li>
           <li class="comment-username">
             <svg style="color: rgb(30, 54, 62);" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chat-fill chat-icon" viewBox="0 0 16 16"> <path d="M8 15c4.418 0 8-3.134 8-7s-3.582-7-8-7-8 3.134-8 7c0 1.76.743 3.37 1.97 4.6-.097 1.016-.417 2.13-.771 2.966-.079.186.074.394.273.362 2.256-.37 3.597-.938 4.18-1.234A9.06 9.06 0 0 0 8 15z" fill="#1e363e"></path> </svg>
-            <span class="user">{{ username }}</span>
+            <span class="user">{{ name }}</span>
           </li>
         </ul>
       </div>
@@ -41,7 +130,7 @@
       
       <div class="create-section">
         <div>
-          <img :src="profile" alt="" class="avatar">
+          <img :src="img" alt="" class="avatar">
         </div>
         <!-- <textInputQuill :identifier="'make'"/> -->
         <textAreaInput @posted="handlePost" name="make" :thread_id="parseInt($route.params.thread)"/>
@@ -52,7 +141,7 @@
       <div class="USING COMMENT COMPONENT">
 
         <div v-for="question in questionsList" class="my-8">
-          <comment :commentData="question"/>
+          <comment :commentData="question" @updateComments="getComments"/>
           <hr>
         </div>
 
@@ -89,128 +178,6 @@
     </div>
   </div>
 </template>
-
-<script>
-import textAreaInput from '@/components/textAreaInput/textAreaInput.vue';
-import axios from 'axios'
-import comment from '@/components/comment.vue';
-import { useThreadStore } from '@/stores/threadStore'
-
-export default {
-  components: {
-    textAreaInput,
-    comment
-  },
-  setup() {
-    const threadStore = useThreadStore()
-    return {threadStore}
-  },
-  data() {
-    return {
-      newQuestion: '', // Holds the user's new question input
-      username: 'Jared',
-      profile: '../../public/Profile Female.png',
-      focus: false,
-
-      questionsList : [],
-      forum_text : 'NO PROPER DATA MADE. ASSUMED TO BE DEV WORK.',
-      forum_title : 'NO PROPER DATA MADE. ASSUMED TO BE DEV WORK.'
-    }
-  },
-  mounted() {
-    this.threadStore.setCurrentThread(this.$route.params.thread)
-    this.forum_text = this.threadStore.current.forum_text
-    this.forum_title = this.threadStore.current.forum_title
-
-    axios.get(import.meta.env.VITE_BACKEND + '/forum/comments/' + this.$route.params.thread).then(res => {
-      console.log(res.data);
-      this.questionsList = res.data
-
-      var questions = {
-        children : [],
-        comment_text : '',
-        comment_text_raw : '',
-        created : '',
-        id : '',
-        parent_id : '',
-        thread_id : '',
-        user_email : '',
-        num_likes : 2,
-        num_dislikes : 3,
-      }
-    })
-    
-  },
-
-  methods: {
-    createQuestion() {
-      if (this.newQuestion.trim() === '') {
-        return; // Do not create a question if the input is empty
-      }
-
-      // Create a new question card object
-      const newQuestionCard = {
-        username: this.username, // Replace this with the actual username of the user
-        text: this.newQuestion.trim(),
-        profile: this.profile,
-        newComment: '', // To store the comment input temporarily
-        comments: [],   // Array to store comments for the question
-        date: [new Date().getDate(), new Date().getMonth() + 1, new Date().getFullYear()],
-        upvote: 0,
-        downvote: 0,
-        upvoteFill: false,
-        downvoteFill: false,
-        edit: false,
-        reply: false,
-      };
-
-      // Add the new question card to the top of the questions array
-      this.questions.unshift(newQuestionCard);
-
-      console.log(newQuestionCard)
-
-      // Clear the input field after creating the question
-      this.newQuestion = '';
-    },
-
-    handlePost(postData) {
-      axios.post(import.meta.env.VITE_BACKEND + '/forum/comments', {
-        
-      })
-    },
-
-    postComment(question) {
-      if (question.newComment.trim() === '') {
-        return; // Do not post a comment if the input is empty
-      }
-
-      // Create a new comment object
-      const newComment = {
-        username: this.username, // Replace this with the actual username of the user
-        profile: this.profile,
-        text: question.newComment.trim(),
-        date: [new Date().getDate(), new Date().getMonth() + 1, new Date().getFullYear()],
-        upvote: 0,
-        downvote: 0,
-        upvoteFill: false,
-        downvoteFill: false,
-        edit: false,
-        reply: false,
-      };
-
-      // Push the new comment to the comments array of the corresponding question
-      question.comments.push(newComment);
-
-      // Clear the comment input field after posting the comment
-      question.newComment = '';
-
-      question.reply = !question.reply
-    },
-
-  },
-};
-</script>
-
 <style scoped>
 /* Your existing styles */
 .main {

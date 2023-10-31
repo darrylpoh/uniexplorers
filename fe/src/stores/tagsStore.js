@@ -5,36 +5,41 @@ export const useTagsStore = defineStore('tags', {
   state: () => ({
     tags: {
       'Business' : {
-        background : 'bluepastel',
-        font : 'content'
+        background : 'bg-bluepastel',
+        font : 'text-content'
       },
       'Information Systems' : {
-        background : 'greenpastel',
-        font : 'content'
+        background : 'bg-greenpastel',
+        font : 'text-content'
       },
       'Accountancy' : {
-        background : 'yellowpastel',
-        font : 'white'
+        background : 'bg-yellowpastel',
+        font : 'text-content'
       },
       'Computer Science' : {
-        background : 'red',
-        font : 'content'
+        background : 'bg-red',
+        font : 'text-white'
       },
       'Law' : {
-        background : 'red',
-        font : 'content'
+        background : 'bg-brown',
+        font : 'text-white'
       },
       'Economics' : {
-        background : 'red',
-        font : 'content'
+        background : 'bg-cyan',
+        font : 'text-white'
       },
       'Computing & Law' : {
-        background : 'red',
-        font : 'content'
+        background : 'bg-indigo',
+        font : 'text-white'
       },
       'Social Sciences' : {
-        background : 'red',
-        font : 'content'
+        background : 'bg-salmon',
+        font : 'text-white'
       },
-    }})
+    }}),
+    actions : {
+      getTag(tag) {
+        return Object.values(this.tags[tag])
+      }
+    }
 })

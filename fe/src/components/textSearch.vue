@@ -2,11 +2,10 @@
 
     import { useSearchStore } from '@/stores/searchStore'
     import axios from 'axios'
-    // import { useRouter } from 'vue-router';
-
 
     export default {
         name: 'textSearch',
+
         setup() {
             const searchStore = useSearchStore()
 
@@ -20,6 +19,11 @@
                 debounceTimeout : null,
                 searched : false,
                 showResults : false
+            }
+        },
+        watch: {
+            '$route'() {
+                window.location.reload(true);
             }
         },
         methods : {

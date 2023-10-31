@@ -11,8 +11,6 @@
         methods : {
             handleSubmit() {
                 // all's g
-                console.log(this.textContent)
-                console.log('SBMITTED')
                 this.$emit('posted', true)
             }
         },
@@ -31,14 +29,14 @@
         <!-- Links and Images -->
         <span class="ql-formats">
           <button class="ql-link"></button>
-          <button class="ql-image"></button>
+          <!-- <button class="ql-image"></button> -->
         </span>
     
         <!-- Lists -->
-        <span class="ql-formats">
+        <!-- <span class="ql-formats">
           <button class="ql-list" value="ordered"></button>
           <button class="ql-list" value="bullet"></button>
-        </span>
+        </span> -->
     
         <!-- Clean Format -->
         <span class="ql-formats">
