@@ -27,6 +27,7 @@ async function onSubmit(values, { resetForm }) {
   resetForm();
   rating.value = null;
   closeModal();
+  this.$router.go()
 }
 
 const isShowModal = ref(false)
