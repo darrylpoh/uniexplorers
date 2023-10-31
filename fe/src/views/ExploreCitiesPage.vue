@@ -1,5 +1,5 @@
 <template>
-  <div class="overflow-y-auto">
+  <div class="overflow-y-auto w-full">
     <!-- Filter bar -->
     <div class="filter-bar">
       <ul>
@@ -29,13 +29,13 @@
 
     <!-- If city is not clicked -->
     <div v-if="!showFullCity">
-      <div class="absolute z-0 w-full h-[700px]">
+      <div class="absolute z-0 w-full h-[700px]" @click="goToResult(city)">
         <CityDetails v-if="city" :city="city" />
       </div>
     </div>
     <!-- If city is clicked -->
-    <div v-else>
-      <div class="absolute z-0 w-full h-[700px]">
+    <div v-else @click="goToResult(city)">
+      <div class="absolute z-0 w-full h-[700px]" >
         <CityDetails v-if="city" :city="city" />
       </div>
     </div>
@@ -54,6 +54,7 @@
 import 'vue3-carousel/dist/carousel.css'
 import { Carousel, Slide } from 'vue3-carousel';
 import { onMounted, ref } from 'vue';
+import router from "@/router"
 import cities from '../cities.json';
 import CityDetails from '../components/cityDetails.vue'
 import CityCarousel from '../components/cityCarousel.vue'; 
@@ -66,26 +67,20 @@ const { city, showFullCity } = storeToRefs(useCity)
 let selectedArea = ref('Europe')
 let linePosition = ref('41.5%'); // Use ref for linePosition
 
-
-const changeArea = (area) => {
-  selectedArea = area
-  city.value = cities[area][0]
-  updateLinePosition(area);
-}
-
-
-const updateLinePosition = (area) => {
-  const index = ['Europe', 'Asia', 'America'].indexOf(area);
-  if (index !== -1) {
-    linePosition.value = index * 6 + 41.5 + '%'; 
-  }
-};
-
 onMounted(() => {
   setTimeout(() => city.value = cities['Europe'][0], 100)
 })
 
-
+const changeArea = (area) => {
+  selectedArea = area
+  city.value = cities[area][0]
+  showFullCity = true
+}
+// /city/continent/:cityname
+const goToResult = (cityname) => {
+  const route = 'city/:' + selectedArea.value + '/:' + cityname.name
+  router.push(route)
+}
 </script>
 
 <style>

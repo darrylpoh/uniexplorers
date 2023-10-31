@@ -69,6 +69,7 @@
         showFullCity.value = true
         city.value = slide
     }
+    
 </script>
 
 <style>
