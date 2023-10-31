@@ -23,9 +23,10 @@
             }
         },
         methods : {
-            goToResult(name) {
+            async goToResult(name) {
                 this.showResults = false
-                this.$router.push('uni/' + name)
+                await this.$router.push({path: '/uni/' + name, replace: true})
+                await this.$router.go(0)
             },
 
             // fix for router not fully func
