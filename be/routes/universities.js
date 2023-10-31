@@ -4,6 +4,10 @@ const NodeCache = require('node-cache');
 const {authenticateToken} = require('../modules/jwt_utils.js');
 const {Trie} = require('../modules/autocomplete.js');
 
+const tags_by_uni = db.select('university_name', db.raw('string_agg(tag_name, \', \') as tags')).from('uni_tag')
+            .groupBy('university_name')
+            .as('TEMPtags')
+
 module.exports = app => {
     app.route('/universities')
         .get(async (req, res) => {
@@ -22,9 +26,6 @@ module.exports = app => {
                 }
             }
 
-            const tags_by_uni = db.select('university_name', db.raw('string_agg(tag_name, \', \') as tags')).from('uni_tag')
-            .groupBy('university_name')
-            .as('TEMPtags')
 
             db.select().from('university').modify(
                 (queryBuilder) => {
@@ -43,7 +44,7 @@ module.exports = app => {
                         }
                     }
                     if (reqGpa) {
-                        queryBuilder.where('gpa_10_percentile', '>=', reqGpa);
+                        queryBuilder.where('gpa_10_percentile', '<=', reqGpa);
                     }
                     if (reqName) {
                         queryBuilder.where('name', 'ilike', `%${reqName}%`);
@@ -185,6 +186,11 @@ module.exports = app => {
                         builder.orWhere('name', 'ilike', `%${searchTerm}%`)
                     }
                 })
+                .leftJoin(tags_by_uni, 'TEMPtags.university_name', 'university.name').then(
+                    (results) => {
+                        res.json(results)
+                    }
+                )
                 .then(universities =>
                     res.json(universities)
                 )

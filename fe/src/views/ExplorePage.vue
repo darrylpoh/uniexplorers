@@ -15,24 +15,17 @@
       return { searchStore, filterKey, otherKey }
     },
     mounted() {
-      if (this.searchStore.searchResults.length == 0) {
-        fetchWrapper.get(import.meta.env.VITE_BACKEND + '/universities').then(data => {
-          this.searchStore.setSearchResults(data)
-        }).catch(err => {
-            if (err.code == 'ERR_NETWORK') {
-              this.error = "DB Not Connected..."
-            }
-          })
-      } else {
-        this.results = this.searchStore.searchResults
-      }
-
+      this.searchStore.getSearchResults().catch(err => {
+        if (err.code == 'ERR_NETWORK') {
+          this.error = "DB Not Connected..."
+        }
+      })
     },
     inject: ["mq"],
     data() {
       return {
         filtered : false,
-        error : "NO RESULTS :(",
+        error : "Loading...",
         showfilter : false
       }
     },
@@ -47,7 +40,6 @@
         this.showfilter = !this.showfilter
       },
       updateSpacer(width) {
-        // console.log(width)
         document.getElementById('SPACER').style.width = `${width}px`;
       },
       queryBuilder(filters) {
@@ -56,13 +48,13 @@
 
           switch (category) {
 
-            case 'faculty':
-              if (filters.faculty.length > 1) {
-                filters.faculty.forEach(filter => {
-                  query += `&faculty=${filter}`
+            case 'tag':
+              if (filters.tag.length > 1) {
+                filters.tag.forEach(filter => {
+                  query += `&tag=${filter}`
                 });
-              } else if (filters.faculty.length == 1) {
-                query += `&faculty=${filters.faculty[0]}`
+              } else if (filters.tag.length == 1) {
+                query += `&tag=${filters.tag[0]}`
               }
               break;
           
@@ -74,7 +66,7 @@
               if (filters.continent.length > 1) {
                 filters.continent.forEach(filter => {
                       query += `&continent=${filter}`
-                    });
+                    })
               } else if (filters.continent.length == 1) {
                 query += `&continent=${filters.continent[0]}`
               }
@@ -85,7 +77,7 @@
 
         return query
       },
-      updateResult(filters) {
+      async updateResult(filters) {
 
         if (this.mq.smMinus) {
           this.toggleFilter()
@@ -96,14 +88,15 @@
         if (filters !== 'reset') {
           query = this.queryBuilder(filters)
         } else {
-          this.filterKey++
-          this.otherKey--
+          query = 'reset'
         }
 
-        this.searchStore.setSearchQuery(query)
-        fetchWrapper.get(import.meta.env.VITE_BACKEND + '/universities' + query).then(data => {
-          this.searchStore.setSearchResults(data)
-        })
+        await this.searchStore.getSearchResults(query).then(
+          res => {
+            this.error = res ? '' : 'No Results Found'
+          }
+        )
+        // console.log('query made: ', query)
       }
     }
   }

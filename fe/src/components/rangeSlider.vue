@@ -21,15 +21,18 @@
                 set(value) {
                     const progress = (value / 200) * 100;
                     const valOUT = progress / 100 * this.gap + this.min;
-                    this.bgStyle = `linear-gradient(to right, #1E363E ${progress}%, #ccc ${progress}%)`
+                    this.bgStyle = `linear-gradient(to right, #1E363E ${progress}%, #eee ${progress}%)`
                     this.$emit("update:modelValue", Number(value));
                     this.$emit("sliderValue", valOUT)
                 }
             }
         },
+        beforeUnmount() {
+            this.bgStyle = `linear-gradient(to right, #1E363E 100%, #eee 0%)`
+        },
         data() {
             return {
-                bgStyle : 'linear-gradient(to right, #1E363E 100%, #ccc 0%)',
+                bgStyle : 'linear-gradient(to right, #1E363E 100%, #eee 0%)',
             }
         },
     }
