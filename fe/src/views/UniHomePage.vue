@@ -8,6 +8,7 @@ import { GoogleMap, Marker, InfoWindow } from "vue3-google-map";
 import NearbyPlaceTab from '../components/NearbyPlaceTab.vue';
 import CourseMapping from '../components/CourseMapping.vue';
 import textSearch from '../components/textSearch.vue';
+import { useUniImageStore } from '@/stores';
 
 export default {
   components: {
@@ -35,6 +36,9 @@ export default {
   },
   async beforeMount() {
     let name = this.$route.params.uniName
+
+    const store = useUniImageStore()
+    this.images = store.uni_images[name]
 
     let query = '?name=' + name
     let res = await axios.get(import.meta.env.VITE_BACKEND + '/universities/' + query)
@@ -269,7 +273,7 @@ export default {
           <!-- <h2 class="font-semibold text-base lg:text-lg mt-2">All Experiences: Overwhelmingly Positive (100)</h2> -->
         </div>
 
-        <div class="flex sm:basis-2/5 md:justify-end lg:justify-center md:my-2 lg:my-4">
+        <div class="flex sm:basis-2/5 md:justify-end lg:justify-center md:my-2 lg:my-4" v-if="reviews && reviews.length > 0">
           <ReviewModal :uni-name="university.name"></ReviewModal>
         </div>
 
@@ -278,8 +282,9 @@ export default {
             <SingleReview v-for="review in reviews" :key="review" :review="review"></SingleReview>
           </div>
 
-          <div class="grid justify-center text-lg text-darkgreen font-medium" v-if="reviews.length == 0">
-            Be the first to leave a review today!
+          <div class="flex flex-wrap justify-center text-lg md:text-base text-darkgreen font-medium lg:font-semibold" v-if="reviews && reviews.length == 0">
+            <span class="basis-full text-center mb-2">Be the first to leave a review today!</span>
+            <ReviewModal class="basis-full" :uni-name="university.name"></ReviewModal>
           </div>
         </div>
       </div>

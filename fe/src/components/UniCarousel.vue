@@ -4,6 +4,12 @@
             snapAlign="start" :items-to-show="1">
             <Slide v-for="slide, index in images" :key="slide">
                 <div @click="showCity(slide, index)" class="w-full h-auto">
+                    <img class="w-full h-96 px-28" :src="baseURL + slide">
+                </div>
+            </Slide>
+            
+            <Slide v-for="slide, index in fallback_images" :key="slide">
+                <div @click="showCity(slide, index)" class="w-full h-auto">
                     <img class="w-full h-96" :src="slide.src">
                 </div>
             </Slide>
@@ -22,7 +28,13 @@ import { Carousel, Slide, Navigation } from 'vue3-carousel'
 
 let currentSlide = ref(0)
 
+const baseURL = '/src/assets/uni-images/'
 const props = defineProps(['images'])
+const images = props.images
+if (images == undefined) {
+    let fallback_images = ref([{ 'src': '/src/assets/universities/cambridge.png' }])
+    console.log(fallback_images.value)
+}
 
 const showCity = (slide, index) => {
     currentSlide.value = index
