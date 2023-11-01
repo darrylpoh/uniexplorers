@@ -197,7 +197,7 @@ export default {
       <textSearch class="my-5 md:hidden mx-auto"/>
       <div class="main rounded-xl flex flex-wrap lg:my-8 my-5 lg:flex-nowrap items-center text-darkgreen">
         <div class="basis-full lg:basis-1/2 xl:basis-5/12 md:ml-4 ml-4">
-          <h2 class="font-bold font-display lg:text-2xl md:text-xl">{{ university.name }}</h2>
+          <h2 class="font-bold font-display lg:text-2xl sm:text-lg">{{ university.name }}</h2>
         </div>
         <div
           class="basis-full lg:basis-1/2 xl:basis-7/12 location-gpa-semester prose-base lg:prose-lg flex gap-2 md:justify-start md:text-md md:gap-6 md:ml-4 ml-4 mt-2">
@@ -240,7 +240,8 @@ export default {
                   :options="{ position: marker.center, icon: { url: 'https://maps.google.com/mapfiles/ms/icons/orange-dot.png' } }">
                   <InfoWindow v-model="opened">
                     <div id="content">
-                      {{ marker.name }}
+                      <p>{{ marker.name }}</p>
+                      <el-rate v-bind="marker.rating"></el-rate>
                     </div>
                   </InfoWindow>
                 </Marker>
@@ -258,7 +259,7 @@ export default {
           <hr class="solid">
         </div>
 
-        <div class="basis-full">
+        <div class="basis-full overflow-hidden">
           <CourseMapping></CourseMapping>
         </div>
 
