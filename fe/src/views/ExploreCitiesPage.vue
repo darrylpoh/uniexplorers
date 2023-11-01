@@ -78,7 +78,7 @@ const changeArea = (area) => {
 }
 // /city/continent/:cityname
 const goToResult = (cityname) => {
-  const route = 'city/:' + selectedArea.value + '/:' + cityname.name
+  const route = 'city/' + selectedArea.value + '/' + cityname.name
   router.push(route)
 }
 </script>
