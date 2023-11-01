@@ -72,7 +72,7 @@ onMounted(() => {
 })
 
 const changeArea = (area) => {
-  selectedArea = area
+  selectedArea.value = area
   city.value = cities[area][0]
   showFullCity = true
 }
