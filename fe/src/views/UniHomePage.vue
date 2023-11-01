@@ -79,25 +79,10 @@ export default {
         this.latitude = data.results[0].geometry.location.lat;
         this.longitude = data.results[0].geometry.location.lng;
         this.center = { lat: this.latitude, lng: this.longitude };
-        this.place_id = data.results[0].place_id
       } else {
         this.latitude = null;
         this.longitude = null;
         console.log("Unable to get coordinates.");
-      }
-    },
-    async getImages() {
-      if (this.place_id) {
-        const query = '?place_id=' + this.place_id;
-        const res = await axios.get(import.meta.env.VITE_BACKEND + '/place_photos' + query);
-        const photo_refs = res.data
-
-        this.images = []
-        for (const ref of photo_refs) {
-          const url = `https://maps.googleapis.com/maps/api/place/photo?maxwidth=1280&maxheight=720&photo_reference=${ref}&key=${this.GOOGLE_MAP_API_KEY}`
-          let img = {'src': url, 'alt': ''}
-          this.images.push(img)
-        }
       }
     },
 
@@ -241,7 +226,12 @@ export default {
                   <InfoWindow v-model="opened">
                     <div id="content">
                       <p>{{ marker.name }}</p>
-                      <el-rate v-bind="marker.rating"></el-rate>
+                      <div>
+                        <span>{{ marker.rating }}</span>
+                        <el-icon style="vertical-align: middle; margin-left: 0.1em; padding-bottom: 0.2em;" :size="18" color="#ff9900">
+                          <StarFilled />
+                        </el-icon>
+                      </div>
                     </div>
                   </InfoWindow>
                 </Marker>
