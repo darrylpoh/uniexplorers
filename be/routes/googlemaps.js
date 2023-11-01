@@ -1,4 +1,5 @@
 const db = require('../db/knex');
+const fs = require('fs')
 const axios = require('axios')
 require('dotenv').config();
 
@@ -34,6 +35,114 @@ module.exports = app => {
             })
             
         })
+
+      var cache = {}
+
+      const cityGeocodeCache = async (req, res, next) => {
+        if (!cache['city_geocode']) {
+            let data = fs.readFileSync('json/city_geocode_data.json');
+            let city_geocode = JSON.parse(data);
+            cache['city_geocode'] = city_geocode;
+        }
+        
+        next();
+      }
+
+      const uniGeocodeCache = async (req, res, next) => {
+        if (!cache['uni_geocode']) {
+            let data = fs.readFileSync('json/uni_geocode_data.json');
+            let uni_geocode = JSON.parse(data);
+            cache['uni_geocode'] = uni_geocode;
+        }
+        
+        next();
+      }
+
+      const cityNearbyCache = async (req, res, next) => {
+        if (!cache['city_nearby']) {
+            let data = fs.readFileSync('json/city_nearby_data.json');
+            let city_nearby = JSON.parse(data);
+            cache['city_nearby'] = city_nearby;
+        }
+        
+        next();
+      }
+
+      const uniNearbyCache = async (req, res, next) => {
+        if (!cache['uni_nearby']) {
+            let data = fs.readFileSync('json/uni_nearby_data.json');
+            let uni_nearby = JSON.parse(data);
+            cache['uni_nearby'] = uni_nearby;
+        }
+        
+        next();
+      }
+
+    app.route('/geocode/city/:city')
+      .get(cityGeocodeCache, async (req, res) => {
+          const {city} = req.params;
+          console.log(cache['city_geocode'])
+          const geocode_data = cache['city_geocode'][city]
+
+          if (geocode_data) {
+            res.json(geocode_data)
+          } else {
+            res.status(404).json({
+              "success": false,
+              "message": "city geocode data not found"
+            })
+          }
+          
+      })
+
+    app.route('/geocode/university/:university')
+      .get(uniGeocodeCache, async (req, res) => {
+          const {university} = req.params;
+          const geocode_data = cache['uni_geocode'][university]
+
+          if (geocode_data) {
+            res.json(geocode_data)
+          } else {
+            res.status(404).json({
+              "success": false,
+              "message": "uni geocode data not found"
+            })
+          }
+          
+      })
+
+    app.route('/nearby/city/:city')
+      .get(cityNearbyCache, async (req, res) => {
+          const {city} = req.params;
+          const nearby_data = cache['city_nearby'][city]
+
+          if (nearby_data) {
+            res.json(nearby_data)
+          } else {
+            res.status(404).json({
+              "success": false,
+              "message": "city nearby data not found"
+            })
+          }
+          
+      })
+
+    app.route('/nearby/university/:university')
+      .get(uniNearbyCache, async (req, res) => {
+          const {university} = req.params;
+
+          const nearby_data = cache['uni_nearby'][university]
+
+          if (nearby_data) {
+            res.json(nearby_data)
+          } else {
+            res.status(404).json({
+              "success": false,
+              "message": "uni nearby data not found"
+            })
+          }
+          
+      })
 
     app.route("/place_photos")
       .get(async (req, res) => {

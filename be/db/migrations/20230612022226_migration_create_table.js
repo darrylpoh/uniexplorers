@@ -140,5 +140,6 @@ exports.down = function(knex) {
         .dropTableIfExists('image_file')
         .dropTableIfExists('uni_forum_thread')
         .dropTableIfExists('uni_forum_comment')
-        .dropTableIfExists('university_image');
+        .dropTableIfExists('university_image')
+        .dropTableIfExists('course_mapping');
 };
