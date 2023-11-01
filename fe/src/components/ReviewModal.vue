@@ -16,7 +16,7 @@ const initialErrors = {
 };
 
 const schema = yup.object({
-  Rating: yup.number().required().min(1),
+  // Rating: yup.number().required().min(1),
   Comment: yup.string().required().min(1),
 });
 async function onSubmit(values, { resetForm }) {
@@ -57,11 +57,11 @@ function showModal() {
     </template>
     <template #body>
       <Form @submit="onSubmit" :validation-schema="schema" :initial-errors="initialErrors">
-        <Field v-slot="{ field, errors }" name="Rating" rules="required">
+        <!-- <Field v-slot="{ field, errors }" name="Rating" rules="required">
           <span class="align-middle">Rating &nbsp;</span>
           <el-rate class="align-middle pb-1" v-bind="field" v-model="rating" allow-half />
           <div class="align-middle float-right text-red-500" v-if="errors[0] && submitted">Please select a rating</div>
-        </Field>
+        </Field> -->
         <Field v-slot="{ field, errors }" v-model="comment" name="Comment" rules="required">
           <textarea v-bind="field" name="Comment" rows="5" maxlength="250"
             class="block mt-2 p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-green-500 focus:border-green-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-green-500 dark:focus:border-green-500"

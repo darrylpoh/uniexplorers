@@ -44,7 +44,6 @@ export default {
     let res = await axios.get(import.meta.env.VITE_BACKEND + '/universities/' + query)
     this.university = res.data[0]
     await this.getCoordinates()
-    // await this.getImages()
 
     res = await axios.get(import.meta.env.VITE_BACKEND + '/reviews/' + name)
     this.reviews = res.data
@@ -72,32 +71,21 @@ export default {
   },
   methods: {
     async getCoordinates() {
-      const apiUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${this.university.name}&key=${this.GOOGLE_MAP_API_KEY}`;
+      // const apiUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${this.university.name}&key=${this.GOOGLE_MAP_API_KEY}`;
+      const apiUrl = `${import.meta.env.VITE_BACKEND}/geocode/university/${this.university.name}`
       const response = await fetch(apiUrl);
       const data = await response.json();
-      if (data.results.length > 0) {
-        this.latitude = data.results[0].geometry.location.lat;
-        this.longitude = data.results[0].geometry.location.lng;
-        this.center = { lat: this.latitude, lng: this.longitude };
-        this.place_id = data.results[0].place_id
+      if (data) {
+        // this.latitude = data.results[0].geometry.location.lat;
+        // this.longitude = data.results[0].geometry.location.lng;
+        // this.center = { lat: this.latitude, lng: this.longitude };
+        this.latitude = data.center.lat
+        this.longitude = data.center.lng
+        this.center = data.center
       } else {
         this.latitude = null;
         this.longitude = null;
         console.log("Unable to get coordinates.");
-      }
-    },
-    async getImages() {
-      if (this.place_id) {
-        const query = '?place_id=' + this.place_id;
-        const res = await axios.get(import.meta.env.VITE_BACKEND + '/place_photos' + query);
-        const photo_refs = res.data
-
-        this.images = []
-        for (const ref of photo_refs) {
-          const url = `https://maps.googleapis.com/maps/api/place/photo?maxwidth=1280&maxheight=720&photo_reference=${ref}&key=${this.GOOGLE_MAP_API_KEY}`
-          let img = {'src': url, 'alt': ''}
-          this.images.push(img)
-        }
       }
     },
 
@@ -115,9 +103,16 @@ export default {
       }
       const keyword = mapping[placeType]
 
-      const query = `?keyword=${keyword}&lat=${this.latitude}&lng=${this.longitude}&radius=5000&type=${placeType}`
-      const res = await axios.get(import.meta.env.VITE_BACKEND + '/nearbysearch' + query);
-      const results = res.data.results;
+      // const query = `?keyword=${keyword}&lat=${this.latitude}&lng=${this.longitude}&radius=5000&type=${placeType}`
+      // const res = await axios.get(import.meta.env.VITE_BACKEND + '/nearbysearch' + query);
+      
+      const apiUrl = `${import.meta.env.VITE_BACKEND}/nearby/university/${this.university.name}`
+      const res = await fetch(apiUrl)
+      const data = await res.json();
+      if (!(placeType in data)) {
+        return []
+      }
+      const results = data[placeType].results;
       let processed_results = [];
       for (let i = 1; i < results.length; i++) {
         if (
@@ -197,7 +192,7 @@ export default {
       <textSearch class="my-5 md:hidden mx-auto"/>
       <div class="main rounded-xl flex flex-wrap lg:my-8 my-5 lg:flex-nowrap items-center text-darkgreen">
         <div class="basis-full lg:basis-1/2 xl:basis-5/12 md:ml-4 ml-4">
-          <h2 class="font-bold font-display lg:text-2xl md:text-xl">{{ university.name }}</h2>
+          <h2 class="font-bold font-display lg:text-2xl sm:text-lg">{{ university.name }}</h2>
         </div>
         <div
           class="basis-full lg:basis-1/2 xl:basis-7/12 location-gpa-semester prose-base lg:prose-lg flex gap-2 md:justify-start md:text-md md:gap-6 md:ml-4 ml-4 mt-2">
@@ -240,7 +235,13 @@ export default {
                   :options="{ position: marker.center, icon: { url: 'https://maps.google.com/mapfiles/ms/icons/orange-dot.png' } }">
                   <InfoWindow v-model="opened">
                     <div id="content">
-                      {{ marker.name }}
+                      <p>{{ marker.name }}</p>
+                      <div>
+                        <span>{{ marker.rating }}</span>
+                        <el-icon style="vertical-align: middle; margin-left: 0.1em; padding-bottom: 0.2em;" :size="18" color="#ff9900">
+                          <StarFilled />
+                        </el-icon>
+                      </div>
                     </div>
                   </InfoWindow>
                 </Marker>
@@ -258,7 +259,7 @@ export default {
           <hr class="solid">
         </div>
 
-        <div class="basis-full">
+        <div class="basis-full overflow-hidden">
           <CourseMapping></CourseMapping>
         </div>
 

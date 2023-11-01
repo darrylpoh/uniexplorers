@@ -3,14 +3,14 @@
         <Carousel ref="carousel" v-model="currentSlide" :items-to-scroll="1" :wrap-around="true" :transition="500"
             snapAlign="start" :items-to-show="1">
             <Slide v-for="slide, index in images" :key="slide">
-                <div @click="showCity(slide, index)" class="w-full h-auto">
-                    <img class="w-full h-96 px-28" :src="baseURL + slide">
+                <div @click="showUni(slide, index)" class="w-full h-auto">
+                    <img class="w-full h-96 lg:px-28 xl:h-[500px]" :src="baseURL + slide">
                 </div>
             </Slide>
             
             <Slide v-for="slide, index in fallback_images" :key="slide">
-                <div @click="showCity(slide, index)" class="w-full h-auto">
-                    <img class="w-full h-96" :src="slide.src">
+                <div @click="showUni(slide, index)" class="w-full h-auto">
+                    <img class="w-full h-96 lg:px-28 xl:h-[500px]" :src="slide.src">
                 </div>
             </Slide>
             <template #addons>
@@ -36,9 +36,8 @@ if (images == undefined) {
     console.log(fallback_images.value)
 }
 
-const showCity = (slide, index) => {
+const showUni = (slide, index) => {
     currentSlide.value = index
-    city.value = slide
 }
 </script>
 

@@ -128,7 +128,7 @@ export default {
 </script>
 
 <template>
-  <div style="height: 100%" class="flex flex-wrap pt-7">
+  <div style="height: 100%; width: 100%;" class="flex flex-wrap pt-7">
     <!-- <el-select-v2 class="w-1/2 mb-2" v-model="filters" :options="filterOptions" filterable placeholder="Select"
       multiple /> -->
     <el-autocomplete
@@ -136,7 +136,7 @@ export default {
       :fetch-suggestions="filterOptionsCurr"
       clearable
       id="query"
-      class="inline-input basis-1/3"
+      class="inline-input sm:basis-1/2 lg:basis-1/3 basis-full"
       placeholder="Select Filter"
       @select="handleSelect"
     >
@@ -153,8 +153,8 @@ export default {
         {{ filter }}
       </el-tag>
     </div>
-    <el-table :data="paginateData" :default-sort="{ prop: 'course_area', order: 'ascending' }" height="auto" width="auto"
-      class="custom-table basis-full mt-2">
+    <el-table :data="paginateData" :default-sort="{ prop: 'course_area', order: 'ascending' }" height="auto"
+      class="custom-table basis-full mt-2" style="width: 100%;">
       <el-table-column prop="course_title" label="Course Title">
         <template #default="scope">
           <span>{{ scope.row.course_title }}</span>
