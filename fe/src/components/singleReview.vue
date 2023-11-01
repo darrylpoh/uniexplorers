@@ -36,10 +36,10 @@ function onClickShow() {
 			<img class="w-16 h-16 mb-3 rounded-full shadow-lg" src="https://cdn0.iconfinder.com/data/icons/communication-456/24/account_profile_user_contact_person_avatar_placeholder-512.png" alt="Bonnie image" />
 		</div>
 		<div class="xl:basis-5/6 lg:basis-4/5 md:basis-3/4 basis-full">
-			<h3 class="font-semibold text-md">{{ review.user_email }}</h3>
+			<h3 class="font-semibold text-md">@{{ review.user_email.split('@')[0] }}</h3>
 			<h3 class="text-md">{{ date.toDateString() }}, {{ date.toLocaleTimeString() }}</h3>
 		</div>
-		<div class="lg:basis-11/12 mb-3 px-3">
+		<div class="lg:basis-11/12 mb-3 lg:px-3">
 			<p class="text-gray-500 text-sm md:text-md">{{ comment }}</p>
 
 			<div v-if="exceed">
