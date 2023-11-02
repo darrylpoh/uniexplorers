@@ -233,7 +233,13 @@ export default {
                   :options="{ position: marker.center, icon: { url: 'https://maps.google.com/mapfiles/ms/icons/orange-dot.png' } }">
                   <InfoWindow v-model="opened">
                     <div id="content">
-                      {{ marker.name }}
+                      <p>{{ marker.name }}</p>
+                      <div>
+                        <span>{{ marker.rating }}</span>
+                        <el-icon style="vertical-align: middle; margin-left: 0.1em; padding-bottom: 0.2em;" :size="18" color="#ff9900">
+                          <StarFilled />
+                        </el-icon>
+                      </div>
                     </div>
                   </InfoWindow>
                 </Marker>
