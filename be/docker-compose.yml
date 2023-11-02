@@ -2,6 +2,7 @@ version: '3.9'
 
 services:
   server1:
+    container_name: server_1
     build: .
     restart: on-failure
     ports: 
@@ -16,6 +17,7 @@ services:
   #   depends_on:
   #     - db
   db:
+    container_name: database
     image: 'postgres:15.4'
     ports: 
       - "5432:5432"
@@ -27,15 +29,17 @@ services:
       - data:/var/lib/postgresql/data
   
   seed_migration:
+    container_name: seed_migration
     build:
       context: .
     links:
       - db
     depends_on:
       - db
-    command: sh -c "npx knex migrate:latest && npx knex seed:run"
+    command: /bin/sh -c /app/migrate.sh
   
   ingestion:
+    container_name: ingestion
     build: ./populate_db
     depends_on:
       - db

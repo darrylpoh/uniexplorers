@@ -7,8 +7,7 @@ WORKDIR /app
 # Copy the current directory contents into the container at /app
 COPY . /app
 
-RUN apt-get update \
-    && apt-get -y install libpq-dev gcc
+RUN apt-get update && apt-get -y install libpq-dev gcc
 
 # Install any needed packages specified in requirements.txt
 RUN pip install pandas openpyxl python-dotenv sqlalchemy psycopg2

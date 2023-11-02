@@ -1,5 +1,6 @@
 # pip install pandas openpyxl python-dotenv sqlalchemy psycopg2
 import os
+import time
 from pathlib import Path
 
 import pandas as pd
@@ -47,6 +48,18 @@ def insert_course_mapping(course_mapping_df: pd.DataFrame, connstring: str) -> N
     conn = create_engine(connstring)
     course_mapping_df.to_sql('course_mapping', con=conn, if_exists="append", index=False)
     print("Course mapping inserted")
+
+
+def is_db_up() -> bool:
+    conn = create_engine(get_connstring())
+
+    try:
+        test_conn = conn.connect()
+        test_conn.close()
+
+        return True
+    except:
+        return False
 
 
 '''
@@ -110,6 +123,11 @@ course_mapping_df = course_mapping_df.rename(columns=COURSE_MAPPING_COLUMN)
 
 try:
     if not DONE_INDICATOR.is_file():
+
+        while not is_db_up():
+            time.sleep(0.1)
+            print("Waiting 0.1s")
+
         insert_uni_data(uni_gpas_df, get_connstring())
         insert_tag_data(uni_tags_df, get_connstring())
         insert_course_mapping(course_mapping_df, get_connstring())

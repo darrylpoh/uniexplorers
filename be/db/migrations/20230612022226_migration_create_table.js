@@ -130,16 +130,16 @@ exports.up = function(knex) {
  */
 exports.down = function(knex) {
     return knex.schema
-        .dropTableIfExists('user')
+        .dropTableIfExists('image_file')
+        .dropTableIfExists('course_mapping')
         .dropTableIfExists('university')
+        .dropTableIfExists('user')
         .dropTableIfExists('tag')
         .dropTableIfExists('review')
         .dropTableIfExists('uni_tag')
         .dropTableIfExists('uni_exchange')
         .dropTableIfExists('uni_user')
-        .dropTableIfExists('image_file')
         .dropTableIfExists('uni_forum_thread')
         .dropTableIfExists('uni_forum_comment')
-        .dropTableIfExists('university_image')
-        .dropTableIfExists('course_mapping');
+        .dropTableIfExists('university_image');
 };
