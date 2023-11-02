@@ -66,16 +66,17 @@
     },
     mounted() {
       fetchWrapper.get(import.meta.env.VITE_BACKEND + '/universities/name/' + this.$route.params.uniName).then(data => {
-        setInterval(()=>{
-          this.uniData = data
-        }, 2000)
+        // setInterval(()=>{
+        //   this.uniData = data
+        // }, 2000)
 
-        // this.uniData = data
+        this.uniData = data
 
       })
       fetchWrapper.get(import.meta.env.VITE_BACKEND + '/forum/threads/' + this.$route.params.uniName).then(data => {
         this.threads = data
         this.setThreads(data)
+        console.log(data);
         this.loaded = true
       })
     }

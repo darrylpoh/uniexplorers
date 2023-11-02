@@ -1,12 +1,12 @@
 <template>
-  <div class="lg:flex lg:my-24 my-12">
-    <textSearch class=" h-12 absolute w-3/4 -translate-y-10 left-0 right-0 mx-auto md:hidden"/>
-    <div class="bg-white relative top-4 md:top-0 lg:mr-10 flex flex-col justify-center items-center lg:justify-start w-3/4 mb-6 lg:my-0 lg:w-1/5 mx-auto rounded-lg p-12">
+  <div class="flex flex-col lg:flex-row gap-4 m-12 mt-4">
+    <textSearch class=" h-12 left-0 right-0 mx-auto md:hidden"/>
+    <div class="bg-white h-fit grow lg:grow-0 relative flex flex-col justify-center items-center rounded-lg p-12">
       <img :src="yourImg" alt="" class="mb-4 aspect-square w-24">
       <p class="lg:mb-16 mb-4 text-center text-content name font-bold">{{name}}</p>
       <p class="text-content/70">Singapore Management University</p>
     </div>
-    <div class="lg:w-3/5 w-3/4 bg-white mx-auto rounded-lg p-10">
+    <div class="grow bg-white rounded-lg p-10">
       <form action="" class="relative w-full">
         <label for="">Name</label>
         <input type="text" v-model="name" @keydown="inputChange" class="rounded xl:w-3/5 md:w-4/5 w-full">
@@ -48,7 +48,9 @@
 
 <script>
 import textSearch from '../components/textSearch.vue'
+import { fetchWrapper } from '../helpers/fetch-wrapper';
 import { useAuthStore, useCacheStore } from '../stores';
+
 export default {
   data() {
     return {
@@ -69,6 +71,12 @@ export default {
     this.CacheStore.getImg(this.image_filename).then(res => {
       this.yourImg = res
     })
+
+    fetchWrapper.get(import.meta.env.VITE_BACKEND + '/forum/threads').then(data => {
+      console.log(data);
+    })
+
+
   },
   components: {
     textSearch,

@@ -28,7 +28,7 @@
 
 
       <!-- LATEST COMMENT HERE -->
-      <div class="meta flex justify-between items-center ml-4">
+      <div v-if="meta" class="meta flex justify-between items-center ml-4">
 
         <div class="commentLatest flex items-center gap-2 pr-12">
           
@@ -36,7 +36,7 @@
             <p class="font-semibold text-sm text-lightgrey brightness-110 inline">
               {{ latest_user }}
             </p>
-            <span class="ml-2 opacity-50 font-light text-sm"> {{ meta.latest?.created ? '8 days ago' : 'yes' }}</span>
+            <span class="ml-2 opacity-50 font-light text-sm"> {{ meta.latest?.created ? '8 days ago' : 'newest' }}</span>
             <p class="text-sm line-clamp-2">
               {{ latest_comment_text }}
             </p>
