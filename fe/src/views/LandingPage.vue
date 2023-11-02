@@ -142,7 +142,7 @@
         </div> -->
 
   <div class="globe-container flex flex-col md:flex-row items-stretch h-min -translate-y-1/2" >
-    <div id="map" class="basis-1/2 hidden sm:block min-h-[500px] lg:min-h-full overflow-visible flex item-center"></div>
+    <div id="map" class="basis-1/2 hidden sm:block min-h-[500px] 2xl:min-h-full overflow-visible flex item-center"></div>
     <div class="basis-1/2 text-white/80 flex flex-col font-bold italic justify-center p-16">
       This project was made with an intention to address the following Singapore Sustainability Development Goals:
       <ul class="list-inside list-disc my-2 italic">
