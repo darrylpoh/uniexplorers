@@ -29,8 +29,6 @@ module.exports = app => {
                 return res.status(400).send('Email or password is incorrect');
             }
 
-            // console.log(user);
-
             // check if password is correct
             const validPassword = await bcrypt.compare(reqPassword, user.password);
             if (!validPassword) {

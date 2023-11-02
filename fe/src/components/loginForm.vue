@@ -47,7 +47,6 @@ export default {
                 this.errors.email = 'Invalid email address.';
                 return;
             }
-            console.log(this.email, this.password)
             
             const authStore = useAuthStore();
             return authStore.login(this.email, this.password)

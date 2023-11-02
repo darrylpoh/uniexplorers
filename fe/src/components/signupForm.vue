@@ -111,8 +111,6 @@ export default {
         return
       }
 
-      console.log(this.email, this.password)
-
       const authStore = useAuthStore()
       return authStore.signup(this.email, this.password).then(res => {
         this.$emit('signUp', this.email)
