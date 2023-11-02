@@ -128,9 +128,9 @@ export default {
       <div class="menu-card bg-white border-2 rounded-xl text-darkgreen">
         <p class="menu">Menu</p>
         <router-link to="/explore" class="menu-link font-bold">Home</router-link>
-        <router-link to="/unihomepage" class="menu-link font-bold">University</router-link>
+        <router-link :to="`/uni/${$route.params.uniName}`" class="menu-link font-bold" replace>University</router-link>
         <router-link :to="{name: 'uniDiscussions'}" class="menu-link font-bold">Discussion</router-link>
-        <router-link to="explorecitiespage" class="menu-link font-bold">City</router-link>
+        <router-link to="/explorecitiespage" class="menu-link font-bold">City</router-link>
       </div>
     </div>
 
