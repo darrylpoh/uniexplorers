@@ -146,7 +146,7 @@ export default {
     </el-autocomplete>
     <el-button class="ml-5 my-1" v-if="filters.length > 0" type="danger" @click="clearFilter">Clear<i class="fa-solid fa-xmark pl-2"></i> </el-button>
 
-    <div class="basis-full flex gap-2 pt-5">
+    <div class="basis-full flex flex-wrap gap-2 pt-5">
       <el-tag v-for="filter in filters" :key="filter" 
         :type="color_map[filter][0]" :effect="color_map[filter][1]"
         closable @close="handleRemove(filter)">
