@@ -3,7 +3,7 @@
     <div class="main card sticky top-20 bg-white flex items-center border border-lightgrey text-darkgreen z-50">
       <div class="university-info grid flex flex-col">
         <div class="university-name mb-2">
-          <h2 class="font-bold text-base xl:text-2xl">{{$route.params.uniName}}</h2>
+          <h2 class="font-bold text-xl xl:text-2xl">{{$route.params.uniName}}</h2>
         </div>
         <!-- grid grid-cols-3 -->
         <div :class="{'gap-2' : uniData && mq.mdPlus}" class="location-gpa-semester flex flex-col sm:flex-row">
@@ -31,13 +31,13 @@
     </div>
 
     <div class="discussionContentWrapper wrapper grid grid-cols-12 mb-16">
-      <div class="discussionsWrapper flex flex-col gap-2 col-span-10 col-start-2 md:col-span-8 xxl:col-span-6">
+      <div class="discussionsWrapper flex flex-col gap-2 col-span-10 col-start-2 md:col-span-8 md:col-start-2 xxl:col-span-6 xxl:col-start-2">
         <div v-if="!loaded" class="text-darkgreen/50 heroText flex justify-center m-16">Threading it up...</div>
         <DiscussCard v-for="thread in threads" :title="thread.forum_title" :forum_text="thread.forum_text" :thread_id="thread.thread_id" :count="thread.comment_count" :meta="thread.first_comment_text_with_name"/><!-- <DiscussCard title="AMA about {schoolName}"/>
-      <DiscussCard title="Accommodation"/>
-      <DiscussCard title="Budget"/>
-      <DiscussCard title="What to do in this city (Maybe can pull the city name)?"/>
-      <DiscussCard title="Who's Going to {schoolName}"/> -->
+        <DiscussCard title="Accommodation"/>
+        <DiscussCard title="Budget"/>
+        <DiscussCard title="What to do in this city (Maybe can pull the city name)?"/>
+        <DiscussCard title="Who's Going to {schoolName}"/> -->
       </div>
     </div>
   </template>

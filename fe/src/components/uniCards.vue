@@ -1,31 +1,29 @@
 <script>
     import tags from '@/components/tags.vue'
     import { fetchWrapper } from '@/helpers';
-    import axios from 'axios'
-    import { useCacheStore } from '../stores';
+    import { useCacheStore, useUniImageStore } from '../stores';
 
     export default {
         name: 'uniCards',
         components : {
             tags
         },
+        setup() {
+            const { getImg } = useCacheStore()
+            const { uni_images } = useUniImageStore()
+
+            return { getImg, uni_images }
+        },
         mounted() {
-            // YAAAA SO ERRRR PLS get uni picturessssss
-            axios.get(import.meta.env.VITE_BACKEND + '/images/university/' + this.uniData.name, {responseType : 'blob'}).then(res => {
-                this.img = URL.createObjectURL(new Blob([res.data]))
-            }).catch(err => {
-                console.log(err);
-            })
 
             fetchWrapper.get(import.meta.env.VITE_BACKEND + `/reviews/${this.uniData.name}`).then(data => {
                 this.displayedReview = data[0]
-                console.log(this.displayedReview)
             })
 
-            const { img, getImg } = useCacheStore()
+            this.uniImg = this.uni_images[this.uniData.name]
 
             // this.reviewImg = await getImg('pikachu.png')
-            getImg('pikachu.png').then(res => {
+            this.getImg('pikachu.png').then(res => {
                 this.reviewImg = res
             })
 
@@ -41,7 +39,7 @@
         data() {
             return {
                 name : 'BOB',
-                img : '',
+                uniImg : '',
                 reviewImg : null,
                 displayedReview : null
             }
@@ -57,7 +55,7 @@
     <!-- TODO: Dyanmically change width-->
     <!-- outline outline-1 outline-darkgreen -->
 <div style="box-shadow: rgba(30, 54, 62, 0.3) 0px 2px 4px;" @click="$router.push('/uni/' + this.uniData.name)" class="card p-0 border-darkgreen/30 xl:max-w-[50vw] rounded-xl min-w-min h-min bg-white flex items-center text-darkgreen transition-all hover:scale-[101%]  hover:cursor-pointer hover:outline-2 hover:outline-offset-2 active:scale-100 active:brightness-90 active:outline-offset-0">
-    <img v-if="mq.lgPlus" :src="img" alt="uniCards.vue" class="w-48 h-48 flex-none">
+    <img v-if="mq.lgPlus" :src="uniImg" alt="uniCards.vue" class="w-48 h-48 flex-none">
     <div class="info flex flex-1 flex-col my-2 mx-4">
         <h2 :class="mq.xlPlus ? 'w-3/4' : 'w-full', mq.lgPlus ? 'text-xl' : 'text-base'" class="font-bold border-b-2"> {{ uniData.name }} </h2>
         <div :class="mq.lgPlus ? 'text-sm' : 'text-xs'" class="TRAITS min-w-min flex flex-row gap-x-4 my-2 mx-2">
@@ -85,7 +83,7 @@
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut fermentum arcu mauris, id tempor urna pulvinar id. Donec lobortis lacinia quam, eu faucibus ante viverra in. Etiam sit amet pellentesque lorem. Etiam ornare sed lorem eu dictum.
         </div>
 
-        <div v-if="mq.lgPlus" class="h-auto review flex items-center gap-4 mb-2">
+        <div v-if="mq.lgPlus && displayedReview" class="h-auto review flex items-center gap-4 mb-2">
             <img class="w-16 h-16" :src="reviewImg" alt="">
             <div>
                 <p class="reviewtext text-lightgrey text-sm">
