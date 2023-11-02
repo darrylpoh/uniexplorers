@@ -143,7 +143,7 @@
                     <svg :class="mq.lgPlus ? 'w-6 mx-2' : 'w-4 scale-105 mr-1.5'" class="inline scale-[0.8] relative" viewBox="0 0 35 29" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M6.36364 16.4011V22.8456L17.5 29L28.6364 22.8456V16.4011L17.5 22.5556L6.36364 16.4011ZM17.5 0L0 9.66667L17.5 19.3333L31.8182 11.4228V22.5556H35V9.66667L17.5 0Z" fill="black"/>
                     </svg>
-                    {{ result.gpa }} GPA
+                    {{ result.gpa_10_percentile }} GPA
                 </div>
                 <div class="time font-medium flex-1 items-center min-w-fit mr-4">
                     <svg :class="mq.lgPlus ? 'w-5 mx-2' : 'w-3.5 scale-105 mr-1.5'" class="inline scale-[0.8] relative" viewBox="0 0 29 29" fill="none" xmlns="http://www.w3.org/2000/svg">
