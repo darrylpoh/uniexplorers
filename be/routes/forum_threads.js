@@ -129,6 +129,7 @@ module.exports = app => {
                 ) as first_comment_text_with_name`
                 )
             )
+            .where('uni_forum_thread.university_name', university_name)
             .leftJoin('uni_forum_comment', 'uni_forum_thread.id', 'uni_forum_comment.thread_id')
             .groupBy('uni_forum_thread.id', 'uni_forum_thread.university_name', 'uni_forum_thread.forum_title', 'uni_forum_thread.forum_text', 'uni_forum_thread.forum_text_raw', 'uni_forum_thread.created', 'uni_forum_thread.updated')
             .then(data => {

@@ -3,7 +3,7 @@
     <div>
       <label
         for="email"
-        :class="email ? 'hidden' : 'block'"
+        :class="email"
         class="transition-all block mb-2 text-sm font-medium text-gray-900 text-darkgreen"
       >
         Your email

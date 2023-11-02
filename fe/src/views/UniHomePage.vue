@@ -44,7 +44,6 @@ export default {
     let res = await axios.get(import.meta.env.VITE_BACKEND + '/universities/' + query)
     this.university = res.data[0]
     await this.getCoordinates()
-    // await this.getImages()
 
     res = await axios.get(import.meta.env.VITE_BACKEND + '/reviews/' + name)
     this.reviews = res.data
@@ -72,13 +71,17 @@ export default {
   },
   methods: {
     async getCoordinates() {
-      const apiUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${this.university.name}&key=${this.GOOGLE_MAP_API_KEY}`;
+      // const apiUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${this.university.name}&key=${this.GOOGLE_MAP_API_KEY}`;
+      const apiUrl = `${import.meta.env.VITE_BACKEND}/geocode/university/${this.university.name}`
       const response = await fetch(apiUrl);
       const data = await response.json();
-      if (data.results.length > 0) {
-        this.latitude = data.results[0].geometry.location.lat;
-        this.longitude = data.results[0].geometry.location.lng;
-        this.center = { lat: this.latitude, lng: this.longitude };
+      if (data) {
+        // this.latitude = data.results[0].geometry.location.lat;
+        // this.longitude = data.results[0].geometry.location.lng;
+        // this.center = { lat: this.latitude, lng: this.longitude };
+        this.latitude = data.center.lat
+        this.longitude = data.center.lng
+        this.center = data.center
       } else {
         this.latitude = null;
         this.longitude = null;
@@ -100,9 +103,16 @@ export default {
       }
       const keyword = mapping[placeType]
 
-      const query = `?keyword=${keyword}&lat=${this.latitude}&lng=${this.longitude}&radius=5000&type=${placeType}`
-      const res = await axios.get(import.meta.env.VITE_BACKEND + '/nearbysearch' + query);
-      const results = res.data.results;
+      // const query = `?keyword=${keyword}&lat=${this.latitude}&lng=${this.longitude}&radius=5000&type=${placeType}`
+      // const res = await axios.get(import.meta.env.VITE_BACKEND + '/nearbysearch' + query);
+      
+      const apiUrl = `${import.meta.env.VITE_BACKEND}/nearby/university/${this.university.name}`
+      const res = await fetch(apiUrl)
+      const data = await res.json();
+      if (!(placeType in data)) {
+        return []
+      }
+      const results = data[placeType].results;
       let processed_results = [];
       for (let i = 1; i < results.length; i++) {
         if (
