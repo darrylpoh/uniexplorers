@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import LandingPage from '../views/LandingPage.vue'
 import ExplorePage from '../views/ExplorePage.vue'
-import UniHomepage from '../views/UniHomepage.vue'
+import UniHomepage from '../views/UniHomePage.vue'
 import ProfilePage from '../views/ProfilePage.vue'
 import DiscussionPage from '../views/DiscussionPage.vue'
 import ThreadPage from '../views/ThreadPage.vue'
