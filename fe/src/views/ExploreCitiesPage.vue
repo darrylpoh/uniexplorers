@@ -62,7 +62,7 @@ import CityCarousel from '../components/cityCarousel.vue';
 import { useCitiesStore } from '../stores/citiesStore'
 import { storeToRefs } from 'pinia';
 const useCity = useCitiesStore()
-const { city, showFullCity } = storeToRefs(useCity)
+let { city, showFullCity } = storeToRefs(useCity)
 
 let selectedArea = ref('Europe')
 let linePosition = ref('41.5%'); // Use ref for linePosition
