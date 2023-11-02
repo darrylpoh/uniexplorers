@@ -43,6 +43,17 @@
 
 
 @layer components {
+  .copyCard {
+    @apply text-darkgreen text-2xl sm:text-4xl md:text-5xl font-caudex font-bold mb-4;
+  }
+
+  .copyDesc {
+    @apply text-content text-lg sm:text-xl md:text-2xl opacity-60;
+  }
+
+  .copySVG {
+    @apply block absolute opacity-30 max-w-[50%] max-h-[50%] lg:relative lg:max-w-full lg:max-h-full lg:opacity-100;
+  }
 
   h1 {
     @apply font-caudex text-4xl font-bold text-darkgreen my-4;
