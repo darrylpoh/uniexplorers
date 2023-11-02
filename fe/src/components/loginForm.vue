@@ -62,7 +62,7 @@ export default {
 <template>
     <form class="space-y-6 h-133 z-10">
         <div>
-            <label for="email" :class="email ? 'hidden' : 'block'"
+            <label for="email" :class="email"
                 class="transition-all block mb-2 text-sm font-medium text-gray-900 text-darkgreen">Your email</label>
             <input type="email" v-model="email" class="textInput z-10" placeholder="name@company.com" required>
         </div>
