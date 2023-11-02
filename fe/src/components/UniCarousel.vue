@@ -48,4 +48,8 @@ const showUni = (slide, index) => {
 .carousel__next:hover {
     color: white;
 }
+
+.carousel__icon {
+    color: darkgreen;
+}
 </style>
