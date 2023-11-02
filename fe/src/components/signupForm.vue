@@ -114,8 +114,12 @@ export default {
       console.log(this.email, this.password)
 
       const authStore = useAuthStore()
-      return authStore.signup(this.email, this.password).catch((error) => {
-        console.log(error)
+      return authStore.signup(this.email, this.password).then(res => {
+        this.$emit('signUp', this.email)
+      }).catch((error) => {
+        if (error == 'Conflict') {
+          this.errors.email = 'This email has been registered'
+        }
       })
     }
   }

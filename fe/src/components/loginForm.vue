@@ -5,11 +5,11 @@ import checkBox from './checkBox.vue';
 
 export default {
     name: 'loginForm',
-    setup() {
-
-    },
     components: {
         checkBox
+    },
+    mounted() {
+        this.email = this.prefilled ?? ''
     },
     data() {
         return {
@@ -23,7 +23,7 @@ export default {
         }
     },
     props: {
-
+        prefilled : String
     },
     methods: {
         expandField() {

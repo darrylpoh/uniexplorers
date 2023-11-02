@@ -7,7 +7,9 @@ import myFooter from './components/myFooter.vue';
 <template>
   <div id="app" :class="{'bg-lightgreen' : $route.path != '/', 'bg-darkgreen' : $route.path == '/'}">
     <headerBanner v-if="$route.path != '/'"/>
-    <RouterView />
+    <div class="wrapper min-h-screen">
+      <RouterView />
+    </div>
     <myFooter />
   </div>
 </template>
