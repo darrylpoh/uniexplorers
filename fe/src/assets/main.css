@@ -16,6 +16,32 @@
   min-height: 100vh;
 }
 
+
+
+@keyframes placeHolderShimmer{
+  0%{
+      background-position: -468px 0
+  }
+  100%{
+      background-position: 468px 0
+  }
+}
+
+.lazyload {
+  flex-grow : 1;
+  animation-duration: 1s;
+  animation-fill-mode: forwards;
+  animation-iteration-count: infinite;
+  animation-name: placeHolderShimmer;
+  animation-timing-function: linear;
+  background: #f6f7f8;
+  background: linear-gradient(to right, #ddd 8%, #ccc 18%, #ddd 33%);
+  background-size: 800px 104px;
+  height: auto;
+  position: relative;
+}
+
+
 @layer components {
 
   h1 {

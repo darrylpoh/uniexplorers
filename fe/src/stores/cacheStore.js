@@ -5,10 +5,10 @@ import { fetchWrapper } from '../helpers/fetch-wrapper'
 export const useCacheStore = defineStore({
   id: 'cache',
   state: () => ({
-    img : {},
+    imgCache : {},
     threads : [],
     current : null,
-
+    selectedUni : null
   }),
   actions: {
     async setCurrentThread(thread_id) {
@@ -27,15 +27,15 @@ export const useCacheStore = defineStore({
       this.threads = threads
     },
     addImg(key, imgBlob) {
-        this.img[key] = imgBlob
+        this.imgCache[key] = imgBlob
     },
     async getImg(key) {
-        if (this.img[key]) {
-            return this.img[key]
+        if (this.imgCache[key]) {
+            return this.imgCache[key]
         } else {
             return await axios.get(import.meta.env.VITE_BACKEND + '/images/' + key, {responseType : 'blob'}).then(res => {
                 const retrievedImg = URL.createObjectURL(new Blob([res.data]))
-                this.img[key] = retrievedImg
+                this.imgCache[key] = retrievedImg
                 return retrievedImg
             })
         }

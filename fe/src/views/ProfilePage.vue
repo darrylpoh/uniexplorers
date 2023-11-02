@@ -1,24 +1,24 @@
 <template>
   <div class="lg:flex lg:my-24 my-12">
-    <textSearch class="mb-12 w-3/4 mx-auto md:hidden"/>
-    <div class="bg-white lg:mr-10 flex flex-col justify-center items-center w-3/4 mb-12 lg:my-0 lg:w-1/5 mx-auto rounded-lg p-12">
-      <img src="../../public/Profile Female.png" alt="" class="lg:mb-24 my-12">
-      <p class="lg:mb-16 mb-6 text-center name font-bold">Jared</p>
-      <p class="mb-12 lg:mb-0">Singapore Management University</p>
+    <textSearch class=" h-12 absolute w-3/4 -translate-y-10 left-0 right-0 mx-auto md:hidden"/>
+    <div class="bg-white relative top-4 md:top-0 lg:mr-10 flex flex-col justify-center items-center lg:justify-start w-3/4 mb-6 lg:my-0 lg:w-1/5 mx-auto rounded-lg p-12">
+      <img :src="yourImg" alt="" class="mb-4 aspect-square w-24">
+      <p class="lg:mb-16 mb-4 text-center text-content name font-bold">{{name}}</p>
+      <p class="text-content/70">Singapore Management University</p>
     </div>
     <div class="lg:w-3/5 w-3/4 bg-white mx-auto rounded-lg p-10">
-      <form action="" class="relative">
+      <form action="" class="relative w-full">
         <label for="">Name</label>
-        <input type="text" v-model="name" @keydown="inputChange" class="rounded lg:w-2/5 w-4/5">
+        <input type="text" v-model="name" @keydown="inputChange" class="rounded xl:w-3/5 md:w-4/5 w-full">
         
         <label for="">Email</label>
-        <input type="email" v-model="email" disabled class="rounded lg:w-2/5 w-4/5">
+        <input type="email" v-model="email" disabled class="rounded xl:w-3/5 md:w-4/5 w-full">
         
         <label for="">New Password</label>
-        <input type="password" v-model="password"  @keydown="inputChange" class="rounded lg:w-2/5 w-4/5">
+        <input type="password" v-model="password"  @keydown="inputChange" class="rounded xl:w-3/5 md:w-4/5 w-full" placeholder="New Password">
         
         <label for="">Confirm New Password</label>
-        <input type="password" v-model="newPassword" class="rounded lg:w-2/5 w-4/5">
+        <input type="password" v-model="newPassword" class="rounded xl:w-3/5 md:w-4/5 w-full">
         
         <label for="">Status</label>
         <select name="" id="" v-model="status"  @change="inputChange" class="rounded lg:w-2/5 w-4/5">
@@ -32,33 +32,43 @@
           <option value="chattahoochee">Chattahoochee Valley Community College</option>
         </select>
 
-        <div class="flex justify-end items-center mb-4">
-          <button :disabled="noChangesMade" class="mr-4">Save Changes <span class="text-orange text-2xl align-middle">&#62;</span></button>
-        </div>
-
-        <div class="flex justify-end items-center mb-4">
-          <button @click="logout" class="mr-4 bg-red-500 hover:bg-red-700 text-white py-2 px-4 rounded">Logout</button>
-        </div>
         
       </form>
+
+      <div class="flex justify-end items-center mb-4">
+        <button :disabled="noChangesMade" class="">Save Changes <span class="text-orange text-2xl align-middle">&#62;</span></button>
+      </div>
+
+      <div class="flex justify-end items-center mb-4">
+        <button @click="logout" class=" bg-red hover:bg-red-700 text-white py-2 px-4 rounded">Logout</button>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import textSearch from '../components/textSearch.vue'
-import { useAuthStore } from '../stores/auth.store.js';
+import { useAuthStore, useCacheStore } from '../stores';
 export default {
   data() {
     return {
-      name: 'Jared',
-      email: 'jared@admin.com',
-      password: '12345678',
+      ...JSON.parse(localStorage.getItem('user')).user_data,
+      password: '',
       newPassword: '',
       status: 'alumni',
       exchangeSchool: 'bocconi',
       noChangesMade: true,
+      yourImg : null
     }
+  },
+  setup() {
+    const CacheStore = useCacheStore()
+    return { CacheStore }
+  },
+  mounted() {
+    this.CacheStore.getImg(this.image_filename).then(res => {
+      this.yourImg = res
+    })
   },
   components: {
     textSearch,
@@ -105,12 +115,5 @@ export default {
 </style>
 
 <style scoped>
-p {
-    color: #aba5a5;
-    font-size: 1.2em;
-  }
 
-.name {
-  font-size: 3em;
-}
 </style>

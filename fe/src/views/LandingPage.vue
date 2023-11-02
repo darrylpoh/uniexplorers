@@ -56,8 +56,8 @@
             Signup
           </button>
         </div>
-        <loginForm v-if="isLoginMode" />
-        <signupForm v-else />
+        <loginForm v-if="isLoginMode" :prefilled="email"/>
+        <signupForm v-else @signUp="handleSignUp"/>
       </div>
     </div>
   </div>
@@ -134,6 +134,14 @@ import Rellax from 'rellax'
 import * as d3 from 'd3'
 import world_json from '@/assets/world.json'
 import entryAnimator from '../components/entryAnimator.vue';
+
+var email = ref('')
+
+function handleSignUp(signedUp) {
+  email.value = signedUp
+  console.log(email)
+  toggleMode(true)
+}
 
 onMounted(() => {
   let rellax = new Rellax('.rellax')
