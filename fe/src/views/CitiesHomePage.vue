@@ -202,7 +202,7 @@ export default {
               :key="placeType"
               :value="placeType"
               :data="this.data[placeType]"
-              :label="capitalizeFirstLetter(placeType)"
+              :label="$toTitleCase(placeType)"
             />
           </el-select>
           <div v-if="filteredPlaceData.length">
