@@ -84,17 +84,6 @@ export default {
       console.log(markers);
       return markers
     },
-    capitalizeFirstLetter(string) {
-      if (string.includes('_')) {
-        const words = string.split('_')
-        const capitalizedWords = words.map((word) =>
-          word.toLowerCase().replace(/\b\w/g, (char) => char.toUpperCase())
-        )
-        return capitalizedWords.join(' ')
-      } else {
-        return string.toLowerCase().replace(/\b\w/g, (char) => char.toUpperCase())
-      }
-    },
     async getCoordinates() {
       const apiUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${this.city.name}&key=${this.GOOGLE_MAP_API_KEY}`
       const response = await fetch(apiUrl)

@@ -159,17 +159,6 @@ export default {
       // console.log(markers);
       return markers
     },
-    capitalizeFirstLetter(string) {
-      if (string.includes('_')) {
-        const words = string.split('_')
-        const capitalizedWords = words.map((word) =>
-          word.toLowerCase().replace(/\b\w/g, (char) => char.toUpperCase())
-        )
-        return capitalizedWords.join(' ')
-      } else {
-        return string.toLowerCase().replace(/\b\w/g, (char) => char.toUpperCase())
-      }
-    },
   },
   computed: {
     filteredPlaceData() {
@@ -218,7 +207,7 @@ export default {
           <!-- Dropdown -->
           <el-select v-model="selectedPlaceType" class="m-2" placeholder="Select">
             <el-option v-for="(placeData, placeType) in data" :key="placeType" :value="placeType"
-              :label="capitalizeFirstLetter(placeType)" />
+              :label="$toTitleCase(placeType)" />
           </el-select>
           <div v-if="filteredPlaceData.length">
             <NearbyPlaceTab :data="filteredPlaceData" class="nearby-place-table" />
