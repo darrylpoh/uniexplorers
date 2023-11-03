@@ -28,7 +28,7 @@ import { Carousel, Slide, Navigation } from 'vue3-carousel'
 
 let currentSlide = ref(0)
 
-const baseURL = '/src/assets/uni-images/'
+const baseURL = '/uni-images/'
 const props = defineProps(['images'])
 const images = props.images
 if (images == undefined) {

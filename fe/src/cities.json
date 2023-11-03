@@ -3,64 +3,64 @@
     {
       "name": "Paris",
       "country": "France", 
-      "image": "../../public/cities/paris.jpg"
+      "image": "../../cities/paris.jpg"
     },
     {
       "name": "Rome",
       "country": "Italy",
-      "image": "../../public/cities/rome.jpg"
+      "image": "../../cities/rome.jpg"
     },
     {
       "name": "Barcelona",
       "country": "Spain", 
-      "image": "../../public/cities/barcelona.jpg"
+      "image": "../../cities/barcelona.jpg"
     },
     {
       "name": "Vienna",
       "country": "Austria",
-      "image": "../../public/cities/vienna.jpg"
+      "image": "../../cities/vienna.jpg"
     },
     {
       "name": "Prague",
       "country": "Czech Republic",
-      "image": "../../public/cities/prague.jpg"
+      "image": "../../cities/prague.jpg"
     },
     {
       "name": "Athens",
       "country": "Greece", 
-      "image": "../../public/cities/athens.jpg"
+      "image": "../../cities/athens.jpg"
     }
   ],
   "Asia": [
     {
       "name": "Tokyo",
       "country": "Japan",
-      "image": "../../public/cities/tokyo.jpg"
+      "image": "../../cities/tokyo.jpg"
     },
     {
       "name": "Shanghai",
       "country": "China",
-      "image": "../../public/cities/shanghai.jpg"
+      "image": "../../cities/shanghai.jpg"
     },
     {
       "name": "Seoul",
       "country": "South Korea",
-      "image": "../../public/cities/seoul.jpg"
+      "image": "../../cities/seoul.jpg"
     },
     {
       "name": "Osaka",
       "country": "Japan",
-      "image": "../../public/cities/osaka.jpg"
+      "image": "../../cities/osaka.jpg"
     },
     {
       "name": "Busan",
       "country": "Korea",
-      "image": "../../public/cities/busan.jpg"
+      "image": "../../cities/busan.jpg"
     },
     {
       "name": "Beijing",
       "country": "China",
-      "image": "../../public/cities/beijing.jpg"
+      "image": "../../cities/beijing.jpg"
     }
   ],
   
@@ -68,32 +68,32 @@
     {
       "name": "New York City",
       "state": "New York",
-      "image": "../../public/cities/new-york.jpg"
+      "image": "../../cities/new-york.jpg"
     },
     {
       "name": "Los Angeles",
       "state": "California",
-      "image": "../../public/cities/los-angeles.jpg"
+      "image": "../../cities/los-angeles.jpg"
     },
     {
       "name": "Chicago",
       "state": "Illinois",
-      "image": "../../public/cities/chicago.jpg"
+      "image": "../../cities/chicago.jpg"
     },
     {
       "name": "Page",
       "state": "Arizona",
-      "image": "../../public/cities/page.jpg"
+      "image": "../../cities/page.jpg"
     },
     {
       "name": "Philadelphia",
       "state": "Pennsylvania",
-      "image": "../../public/cities/philadelphia.jpg"
+      "image": "../../cities/philadelphia.jpg"
     },
     {
       "name": "Dallas",
       "state": "Texas",
-      "image": "../../public/cities/dallas.jpg"
+      "image": "../../cities/dallas.jpg"
     }
   ]
 }
