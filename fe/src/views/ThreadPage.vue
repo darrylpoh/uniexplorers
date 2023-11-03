@@ -3,7 +3,7 @@
 import textAreaInput from '@/components/textAreaInput/textAreaInput.vue';
 import { fetchWrapper } from '../helpers/fetch-wrapper';
 import comment from '@/components/comment.vue';
-import { useCacheStore } from '@/stores/CacheStore'
+import { useCacheStore } from '@/stores/cacheStore'
 
 export default {
   components: {
