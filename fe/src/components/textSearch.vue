@@ -63,7 +63,7 @@
                 axios.get(import.meta.env.VITE_BACKEND + '/universities/search/' + this.search)
                     .then(res => {
                         // Get the first 5 results
-                        const firstEightResults = res.data.slice(0, 5);
+                        const firstEightResults = res.data.slice();
                         this.results = firstEightResults;
                         this.returnedresults = true
                         
@@ -100,8 +100,19 @@
                         this.selectedIdx = Math.min(this.results.length - 1, this.selectedIdx + 1)
                         break;
                 }
+
+                if (this.selectedIdx < this.results.length - 1 && this.selectedIdx > 3) {
+                    this.fixScrolling();
+                }
+            },
+            fixScrolling(){
+                const liH = this.$refs.searchedItem[this.selectedIdx].clientHeight;
+                this.$refs.textSearchContainer.scrollTop = liH * (this.selectedIdx - 3);
+                // .scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' })
+                
             },
             unFocus() {
+                this.returnedresults = false
                 this.showResults = false
             }
         }
@@ -110,7 +121,7 @@
 
 <template>
 
-    <div class="wrapper" v-click-outside="unFocus">
+    <div class="wrapper" v-click-outside="unFocus" @click="() => { if (searched) {this.returnedresults=true}}">
         <div class="wrapper">
             <input @input="debouncedSearch" @keydown.enter="updateExplorePage" @focus="showResults = true" type="text" :class="{'rounded-b-xl' : !returnedresults }" class="relative rounded-t-xl w-full h-full pl-4 m-0 text-black"
                 placeholder="University?"
@@ -124,8 +135,8 @@
                 </svg>
             </div>
         </div>
-        <div v-if="searched && showResults" class="wrapper h-auto bg-white overflow-hidden shadow-md rounded-lg rounded-t-none border border-2 border-darkgreen/30">
-            <div v-if="results.length > 0" v-for="result, idx in results" @click="goToResult(result.name)" @mouseleave="selectedIdx = -1" @mouseenter="selectedIdx = idx" class="relative shadow-inner w-full min-h-16 py-2 hover:cursor-pointer active:border active:border-darkgreen transition-all duration-75" :class="[idx != results.length - 1 && 'border-b border-lightgray', selectedIdx == idx && 'selected']">
+        <div v-if="searched && showResults" ref="textSearchContainer" class="wrapper h-auto max-h-[50vh] overflow-y-scroll bg-white overflow-hidden shadow-md rounded-lg rounded-t-none border border-2 border-darkgreen/30">
+            <div ref="searchedItem" v-if="results.length > 0" v-for="result, idx in results" @click="goToResult(result.name)" @mouseleave="selectedIdx = -1" @mouseenter="selectedIdx = idx" class="relative shadow-inner w-full min-h-16 py-2 hover:cursor-pointer active:border active:border-darkgreen transition-all duration-75" :class="[idx != results.length - 1 && 'border-b border-lightgray', selectedIdx == idx && 'selected']">
                 <h2 class="text-darkgreen pl-4 text-lg font-medium text-left">{{result.name}}</h2>
         
                 <div class="text-sm w-full flex flex-row my-2 mx-4 text-lightgrey">
@@ -159,6 +170,6 @@
 
 <style scoped>
 .selected {
-    background-color: rgb(243, 244, 246)
+    background-color: #eeeeee
 }
 </style>
