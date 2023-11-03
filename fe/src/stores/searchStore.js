@@ -33,7 +33,6 @@ export const useSearchStore = defineStore({
       } else {
         return fetchWrapper.get(import.meta.env.VITE_BACKEND + '/universities' + query).then(data => {
           this.searchResults = data
-          // console.log('data retrieved', data)
           return data.length > 0
         }).catch(err => {
           return Promise.reject(err);

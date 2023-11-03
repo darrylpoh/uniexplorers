@@ -76,12 +76,10 @@ export default {
     getMarkers(activeTab) {
       let markers = []
       let curr = this.data[activeTab]
-      console.log(this.data[activeTab])
       for (const p in curr) {
         let marker = { 'center': curr[p].center, 'name': curr[p].name, 'rating': curr[p].rating }
         markers.push(marker)
       }
-      console.log(markers);
       return markers
     },
     async getCoordinates() {

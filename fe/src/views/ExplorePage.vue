@@ -96,7 +96,6 @@
             this.error = res ? '' : 'No Results Found'
           }
         )
-        // console.log('query made: ', query)
       }
     }
   }

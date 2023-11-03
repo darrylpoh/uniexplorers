@@ -95,13 +95,11 @@
                     case 'up':
                         console.log('up was pressed');
                         this.selectedIdx = Math.max(-1, this.selectedIdx - 1)
-                        console.log(this.selectedIdx);
                         break;
                 
                     case 'down':
                         console.log('down was pressed');
                         this.selectedIdx = Math.min(this.results.length - 1, this.selectedIdx + 1)
-                        console.log(this.selectedIdx);
                         break;
                 }
             },

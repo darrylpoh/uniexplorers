@@ -15,7 +15,6 @@ export const useCacheStore = defineStore({
         if (this.threads === [] || !this.current) {
             return fetchWrapper.get(import.meta.env.VITE_BACKEND + '/forum/' + thread_id).then(data => {
               this.current = data[0]
-              console.log(this.current)
               return this.current
             })
           } else {

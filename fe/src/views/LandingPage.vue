@@ -166,7 +166,6 @@ var email = ref('')
 
 function handleSignUp(signedUp) {
   email.value = signedUp
-  console.log(email)
   toggleMode(true)
 }
 

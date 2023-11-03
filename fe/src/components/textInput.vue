@@ -36,7 +36,6 @@
             handleSubmit() {
                 // all's g
                 console.log(this.textContent)
-                console.log('SBMITTED')
                 this.$emit('posted', true)
             }
         },
