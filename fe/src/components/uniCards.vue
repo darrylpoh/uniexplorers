@@ -62,7 +62,7 @@
     <!-- TODO: Dyanmically change width-->
     <!-- outline outline-1 outline-darkgreen -->
 <div style="box-shadow: rgba(30, 54, 62, 0.3) 0px 2px 4px;" @click="$router.push('/uni/' + this.uniData.name)" class="card p-0 border-darkgreen/30 xl:max-w-[50vw] rounded-xl min-w-min h-min bg-white flex items-center text-darkgreen transition-all hover:scale-[101%]  hover:cursor-pointer hover:outline-2 hover:outline-offset-2 active:scale-100 active:brightness-90 active:outline-offset-0">
-    <img v-if="mq.lgPlus" :src="uniImg" alt="" class="w-48 h-48 flex-none">
+    <img v-if="mq.lgPlus" :src="uniImg" alt="uniCards.vue" class="w-48 h-48 flex-none">
     <div class="info flex flex-1 flex-col my-2 mx-4">
         <h2 :class="mq.xlPlus ? 'w-3/4' : 'w-full', mq.lgPlus ? 'text-xl' : 'text-base'" class="font-bold border-b-2"> {{ uniData.name }} </h2>
         <div :class="mq.lgPlus ? 'text-sm' : 'text-xs'" class="TRAITS min-w-min flex flex-row gap-x-4 my-2 mx-2">

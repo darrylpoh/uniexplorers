@@ -4,29 +4,35 @@
   import exploreFilter from '../components/exploreFilter.vue';
   import textSearch from '../components/textSearch.vue';
   import { MqResponsive } from "vue3-mq";
-  import { useSearchStore } from '@/stores/searchStore'
+  import { useSearchStore } from '../stores'
+import { tickStep } from 'd3';
 
   export default {
     name: 'ExplorePage',
     setup() {
-      const searchStore = useSearchStore()
+      const { getCurrentPage, navigatePage, getSearchResults } = useSearchStore()
       var filterKey = 0
       var otherKey = 9999
-      return { searchStore, filterKey, otherKey }
+      
+      return { getCurrentPage, navigatePage, getSearchResults, filterKey, otherKey }
     },
-    mounted() {
-      this.searchStore.getSearchResults().catch(err => {
-        if (err.code == 'ERR_NETWORK') {
-          this.error = "DB Not Connected..."
-        }
-      })
+    async mounted() {
+      const allRes = await this.getSearchResults()
+      this.totalPages = Math.ceil(allRes.length / this.MAX_CARDS)
+      this.updatePages()
     },
     inject: ["mq"],
     data() {
       return {
         filtered : false,
-        error : "Loading...",
-        showfilter : false
+        error : "",
+        showfilter : false,
+        loading : true,
+        currentPage : this.getCurrentPage,
+        nearbyPages : [],
+        displayedResults : [],
+        MAX_CARDS : 6,
+        totalPages : 1
       }
     },
     components : {
@@ -36,6 +42,38 @@
       MqResponsive
     },
     methods : {
+      async updatePages() {
+        var pages = []
+        var toShow = await this.getSearchResults()
+
+        if (this.totalPages <= 5) {
+          for (let i = 1; i <= this.totalPages; i++) {
+            pages.push(i);
+          }
+        } else {
+          const startPage = Math.max(1, this.currentPage - 2);
+          const endPage = Math.min(this.totalPages, startPage + 4);
+          for (let i = startPage; i <= endPage; i++) {
+            pages.push(i);
+          }
+        }
+
+        var startIdx = (this.currentPage - 1) * this.MAX_CARDS
+        this.displayedResults = toShow.slice(startIdx, startIdx + this.MAX_CARDS)
+        this.nearbyPages = pages
+      },
+      navPageExplore(shift) {
+        if (shift === 'reset') {
+          return this.navigatePage('reset')
+        }
+
+        if ((this.currentPage == this.totalPages && shift > 0) || (this.currentPage == 1 && shift < 0)) {
+          return
+        }
+        this.currentPage += shift
+        this.updatePages()
+        return this.navigatePage(shift)
+      },
       toggleFilter(e) {
         this.showfilter = !this.showfilter
       },
@@ -78,7 +116,7 @@
         return query
       },
       async updateResult(filters) {
-
+        this.loading = !this.loading
         if (this.mq.smMinus) {
           this.toggleFilter()
         }
@@ -91,12 +129,25 @@
           query = 'reset'
         }
 
-        await this.searchStore.getSearchResults(query).then(
-          res => {
-            this.error = res ? '' : 'No Results Found'
+        await this.getSearchResults(query).then(
+          async data => {
+            console.log('response from query', data);
+            const totalRes = data.length
+            if (totalRes == 0) {
+              this.error = 'No Results Found'
+              this.totalPages = 0
+              this.navPageExplore('reset')
+            } else {
+              this.totalPages = Math.ceil(totalRes / this.MAX_CARDS)
+              this.navPageExplore(-this.currentPage + 1)
+            }
+            await this.updatePages()
           }
-        )
+        ).finally(() => {
+          this.loading = !this.loading
+        })
       }
+
     }
   }
 </script>
@@ -111,7 +162,7 @@
           <div class="filtersm relative card bg-white w-full text-darkgreen grow">
             <h2 class="text-xl font-bold"> Filter & Sort </h2>
             <hr class="mb-2"/>
-            <exploreFilter :key="filterKey" @filter="updateResult"/>
+            <exploreFilter :key="$uuid()" @filter="updateResult"/>
           </div>
       </div>
     </Transition>
@@ -120,7 +171,7 @@
     <div :class="mq.smMinus ? 'flex-col items-center px-4' : 'flex-row justify-center px-8'" class="gap-4 text-darkgreen flex my-4 relative">
       <MqResponsive target="md+">
         <div style="box-shadow: rgba(30, 54, 62, 0.3) 0px 2px 4px;" id="filter" class="rounded-xl h-fit w-fit bg-white mx-2 p-2 lg:p-4 flex flex-col gap-2">
-          <exploreFilter :key="otherKey" @filter="updateResult" @filterWidth="updateSpacer"/>
+          <exploreFilter :key="$uuid()" @filter="updateResult" @filterWidth="updateSpacer"/>
         </div>
       </MqResponsive>
 
@@ -137,18 +188,41 @@
 
       <div :class="mq.lgPlus ? 'w-auto' : 'w-full'" class="RESULTS rounded-xl flex flex-col justify-start gap-2 min-w-[50vw] min-h-[50vh]">
         
-        <div class="text-lg font-bold">
-          Showing {{ filtered ? searchStore.searchResults.length : `All (${searchStore.searchResults.length})` }} Results
-        </div>
-        <transition-group name="list"  mode="out-in" tag="div" class="flex flex-col gap-3">
-            <div v-for="uni in searchStore.searchResults" v-bind:key="uni.name">
-              <uniCards :uniData="uni"/>
+        <div class="text-lg font-bold h-8">
+          <!-- Showing {{ filtered ? totalResults : `All (${totalResults})` }} Results -->
+          <div class="pagination select-none flex gap-2 h-full items-center">
+            <div :class="{'opacity-30' : currentPage === 1}" class="nav w-8 h-8 flex items-center" @click="navPageExplore(-1)" :disabled="currentPage === 1">
+              <img src="vectors/caret.svg" class="min-h-full min-w-full rotate-180" alt="">
             </div>
-        </transition-group>
+            <div
+              v-for="page in nearbyPages"
+              :key="page"
+              @click="navPageExplore(page - currentPage)"
+              class="text-content rounded cursor-pointer px-2 select-none"
+              :class="{ 'bg-darkgreen text-white shadow-md border border-white ': currentPage === page }"
+            >
+              {{ page }}
+            </div>
+            <div :class="{'opacity-30' : currentPage === totalPages}" class="nav w-8 h-8 flex items-center" @click="navPageExplore(1)" :disabled="currentPage === totalPages">
+              <img src="vectors/caret.svg" class="min-h-full min-w-full" alt="">
+            </div>
+          </div>
 
-        <div v-if="searchStore.searchResults.length == 0" class="w-full h-full flex justify-center items-center">
+
+        </div>
+
+        <div class="wrapper">
+          <!-- <transition-group name="list"  mode="out-in" tag="div" class="flex flex-col gap-3"> -->
+              <div class="flex flex-col gap-3" >
+                <uniCards v-for="uni in displayedResults" v-bind:key="uni.name" :uniData="uni"/>
+              </div>
+          <!-- </transition-group> -->
+        </div>
+
+        <div v-if="totalResults == 0" class="w-full h-full flex justify-center items-center">
           <span class="text-7xl font-bold">{{ error }}</span>
         </div>
+
       </div>
 
       <div v-if="mq.mdPlus" id="SPACER" style="z-index: -1;">

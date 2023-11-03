@@ -1,6 +1,7 @@
 <template>
   <div class="coverBg rellax h-[130vh] w-screen absolute bg-darkgreen overflow-x-hidden">
     <div class="imagesContainer flex min-w-full w-full h-auto min-h-full opacity-50">
+      
       <Transition mode="out-in" name="fade-zoom">
         <img
           class="inline-block object-cover w-full"
@@ -9,7 +10,6 @@
           :key="imgToShow"
         />
       </Transition>
-      <!-- <img class="inline-block object-cover w-full" v-for="image, idx in images" :src="image" :key="idx"> -->
     </div>
   </div>
 
@@ -67,9 +67,7 @@
 
   <div data-rellax-speed="7" class="rellax relative moreCopyContent min-h-screen h-auto bg-lightgreen px-16 pt-16">
     <svg class="absolute w-full -translate-y-full left-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path class="fill-lightgreen" fill-opacity="1" d="M0,64L40,90.7C80,117,160,171,240,181.3C320,192,400,160,480,170.7C560,181,640,235,720,234.7C800,235,880,181,960,176C1040,171,1120,213,1200,197.3C1280,181,1360,107,1400,69.3L1440,32L1440,320L1400,320C1360,320,1280,320,1200,320C1120,320,1040,320,960,320C880,320,800,320,720,320C640,320,560,320,480,320C400,320,320,320,240,320C160,320,80,320,40,320L0,320Z"></path></svg>
-    <!-- TODO: Add more copy writing content -->
 
-        <!-- <div class="flex space-around gap-16 h-[50vh] p-12"> -->
                 <div class="flex max-h-[30vh] w-auto justify-around sm:my-0 sm:my-48">
                     <div data-rellax-speed="2" data-rellax-percentage="0.5" data-rellax-zindex="5" class="rellax wrapper flex flex-col justify-center w-fit">
                       <h2 class="copyCard">
@@ -132,14 +130,6 @@
         </article>
     <div class='text-lightgreen'>a</div>
   </div>
-
-  <!-- <div class="pl-10 rightcard w-1/2 flex-1">
-            <el-carousel height="auto" :interval="5000" arrow="always">
-                <el-carousel-item style="height: 100vh" v-for="image in images" :key="image">
-                    <el-image style="width: 100%; height: 100%" :key="image" :src="image" :fit="fill" />
-                </el-carousel-item>
-            </el-carousel>
-        </div> -->
 
   <div class="globe-container flex flex-col md:flex-row items-stretch h-min -translate-y-1/2" >
     <div id="map" class="basis-1/2 hidden sm:block min-h-[500px] 2xl:min-h-full overflow-visible flex item-center"></div>
@@ -236,18 +226,20 @@ onMounted(() => {
 })
 
 var imageStyle = ref(null)
+var images = ref(null)
 
 const isLoginMode = ref(true)
-var heroShown = ref('hello')
-const images = Object.keys(
-  import.meta.glob('@/assets/universities/*.png', { import: 'default', eager: true })
-)
+
+const imported = import.meta.glob("/public/universities/*.png", { import: 'default', eager: true })
+images.value =  Object.values(imported);
+
 var imgToShow = ref(0)
 
 function toggleMode(loginMode) {
   isLoginMode.value = loginMode
 }
 
+  var heroShown = ref('hello')
 function swapHero() {
   if (heroShown.value == 'hello') {
     heroShown.value = 'bye'
@@ -258,25 +250,10 @@ function swapHero() {
 
 function swapImages() {
   imgToShow.value++
-  if (imgToShow.value >= images.length) {
+  if (imgToShow.value >= images.value.length) {
     imgToShow.value = 0
   }
 
-  // I CANT GET THIS FKING THING TO WORK
-  // const randomX = Math.floor(Math.random() * 6) - 5
-  // const randomY = Math.floor(Math.random() * 6) - 5
-
-  // imageStyle.value = {
-  //         position : 'absolute',
-  //         transform : 'translate(0%)',
-  //         transition: `transform 6s linear`,
-  //     }
-
-  // setTimeout(() => {
-  //     imageStyle.value = { ...imageStyle.value,
-  //         transform : `translate(${randomX}%, ${randomY}%)`
-  //     }
-  // }, 800)
 }
 </script>
 
