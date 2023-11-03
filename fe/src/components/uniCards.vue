@@ -87,8 +87,8 @@
             <img class="w-16 h-16" :src="reviewImg" alt="">
             <div>
                 <p class="reviewtext text-lightgrey text-sm">
-                    “ {{ displayedReview ? displayedReview.review_text : ''}} “
-                    <span class="text-sm font-medium "> - Bob, Y2 Exchange Student</span>
+                    “ {{ displayedReview.review_text }} “
+                    <span class="text-sm font-medium "> - {{ $toTitleCase(displayedReview.user_email.split('@')[0]) }}</span>
                 </p> 
             </div>
         </div>
