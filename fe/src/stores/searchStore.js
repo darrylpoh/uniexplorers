@@ -40,6 +40,7 @@ export const useSearchStore = defineStore({
         // if i get query is reset, then re-retrieve all
         return fetchWrapper.get(import.meta.env.VITE_BACKEND + '/universities').then(data => {
           this.searchResults = data
+          return data
         }).catch(err => {
           return Promise.reject(err);
           })

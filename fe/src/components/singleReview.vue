@@ -1,5 +1,6 @@
 <script setup>
 import { ref } from 'vue';
+import { useCacheStore } from '../stores'; 
 
 const props = defineProps(['review'])
 
@@ -9,6 +10,15 @@ let comment_trunc = truncate(comment_original, 40)
 let comment = ref(comment_trunc)
 let exceed = num_words(comment_original, 40)
 let date = new Date(props.review.created)
+
+const { getImg } = useCacheStore()
+
+let profileImg = ref('https://cdn0.iconfinder.com/data/icons/communication-456/24/account_profile_user_contact_person_avatar_placeholder-512.png')
+
+getImg(props.review.user_email + '.png').then( data => {
+	profileImg.value = data
+})
+
 
 function num_words(text, length) {
 	if (text == undefined || text.length == 0) return 0;
@@ -33,7 +43,7 @@ function onClickShow() {
 <template>
 	<div class="flex flex-row flex-wrap md:h-1/2 sm:h-full my-3 mx-3 px-4">
 		<div class="xl:basis-1/6 lg:basis-1/5 md:basis-1/4 basis-full">
-			<img class="w-16 h-16 mb-3 rounded-full shadow-lg" src="https://cdn0.iconfinder.com/data/icons/communication-456/24/account_profile_user_contact_person_avatar_placeholder-512.png" alt="Bonnie image" />
+			<img class="w-16 h-16 mb-3 rounded-full shadow-lg" :src="profileImg" alt="Bonnie image" />
 		</div>
 		<div class="xl:basis-5/6 lg:basis-4/5 md:basis-3/4 basis-full">
 			<h3 class="font-semibold text-md">@{{ review.user_email.split('@')[0] }}</h3>

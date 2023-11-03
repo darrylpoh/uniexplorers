@@ -8,6 +8,7 @@
 
 <script>
 	import Quill from 'quill'
+
 	import quillToolbar from './quillToolbar.vue'
 
     export default {
@@ -88,6 +89,7 @@
     }
 </script>
 
-<style lang="css">
 
+<style lang="css">
+    @import 'quill/dist/quill.snow.css';
 </style>
