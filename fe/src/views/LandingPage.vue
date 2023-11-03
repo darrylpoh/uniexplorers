@@ -130,7 +130,7 @@
         <article>
             
         </article>
-    EYO BOB
+    <div class='text-lightgreen'>a</div>
   </div>
 
   <!-- <div class="pl-10 rightcard w-1/2 flex-1">
