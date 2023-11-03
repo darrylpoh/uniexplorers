@@ -43,6 +43,29 @@
 
 
 @layer components {
+  p > a {
+    @apply underline text-darkgreen font-bold
+  }
+
+  p > a {
+    background: url('/vectors/openlink.svg') right center no-repeat;
+    display: inline-block;
+    padding-right: 24px;
+    
+  }
+
+  p > ul, ol {
+    @apply list-inside pl-4
+  }
+
+  p > ul {
+    @apply list-disc
+  }
+
+  p > ol {
+    @apply list-decimal
+  }
+
   .copyCard {
     @apply text-darkgreen text-2xl sm:text-4xl md:text-5xl font-caudex font-bold mb-4;
   }
