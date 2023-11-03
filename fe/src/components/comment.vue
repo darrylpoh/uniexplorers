@@ -2,7 +2,7 @@
 
     import { fetchWrapper } from '@/helpers';
     import textAreaInput from './textAreaInput/textAreaInput.vue';
-    import { useCacheStore } from '@/stores/CacheStore'
+    import { useCacheStore } from '@/stores/cacheStore'
 
     export default {
         name: 'comment',
