@@ -249,7 +249,7 @@ export default {
         </div>
       </div>
     </div>
-    <CtaBanner class="mt-12 md:mt-20"></CtaBanner>
+    <!-- <CtaBanner class="mt-12 md:mt-20"></CtaBanner> -->
   </div>
 </template>
 
