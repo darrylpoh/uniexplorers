@@ -192,7 +192,7 @@ import { tickStep } from 'd3';
           <!-- Showing {{ filtered ? totalResults : `All (${totalResults})` }} Results -->
           <div class="pagination select-none flex gap-2 h-full items-center">
             <div :class="{'opacity-30' : currentPage === 1}" class="nav w-8 h-8 flex items-center" @click="navPageExplore(-1)" :disabled="currentPage === 1">
-              <img src="vectors/caret.svg" class="min-h-full min-w-full rotate-180" alt="">
+              <img src="/vectors/caret.svg" class="min-h-full min-w-full rotate-180" alt="">
             </div>
             <div
               v-for="page in nearbyPages"
@@ -204,7 +204,7 @@ import { tickStep } from 'd3';
               {{ page }}
             </div>
             <div :class="{'opacity-30' : currentPage === totalPages}" class="nav w-8 h-8 flex items-center" @click="navPageExplore(1)" :disabled="currentPage === totalPages">
-              <img src="vectors/caret.svg" class="min-h-full min-w-full" alt="">
+              <img src="/vectors/caret.svg" class="min-h-full min-w-full" alt="">
             </div>
           </div>
 
