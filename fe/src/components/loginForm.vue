@@ -51,7 +51,7 @@ export default {
             const authStore = useAuthStore();
             return authStore.login(this.email, this.password)
                     .catch(error => {
-                        console.log(error)
+                        this.errors.password = 'Incorrect password.'
                     });
         }
     }
@@ -77,15 +77,22 @@ export default {
             class="w-full text-white bg-darkgreen hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-green-600 dark:hover:bg-green-700 text-darkgreen">
             Login
         </button>
-        <div v-if="errors.email" class="error-message">{{ errors.email }}</div>
-        <div v-if="errors.password" class="error-message">{{ errors.password }}</div>
+        <div v-if="errors.email || errors.password" class="error-message">
+            {{ errors.email }}
+            {{ errors.password }}
+        </div>
     </form>
 </template>
 
 <style scoped>
 .error-message {
+    border: rgba(248, 81, 73, 0.4) 1px solid ;
+    background: linear-gradient(rgba(248, 81, 73, 0.1), rgba(248, 81, 73, 0.1));
+    border-radius: 6px;
+    padding: 16px;
     color: red;
     font-size: 14px;
     margin-top: 5px;
 }
+
 </style>
