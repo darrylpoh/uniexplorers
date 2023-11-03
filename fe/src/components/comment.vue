@@ -11,13 +11,17 @@
         },
         data() {
             return {
-                reply : false,
                 upvoteFill: false,
                 downvoteFill: false,
                 img : null,
                 yourImg : null,
                 children : null,
                 debounceTimeout: null,
+            }
+        },
+        computed : {
+            reply() {
+                return this.commentData.id == this.currentReply
             }
         },
         setup() {
@@ -41,11 +45,21 @@
             child : {
                 type : Boolean,
                 default : false
+            },
+            currentReply : {
+                type : Number
             }
         },
         methods : {
-
+            willReply() {
+                this.$emit('replying', this.commentData.id)
+            },
             handlePost(postData) {
+
+                if (!postData) {
+                    this.$emit('replying', null)
+                    return
+                }
                 
                 fetchWrapper.post(import.meta.env.VITE_BACKEND + '/forum/comments', {
                     comment_text: postData.comment_text,
@@ -53,19 +67,9 @@
                     thread_id: this.$route.params.thread,
                     parent_id: this.commentData.id
                 }).then(data => {
-                    // console.log('this is from comment', res.data)
-                    // var comment_body = res.data[0]
-                    // comment_body = {...comment_body, user_image_filename : res.data.user_image_filename}
-                    // if (this.children.length > 0) {
-                    //     this.children = [comment_body, ...this.children]
-                    //     console.log(this.children);
-                    // } else {
-                    //     this.children.push(comment_body)
-                    // }
+                    this.$emit('replying', null)
                     this.$emit('updateComments', true)
-                    this.reply = false
                 }).catch(err => {
-                    this.reply = false
                     console.log(err);
                 })
             },
@@ -138,7 +142,12 @@
             <p class="username text-darkgreen">@{{ commentData.user_email.split('@')[0] }}</p>
             <p class="timestamp">{{ getTime(commentData.created) }}</p>
             <p class="question-text text-darkgreen" v-html="commentData.comment_text_raw"></p>
-            <ul class="question-footer">
+
+            <div class="border-top text-right pr-8">
+                <span v-if="!reply && !this.child" @click="willReply" class="cursor-pointer hover:scale-110">Reply</span>
+            </div>
+
+            <!-- <ul class="question-footer hidden">
                 <li>
                     <svg v-if="upvoteFill" width="25px" height="25px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" @click="updateVote('like')" class="thumbs-icon">
                     <path d="M7.24001 11V20H5.63001C4.73001 20 4.01001 19.28 4.01001 18.39V12.62C4.01001 11.73 4.74001 11 5.63001 11H7.24001ZM18.5 9.5H13.72V6C13.72 4.9 12.82 4 11.73 4H11.64C11.24 4 10.88 4.24 10.72 4.61L7.99001 11V20H17.19C17.92 20 18.54 19.48 18.67 18.76L19.99 11.26C20.15 10.34 19.45 9.5 18.51 9.5H18.5Z" fill="#000000"/>
@@ -158,7 +167,7 @@
                     <span>{{ commentData.num_dislikes + downvoteFill ? 1 : 0 }}</span>
                 </li>
                 <li v-if="!child" class="li-text" @click="reply = true">Reply</li>
-            </ul>
+            </ul> -->
 
             <!-- Craft Comment -->
             <div v-if="reply" class="create-section mt-5 flex">
@@ -172,7 +181,7 @@
 
             <!-- Children comments -->
             <div v-for="child in children">
-                <comment :commentData="child" :child="true"/>
+                <comment :commentData="child" :currentReply="currentReply" :child="true" @replying="willReply"/>
             </div>
 
         </div>
@@ -213,7 +222,6 @@
 }
 .question-footer {
   list-style: none;
-  display: flex;
   flex-direction: row;
   margin-left: 10px;
   font-size: 0.8rem

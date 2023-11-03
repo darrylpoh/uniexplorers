@@ -20,7 +20,8 @@ export default {
       name : null,
       questionsList : [],
       forum_text : null,
-      forum_title : null
+      forum_title : null,
+      currentReply : null
     }
   },
   mounted() {
@@ -56,6 +57,9 @@ export default {
   },
 
   methods: {
+    setReply(commentId) {
+      this.currentReply = commentId
+    },
     getComments() {
       this.questionsList = []
       fetchWrapper.get(import.meta.env.VITE_BACKEND + '/forum/comments/' + this.$route.params.thread).then(data => {
@@ -68,17 +72,8 @@ export default {
         comment_text_raw: postData.comment_text_raw,
         thread_id: this.$route.params.thread,
       }).then(data => {
+        this.currentReply = null
         return this.getComments()
-        // console.log('after posting', res.data)
-        // var comment_body = res.data[0]
-        // comment_body = {...comment_body, user_image_filename : res.data.user_image_filename}
-        // console.log(comment_body);
-        // if (this.questionsList.length > 0) {
-        //   this.questionsList = [comment_body, ...this.questionsList]
-        // } else {
-        //   this.questionsList.push(comment_body)
-        // }
-
       }).catch(err => {
         console.log(err);
       })
@@ -172,7 +167,7 @@ export default {
 
       <div class="replies">
         <div v-for="question in questionsList" class="mt-8 mb-4">
-          <comment :commentData="question" @updateComments="getComments"/>
+          <comment :commentData="question" :currentReply="currentReply" @updateComments="getComments" @replying="setReply"/>
           <hr>
         </div>
 

@@ -6,19 +6,24 @@
       },
       textCTA : {
         required : true
+      },
+      commentId : {
+        required : false
       }
     },
-        methods : {
-            handleSubmit() {
-                // all's g
-                this.$emit('posted', true)
-            }
+    methods : {
+        handleSubmit() {
+          this.$emit('posted', true)
         },
+        handleCancel() {
+          this.$emit('posted', false)
+        }
+    },
 	}
 </script>
 
 <template>
-	<div :id="identifier">
+	<div :id="identifier" class="flex items-center justify-center">
 		<span class="ql-formats">
           <button class="ql-bold"></button>
           <button class="ql-italic"></button>
@@ -33,10 +38,11 @@
         </span>
     
         <!-- Lists -->
-        <!-- <span class="ql-formats">
+        <span class="ql-formats">
           <button class="ql-list" value="ordered"></button>
           <button class="ql-list" value="bullet"></button>
-        </span> -->
+        </span>
+
     
         <!-- Clean Format -->
         <span class="ql-formats">
@@ -44,17 +50,31 @@
         </span>
     
         <!-- Include the custom button you defined earlier -->
-        <span class="ql-formats" style="margin-left: auto;">
+        <span class="ql-formats grow flex-end" style="margin-left: auto;">
             <!-- :id="ql-my-custom-button" -->
             <button style="background: #1E363E;
     color: white;
+    font-weight: bold;
     width: auto;
     height: auto;
     text-align: center;
     float: right;
-    padding: 8px 16px;" @click="handleSubmit">
+    padding: 8px 24px;" @click="handleSubmit">
                 {{ textCTA }}
             </button>
-        </span>
+          </span>
+          <span v-if="this.commentId" class="ql-formats">
+            <button style="
+                color: #D21312;
+                width: fit-content;
+                height: fit-content;
+                float: right;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                " @click="handleCancel">
+                <span>Cancel</span>
+            </button>
+          </span>
 	</div>
 </template>

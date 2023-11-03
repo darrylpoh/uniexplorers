@@ -1,7 +1,7 @@
 <template>
 	<div class="ml-4 flex flex-col-reverse flex-grow">
 		<input :name="name" type="hidden" v-model="content_raw">
-		<quillToolbar :textCTA="textCTA" @posted="handleSubmit" :identifier="name + '-editor-toolbar'"/>
+		<quillToolbar :textCTA="textCTA" @posted="handleSubmit" :commentId="comment_id" :identifier="name + '-editor-toolbar'"/>
 	    <div :id="name + '-editor'" style="height: 200px"></div>
 	</div>
 </template>
@@ -46,19 +46,24 @@
                 this.content_raw = this.editor.root.innerHTML
                 this.content = this.editor.getText()
             },
-            handleSubmit() {
+            handleSubmit(bool) {
 
-                this.$emit('posted', {
-                    user_email : JSON.parse(localStorage.getItem('user')).user_data.email,
-                    children : [],
-                    comment_text : this.content,
-                    comment_text_raw : this.content_raw,
-                    created : new Date().toString(),
-                    num_likes : 0,
-                    num_dislikes : 0,
-                })
+                if (bool) {
+                    this.$emit('posted', {
+                        user_email : JSON.parse(localStorage.getItem('user')).user_data.email,
+                        children : [],
+                        comment_text : this.content,
+                        comment_text_raw : this.content_raw,
+                        created : new Date().toString(),
+                        num_likes : 0,
+                        num_dislikes : 0,
+                    })
+    
+                    this.editor.root.innerHTML = ''
+                } else {
+                    this.$emit('posted', false)
+                }
 
-                this.editor.root.innerHTML = ''
             }
         },
 
