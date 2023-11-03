@@ -12,15 +12,12 @@
 					<div>
 						<h2 class="mb-6 text-sm font-semibold text-gray-100 uppercase dark:text-white">Follow us</h2>
 						<ul class="text-gray-200 font-medium">
-							<li class="mb-4">
-								<a href="https://github.com/themesberg/flowbite" class="hover:underline ">Github</a>
-							</li>
 							<li>
-								<a href="https://discord.gg/4eeurUVvTy" class="hover:underline">Discord</a>
+								<a href="https://www.instagram.com/2cooljared/" class="hover:underline">Instagram</a>
 							</li>
 						</ul>
 					</div>
-					<div>
+					<!-- <div>
 						<h2 class="mb-6 text-sm font-semibold text-gray-100 uppercase dark:text-white">Legal</h2>
 						<ul class="text-gray-200 font-medium">
 							<li class="mb-4">
@@ -30,7 +27,7 @@
 								<a href="#" class="hover:underline">Terms &amp; Conditions</a>
 							</li>
 						</ul>
-					</div>
+					</div> -->
 				</div>
 			</div>
 			<hr class="my-6 border-0 sm:mx-auto dark:border-gray-700 lg:my-8" />
@@ -39,7 +36,7 @@
 						class="hover:underline">UniExplorers™</a>. All Rights Reserved.
 				</span>
 				<div class="flex mt-4 space-x-5 sm:justify-center sm:mt-0">
-					<a href="#" class="text-gray-100 hover:text-gray-100">
+					<!-- <a href="#" class="text-gray-100 hover:text-gray-100">
 						<svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
 							viewBox="0 0 8 19">
 							<path fill-rule="evenodd"
@@ -47,8 +44,8 @@
 								clip-rule="evenodd" />
 						</svg>
 						<span class="sr-only">Facebook page</span>
-					</a>
-					<a href="#" class="text-gray-100 hover:text-gray-100">
+					</a> -->
+					<!-- <a href="#" class="text-gray-100 hover:text-gray-100">
 						<svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
 							viewBox="0 0 21 16">
 							<path
@@ -82,7 +79,7 @@
 								clip-rule="evenodd" />
 						</svg>
 						<span class="sr-only">Dribbble account</span>
-					</a>
+					</a> -->
 				</div>
 			</div>
 		</div>
