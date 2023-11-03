@@ -124,9 +124,11 @@ course_mapping_df = course_mapping_df.rename(columns=COURSE_MAPPING_COLUMN)
 try:
     if not DONE_INDICATOR.is_file():
 
-        while not is_db_up():
-            time.sleep(0.1)
-            print("Waiting 0.1s")
+        # while not is_db_up():
+        #     time.sleep(0.1)
+        #     print("Waiting 0.1s")
+        print("Waiting 5 seconds...")
+        time.sleep(5)
 
         insert_uni_data(uni_gpas_df, get_connstring())
         insert_tag_data(uni_tags_df, get_connstring())
