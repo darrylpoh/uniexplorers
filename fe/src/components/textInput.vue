@@ -35,7 +35,6 @@
         methods : {
             handleSubmit() {
                 // all's g
-                console.log(this.textContent)
                 this.$emit('posted', true)
             }
         },

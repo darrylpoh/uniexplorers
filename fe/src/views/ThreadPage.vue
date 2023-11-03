@@ -39,7 +39,6 @@ export default {
 
 
     // if (this.forum_title == 'NO PROPER DATA MADE. ASSUMED TO BE DEV WORK.') {
-    //   console.log('bro what the fuck');
     //   axios.get(import.meta.env.VITE_BACKEND + '/forum/' + this.$route.params.thread).then(res => {
     //     const thread = res.data[0]
     //     console.log(res);

@@ -32,7 +32,7 @@ export default {
                 this.animate = entry.isIntersecting;
                 if (entry.isIntersecting) {
                     setTimeout(() => {
-                        console.log('removing')
+                        // console.log('removing')
                         // FKING INEFFICIENT BUT WTV
                         this.observer.unobserve(this.$refs.target);
                     }, 500)
