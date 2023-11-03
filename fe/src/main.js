@@ -11,7 +11,6 @@ import { Vue3Mq } from "vue3-mq"
 import clickOutside from './helpers/click-outside-directive.js'
 import appear from './helpers/transition-appear-directive'
 import { toTitleCase } from './helpers/toTitleCase'
-import '@vueup/vue-quill/dist/vue-quill.snow.css';
 import { v4 as uuidv4 } from 'uuid';
 
 
