@@ -1,6 +1,6 @@
 require('dotenv').config()
 
-const { CLIENT, DATABASE, PG_USER, PASSWORD, HOST, PG_PORT } = process.env
+const { CLIENT, DATABASE, PG_USER, PASSWORD, HOST, PG_PORT, UNIX_SOCKET } = process.env
 
 module.exports = {
     development: {
@@ -37,18 +37,21 @@ module.exports = {
     },
 
     production: {
-        client: 'postgresql',
+        client: 'pg',
         connection: {
-            database: 'uniexplorers',
-            user: 'postgres',
-            password: 'postgres',
+            database: DATABASE,
+            user: PG_USER,
+            password: PASSWORD,
+            host: UNIX_SOCKET,
+            port: PG_PORT,
         },
         pool: {
             min: 2,
-            max: 10,
+            max: 80,
         },
-        migrations: {
-            tableName: 'knex_migrations',
-        },
+        // migrations: {
+        //     tableName: 'knex_migrations',
+        // },
+        acquireConnectionTimeout: 60000
     },
 }
