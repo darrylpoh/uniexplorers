@@ -124,7 +124,7 @@ module.exports = app => {
                     FROM uni_forum_comment c
                     JOIN "user" u ON c.user_email = u.email
                     WHERE c.thread_id = uni_forum_thread.id 
-                    ORDER BY c.created 
+                    ORDER BY c.created DESC 
                     LIMIT 1
                 ) as first_comment_text_with_name`
                 )
