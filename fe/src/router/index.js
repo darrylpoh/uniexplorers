@@ -85,6 +85,7 @@ router.beforeEach(async (to) => {
   const auth = useAuthStore();
 
   to.meta.title = DEFAULT_TITLE;
+  document.title = DEFAULT_TITLE;
 
   if (authRequired && !auth.user) {
       auth.returnUrl = to.fullPath;
