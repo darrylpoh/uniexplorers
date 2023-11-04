@@ -10,6 +10,8 @@ import CitiesHomePage from '../views/CitiesHomePage.vue'
 
 import {useAuthStore} from '@/stores'
 
+const DEFAULT_TITLE = 'UniExplorers';
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   scrollBehavior(to, from, savedPosition) {
@@ -81,6 +83,8 @@ router.beforeEach(async (to) => {
   const publicPages = ['/'];
   const authRequired = !publicPages.includes(to.path);
   const auth = useAuthStore();
+
+  to.meta.title = DEFAULT_TITLE;
 
   if (authRequired && !auth.user) {
       auth.returnUrl = to.fullPath;
