@@ -19,7 +19,8 @@
                 searched : false,
                 returnedresults : false,
                 showResults : false,
-                selectedIdx : -1
+                selectedIdx : -1,
+                loading : false
             }
         },
         watch: {
@@ -60,10 +61,11 @@
                     return
                 }
                 
-                
+                this.loading = true
                 axios.get(import.meta.env.VITE_BACKEND + '/universities/search/' + this.search)
                 .then(res => {
                     // Get the first 5 results
+                    this.loading = false
                     const firstEightResults = res.data.slice();
                     this.results = firstEightResults;
                     this.returnedresults = true
@@ -126,8 +128,8 @@
 <template>
 
     <div class="wrapper" v-click-outside="unFocus" @click="() => { if (searched) {this.returnedresults=true}}">
-        <div class="wrapper">
-            <input @input="debouncedSearch" @keydown.enter="updateExplorePage" @focus="showResults = true" type="text" :class="{'rounded-b-xl' : !returnedresults }" class="relative rounded-t-xl w-full h-full pl-4 m-0 text-black"
+        <div class="wrapper" >
+            <input @input="debouncedSearch" @keydown.enter="updateExplorePage" @focus="showResults = true" type="text" :class="{'rounded-b-xl' : !returnedresults, 'lazyload' : loading }" class="relative rounded-t-xl w-full h-full pl-4 m-0 text-black"
                 placeholder="University?"
                 v-model="search"
                 @keydown.down.prevent="navResult('down')"
