@@ -63,10 +63,15 @@ import { tickStep } from 'd3';
       MqResponsive
     },
     methods : {
-      async updatePages() {
+      async updatePages(reset) {
         var pages = []
-        var toShow = await this.getSearchResults()
-        this.totalPages = Math.ceil(toShow.length / this.MAX_CARDS)
+        var toShow = []
+
+        if (reset != 'reset') {
+          toShow = await this.getSearchResults()
+          this.totalPages = Math.ceil(toShow.length / this.MAX_CARDS)
+        }
+        
         if (this.totalPages <= 5) {
           for (let i = 1; i <= this.totalPages; i++) {
             pages.push(i);
@@ -158,11 +163,12 @@ import { tickStep } from 'd3';
               this.error = 'No Results Found'
               this.totalPages = 0
               this.navPageExplore('reset')
+              await this.updatePages('reset')
             } else {
               this.totalPages = Math.ceil(totalRes / this.MAX_CARDS)
               this.navPageExplore(-this.currentPage + 1)
+              await this.updatePages()
             }
-            await this.updatePages()
           }
         ).finally(() => {
           this.loading = !this.loading
