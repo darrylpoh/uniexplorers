@@ -11,15 +11,36 @@ import { tickStep } from 'd3';
     name: 'ExplorePage',
     setup() {
       const { getCurrentPage, navigatePage, getSearchResults } = useSearchStore()
-      var filterKey = 0
-      var otherKey = 9999
-      
-      return { getCurrentPage, navigatePage, getSearchResults, filterKey, otherKey }
+      const searchStore = useSearchStore()
+
+      return { getCurrentPage, navigatePage, getSearchResults, searchStore }
     },
-    async mounted() {
-      const allRes = await this.getSearchResults()
-      this.totalPages = Math.ceil(allRes.length / this.MAX_CARDS)
+    mounted() {
       this.updatePages()
+
+      this.searchStore.$onAction(({
+        name, // name of the action
+        store, // store instance, same as `someStore`
+        args, // array of parameters passed to the action
+        after, // hook after the action returns or resolves
+        onError, // hook if the action throws or rejects
+      }) => {
+        after(async (data) => {
+          if (name === 'setSearchResults') {
+
+            const totalRes = data.length
+            if (totalRes == 0) {
+              this.error = 'No Results Found'
+              this.totalPages = 0
+              this.navPageExplore('reset')
+            } else {
+              this.totalPages = Math.ceil(totalRes / this.MAX_CARDS)
+              this.navPageExplore(-this.currentPage + 1)
+            }
+            this.updatePages()
+          }
+        })
+      })
     },
     inject: ["mq"],
     data() {
@@ -45,7 +66,7 @@ import { tickStep } from 'd3';
       async updatePages() {
         var pages = []
         var toShow = await this.getSearchResults()
-
+        this.totalPages = Math.ceil(toShow.length / this.MAX_CARDS)
         if (this.totalPages <= 5) {
           for (let i = 1; i <= this.totalPages; i++) {
             pages.push(i);
@@ -170,7 +191,7 @@ import { tickStep } from 'd3';
 
     <div :class="mq.smMinus ? 'flex-col items-center px-4' : 'flex-row justify-center px-8'" class="gap-4 text-darkgreen flex my-4 relative">
       <MqResponsive target="md+">
-        <div style="box-shadow: rgba(30, 54, 62, 0.3) 0px 2px 4px;" id="filter" class="rounded-xl h-fit w-fit bg-white mx-2 p-2 lg:p-4 flex flex-col gap-2">
+        <div style="box-shadow: rgba(30, 54, 62, 0.3) 0px 2px 4px;" id="filter" class="rounded-xl h-fit w-auto bg-white mx-2 p-2 lg:p-4 flex flex-col gap-2">
           <exploreFilter :key="$uuid()" @filter="updateResult" @filterWidth="updateSpacer"/>
         </div>
       </MqResponsive>
@@ -219,7 +240,7 @@ import { tickStep } from 'd3';
           <!-- </transition-group> -->
         </div>
 
-        <div v-if="totalResults == 0" class="w-full h-full flex justify-center items-center">
+        <div v-if="displayedResults.length == 0" class="w-full h-full flex justify-center items-center">
           <span class="text-7xl font-bold">{{ error }}</span>
         </div>
 

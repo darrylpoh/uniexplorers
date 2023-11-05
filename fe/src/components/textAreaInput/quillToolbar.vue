@@ -19,12 +19,13 @@
           this.$emit('posted', false)
         }
     },
+    inject : ['mq']
 	}
 </script>
 
 <template>
-	<div :id="identifier" class="flex items-center justify-center">
-		<span class="ql-formats">
+	<div :id="identifier" class="flex justify-between items-center sm:justify-center">
+		    <span v-if="mq.smPlus" class="ql-formats">
           <button class="ql-bold"></button>
           <button class="ql-italic"></button>
           <button class="ql-underline"></button>
@@ -45,36 +46,41 @@
 
     
         <!-- Clean Format -->
-        <span class="ql-formats">
+        <!-- <span class="ql-formats">
           <button class="ql-clean"></button>
-        </span>
+        </span> -->
     
         <!-- Include the custom button you defined earlier -->
-        <span class="ql-formats grow flex-end" style="margin-left: auto;">
+        <span class="ql-formats flex grow" style="margin-left: auto; margin-right: 0;">
             <!-- :id="ql-my-custom-button" -->
-            <button style="background: #1E363E;
-    color: white;
-    font-weight: bold;
-    width: auto;
-    height: auto;
-    text-align: center;
-    float: right;
-    padding: 8px 24px;" @click="handleSubmit">
-                {{ textCTA }}
-            </button>
+              <button style="background: #1E363E;
+                  color: white;
+                  font-weight: bold;
+                  width: auto;
+                  height: auto;
+                  text-align: center;
+                  float: right;
+                  padding: 8px 24px;
+                  " @click="handleSubmit">
+                  {{ textCTA }}
+              </button>
+              <button v-if=" this.commentId" style="
+                  color: #D21312;
+                  height: auto;
+                  width: fit-content;
+                  padding-top: 8px;
+                  padding-bottom: 8px;
+                  margin-right: 8px;
+                  float: right;
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                  " @click="handleCancel">
+                  <span>Cancel</span>
+              </button>
           </span>
-          <span v-if="this.commentId" class="ql-formats">
-            <button style="
-                color: #D21312;
-                width: fit-content;
-                height: fit-content;
-                float: right;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                " @click="handleCancel">
-                <span>Cancel</span>
-            </button>
+
+          <span v-if=" this.commentId" class="ql-formats">
           </span>
 	</div>
 </template>

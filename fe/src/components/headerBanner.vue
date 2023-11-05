@@ -37,12 +37,12 @@
 </script>
 
 <template>
-  <div :class="mq.mdPlus ? 'px-16' : (mq.smPlus ? 'px-8' : '')" class="z-10 sticky top-0 w-screen bg-darkgreen h-20 flex items-center justify-around border-0 border-b-2 border-gray-500">
+  <div :class="mq.mdPlus ? 'px-16' : (mq.smPlus ? 'px-8' : '')" class="z-50 sticky top-0 w-screen bg-darkgreen h-20 flex items-center justify-around border-0 border-b-2 border-gray-500">
     <div class="logo w-1/6 lg:w-1/4 overflow-visible">
-      <img @click="goToHome" src="../../public/LightLogo.png" :class="mq.lgPlus ? 'h-16' : 'h-12'" class="left-1/4 cursor-pointer transition-all" title="Back to Home">
+      <img @click="goToHome" src="./LightLogo.png" :class="mq.lgPlus ? 'h-16' : 'h-12'" class="left-1/4 cursor-pointer transition-all" title="Back to Home">
     </div>
     
-    <div v-if="mq.mdPlus" class="searchBar relative h-10 z-10 flex-grow">
+    <div class="hidden md:block searchBar relative h-10 z-50 flex-grow">
       <textSearch/>
     </div>
 

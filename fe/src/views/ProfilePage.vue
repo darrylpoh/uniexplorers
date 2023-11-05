@@ -72,11 +72,6 @@ export default {
       this.yourImg = res
     })
 
-    fetchWrapper.get(import.meta.env.VITE_BACKEND + '/forum/threads').then(data => {
-      console.log(data);
-    })
-
-
   },
   components: {
     textSearch,

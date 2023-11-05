@@ -59,19 +59,23 @@
                     this.returnedresults = false
                     return
                 }
-
+                
+                
                 axios.get(import.meta.env.VITE_BACKEND + '/universities/search/' + this.search)
-                    .then(res => {
-                        // Get the first 5 results
-                        const firstEightResults = res.data.slice();
-                        this.results = firstEightResults;
-                        this.returnedresults = true
-                        
-                        if (enter) {
-                            this.searchStore.setSearchResults(firstEightResults);
-                            this.showResults = false;
-                            this.returnedresults = false
-                        } else {
+                .then(res => {
+                    // Get the first 5 results
+                    const firstEightResults = res.data.slice();
+                    this.results = firstEightResults;
+                    this.returnedresults = true
+                    
+                    if (enter) {
+                        if (this.$route.name !== 'ExplorePage') {
+                            this.$router.push('/explore')
+                        }
+                        this.searchStore.setSearchResults(firstEightResults);
+                        this.showResults = false;
+                        this.returnedresults = false
+                    } else {
                             this.showResults = true;
                         }
 

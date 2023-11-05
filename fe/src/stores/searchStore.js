@@ -58,6 +58,7 @@ export const useSearchStore = defineStore({
     },
     setSearchResults(results) {
       this.searchResults = results
+      return results
     },
     setSearchQuery(query) {
       this.searchQuery = query

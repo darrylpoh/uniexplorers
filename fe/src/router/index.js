@@ -89,7 +89,7 @@ router.beforeEach(async (to) => {
 
   if (authRequired && !auth.user) {
       auth.returnUrl = to.fullPath;
-      return '/login';
+      return '/';
   }
   
   if (auth.user && to.path == '/') {

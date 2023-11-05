@@ -21,11 +21,11 @@
             })
 
             if (this.uni_images[this.uniData.name]) {
-                this.uniImg = this.baseURL + this.uni_images[this.uniData.name][0];
+                this.uniImg = '/uni-images/' + this.uni_images[this.uniData.name][0];
             } else {
                 this.getImg('pikachu.png').then(res => {
-                this.uniImg = res
-            })
+                    this.uniImg = res
+                })
             }
 
             // this.reviewImg = await getImg('pikachu.png')
@@ -48,7 +48,6 @@
                 uniImg : '',
                 reviewImg : null,
                 displayedReview : null,
-                baseURL : '/src/assets/uni-images/',
             }
         },
         props : {

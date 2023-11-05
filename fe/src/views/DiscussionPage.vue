@@ -1,6 +1,6 @@
 <template>
 
-    <div class="main card sticky top-20 bg-white flex items-center border border-lightgrey text-darkgreen z-50">
+    <div class="main card sticky top-20 bg-white flex items-center border border-lightgrey text-darkgreen z-10">
       <div class="university-info grid flex flex-col">
         <div class="university-name mb-2">
           <h2 class="font-bold text-xl xl:text-2xl">{{$route.params.uniName}}</h2>
