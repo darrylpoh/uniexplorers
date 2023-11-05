@@ -66,6 +66,8 @@ exports.up = function(knex) {
             table.integer('exchange_duration').defaultTo(null);
             table.dateTime('created').defaultTo(knex.fn.now());
             table.dateTime('updated');
+            table.specificType('comment_liked', 'INTEGER[]').defaultTo(knex.raw('ARRAY[]::INTEGER[]'));
+            table.specificType('comment_disliked', 'INTEGER[]').defaultTo(knex.raw('ARRAY[]::INTEGER[]'));
         })
         .createTable('tag', (table) => {
             table.string('name').primary();
@@ -109,6 +111,7 @@ exports.up = function(knex) {
             table.string('user_email').index().references('email').inTable('user');
             table.integer('thread_id').index().references('id').inTable('uni_forum_thread').notNullable();
             table.integer('parent_id').index().references('id').inTable('uni_forum_comment');
+            // SELECT COUNT(*) FROM comment_likes WHERE comment_id = id
             table.integer('num_likes').defaultTo(0);
             table.integer('num_dislikes').defaultTo(0);
             table.text('comment_text').notNullable();
@@ -120,6 +123,18 @@ exports.up = function(knex) {
             table.string('university_name').index().references('name').inTable('university');
             table.string('image_filename').index().references('filename').inTable('image_file');
             table.primary(['university_name', 'image_filename']);
+        })
+        .createTable('comment_likes', (table) => {
+            table.string('user_email').index().references('email').inTable('user');
+            table.integer('comment_id').index().references('id').inTable('uni_forum_comment');
+            table.timestamp('created_at').defaultTo(knex.fn.now());
+            table.primary(['user_email', 'comment_id']);
+        })
+        .createTable('comment_dislikes', (table) => {
+            table.string('user_email').index().references('email').inTable('user');
+            table.integer('comment_id').index().references('id').inTable('uni_forum_comment');
+            table.timestamp('created_at').defaultTo(knex.fn.now());
+            table.primary(['user_email', 'comment_id']);
         })
         ;
 };
@@ -141,5 +156,7 @@ exports.down = function(knex) {
         .dropTableIfExists('uni_user')
         .dropTableIfExists('uni_forum_thread')
         .dropTableIfExists('uni_forum_comment')
-        .dropTableIfExists('university_image');
+        .dropTableIfExists('university_image')
+        .dropTableIfExists('comment_likes')
+        .dropTableIfExists('comment_dislikes')
 };

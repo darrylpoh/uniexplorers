@@ -180,45 +180,114 @@ module.exports = app => {
             }
         )
 
-    app.route('/forum/comments/like/:comment_id')
-        .patch(async (req, res) => {
-            const {comment_id} = req.params;
+    app.route('/forum/comments/like')
+        .post(async (req, res) => {
+            const comment_id = req.body.comment_id;
+            const user_email = req.body.user_email;
 
-            db('uni_forum_comment')
-                .where('id', comment_id)
-                .increment('num_likes', 1)
-            .then(
-                (resp) => res.json(resp)
-            )
-            .catch(
-                err => res
-                    .status(404)
-                    .json({
+            const existingLike = await db
+                .select()
+                .from('comment_likes')
+                .where({ user_email: user_email, comment_id: comment_id })
+
+            const existingDislike = await db
+                .select()
+                .from('comment_dislikes')
+                .where({ user_email: user_email, comment_id: comment_id })
+
+            if (existingLike.length > 0) {
+                db
+                .select()
+                .from('comment_likes')
+                .where({ user_email: user_email, comment_id: comment_id }).del().then(result => {
+                    res.json('removed')
+                }).catch(err =>
+                    res.status(404).json({
                         success: false,
-                        message: 'uni forum comment database like increment failed',
+                        message: 'Toggling like on the comment failed',
                         stack: err.stack,
-                })
-            )
+                    })
+                )
+            } else {
+                var swap = 'added'
+                if (existingDislike.length > 0) {
+                    db
+                    .select()
+                    .from('comment_dislikes')
+                    .where({ user_email: user_email, comment_id: comment_id })
+                    .del().then(resp => {
+                        swap = 'swap'
+                    })
+                }
+
+                db
+                .insert({ user_email: user_email, comment_id: comment_id })
+                .into('comment_likes')
+                .then(result => {
+                    res.json(swap)
+                }).catch(err =>
+                    res.status(404).json({
+                        success: false,
+                        message: 'Toggling like on the comment failed',
+                        stack: err.stack,
+                    })
+            );
+            }
+
         })
 
-    app.route('/forum/comments/dislike/:comment_id')
-        .patch(async (req, res) => {
-            const {comment_id} = req.params;
+    app.route('/forum/comments/dislike')
+        .post(async (req, res) => {
+            const comment_id = req.body.comment_id;
+            const user_email = req.body.user_email;
 
-            db('uni_forum_comment')
-                .where('id', comment_id)
-                .increment('num_dislikes', 1)
-            .then(
-                (resp) => res.json(resp)
-            )
-            .catch(
-                err => res
-                    .status(404)
-                    .json({
+            const existingLike = await db
+                .select()
+                .from('comment_likes')
+                .where({ user_email: user_email, comment_id: comment_id })
+
+            const existingDislike = await db
+                .select()
+                .from('comment_dislikes')
+                .where({ user_email: user_email, comment_id: comment_id })
+
+            if (existingDislike.length > 0) {
+                db
+                .select()
+                .from('comment_dislikes')
+                .where({ user_email: user_email, comment_id: comment_id }).del().then(result => {
+                    res.json('removed')
+                }).catch(err =>
+                    res.status(404).json({
                         success: false,
-                        message: 'uni forum comment database dislike increment failed',
+                        message: 'Toggling dislike on the comment failed',
                         stack: err.stack,
-                })
-            )
+                    })
+                )
+            } else {
+                var swap = 'added'
+                if (existingLike.length > 0) {
+                    db
+                    .select()
+                    .from('comment_likes')
+                    .where({ user_email: user_email, comment_id: comment_id })
+                    .del().then(resp => {
+                        swap = 'swap'
+                    })
+                }
+
+                db
+                .insert({ user_email: user_email, comment_id: comment_id })
+                .into('comment_dislikes')
+                .then(result => {
+                    res.json(swap)
+                }).catch(err =>
+                    res.status(404).json({
+                        success: false,
+                        message: 'Toggling dislike on the comment failed',
+                        stack: err.stack,
+                    })
+            );
+            }
         })
 }

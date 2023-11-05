@@ -3,8 +3,7 @@
 import textAreaInput from '@/components/textAreaInput/textAreaInput.vue';
 import { fetchWrapper } from '../helpers/fetch-wrapper';
 import comment from '@/components/comment.vue';
-import { useCacheStore } from '@/stores/cacheStore'
-
+import { useCacheStore, useAuthStore } from '../stores'
 export default {
   components: {
     textAreaInput,
@@ -12,7 +11,8 @@ export default {
   },
   setup() {
     const CacheStore = useCacheStore()
-    return {CacheStore}
+    const { user, commentLikeStatus } = useAuthStore()
+    return { CacheStore, user, commentLikeStatus }
   },
   data() {
     return {
@@ -37,16 +37,7 @@ export default {
       this.img = res
     })
 
-
-    // if (this.forum_title == 'NO PROPER DATA MADE. ASSUMED TO BE DEV WORK.') {
-    //   axios.get(import.meta.env.VITE_BACKEND + '/forum/' + this.$route.params.thread).then(res => {
-    //     const thread = res.data[0]
-    //     console.log(res);
-    //     this.forum_text = thread.forum_text
-    //     this.forum_title = thread.forum_title
-    //   })
-    // }
-
+    console.log(this.user.user_data);
 
     this.getComments()
     // axios.get(import.meta.env.VITE_BACKEND + '/forum/comments/' + this.$route.params.thread).then(res => {
@@ -155,7 +146,7 @@ export default {
       <!-- Input field and "Create" button for asking questions -->
       
       <div class="create-section">
-        <div>
+        <div class="hidden sm:inline">
           <img :src="img" alt="" class="avatar">
         </div>
         <!-- <textInputQuill :identifier="'make'"/> -->
@@ -166,7 +157,7 @@ export default {
 
       <div class="replies">
         <div v-for="question in questionsList" class="mt-8 mb-4">
-          <comment :commentData="question" :currentReply="currentReply" @updateComments="getComments" @replying="setReply"/>
+          <comment :commentData="question" :currentReply="currentReply" :liked="commentLikeStatus(question.id)" @updateComments="getComments" @replying="setReply"/>
           <hr>
         </div>
 

@@ -191,9 +191,6 @@ module.exports = app => {
                         res.json(results)
                     }
                 )
-                .then(universities =>
-                    res.json(universities)
-                )
                 .catch(err => res
                     .status(404)
                     .json({

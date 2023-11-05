@@ -21,7 +21,9 @@ module.exports = app => {
                 "created",
                 "updated",
                 "is_admin",
-                "image_filename"
+                "image_filename",
+                "comment_liked",
+                "comment_disliked"
             ).from('user').where('email', reqEmail).first();
 
             // check if user exists
