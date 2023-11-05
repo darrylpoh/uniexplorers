@@ -97,7 +97,7 @@ export default {
     },
 
     async getWikipedia() {
-      const wikiUrl = `http://localhost:8080/summary/${this.city.name}`
+      const wikiUrl = import.meta.env.VITE_BACKEND + `/summary/${this.city.name}`
       const response = await fetch(wikiUrl)
       const data = await response.json()
       if (data.length > 0) {
