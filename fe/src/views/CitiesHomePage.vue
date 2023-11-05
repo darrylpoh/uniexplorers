@@ -83,16 +83,22 @@ export default {
       return markers
     },
     async getCoordinates() {
-      const apiUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${this.city.name}&key=${this.GOOGLE_MAP_API_KEY}`
-      const response = await fetch(apiUrl)
-      const data = await response.json()
-      if (data.results.length > 0) {
-        this.latitude = data.results[0].geometry.location.lat
-        this.longitude = data.results[0].geometry.location.lng
-        this.center = { lat: this.latitude, lng: this.longitude }
+      // const apiUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${this.city.name}&key=${this.GOOGLE_MAP_API_KEY}`
+      const apiUrl = `${import.meta.env.VITE_BACKEND}/geocode/city/${this.city.name}`
+      const response = await fetch(apiUrl);
+      const data = await response.json();
+      if (data) {
+        // this.latitude = data.results[0].geometry.location.lat;
+        // this.longitude = data.results[0].geometry.location.lng;
+        // this.center = { lat: this.latitude, lng: this.longitude };
+        // console.log(data)
+        this.latitude = data.center.lat
+        this.longitude = data.center.lng
+        this.center = data.center
       } else {
-        this.latitude = null
-        this.longitude = null
+        this.latitude = null;
+        this.longitude = null;
+        console.log("Unable to get coordinates.");
       }
     },
 
@@ -121,11 +127,15 @@ export default {
         supermarket: ''
       }
       const keyword = mapping[placeType]
-
-      const query = `?keyword=${keyword}&lat=${this.latitude}&lng=${this.longitude}&radius=5000&type=${placeType}`
-      const res = await axios.get(import.meta.env.VITE_BACKEND + '/nearbysearch' + query)
-      const results = res.data.results
-      let processed_results = []
+      
+      const apiUrl = `${import.meta.env.VITE_BACKEND}/nearby/city/${this.city.name}`
+      const res = await fetch(apiUrl)
+      const data = await res.json();
+      if (!(placeType in data)) {
+        return []
+      }
+      const results = data[placeType].results;
+      let processed_results = [];
       for (let i = 1; i < results.length; i++) {
         if (
           results[i].name === undefined ||
@@ -134,7 +144,7 @@ export default {
           results[i].geometry.location.lat === undefined ||
           results[i].geometry.location.lng === undefined
         ) {
-          continue
+          continue;
         }
 
         // Add row to processed_results
@@ -143,21 +153,21 @@ export default {
           rating: results[i].rating,
           user_ratings_total: results[i].user_ratings_total,
           latitude: results[i].geometry.location.lat,
-          longitude: results[i].geometry.location.lng
-        }
+          longitude: results[i].geometry.location.lng,
+        };
         row.center = { lat: row.latitude, lng: row.longitude }
-        processed_results.push(row)
+        processed_results.push(row);
       }
 
       processed_results.sort((a, b) => {
         // Sort by rating in descending order
         if (b.rating !== a.rating) {
-          return b.rating - a.rating
+          return b.rating - a.rating;
         }
         // If ratings are equal, sort by number of ratings in descending order
-        return b.user_ratings_total - a.user_ratings_total
-      })
-      processed_results = processed_results.slice(0, 8)
+        return b.user_ratings_total - a.user_ratings_total;
+      });
+      processed_results = processed_results.slice(0, 8);
       return processed_results
     }
   },
