@@ -27,7 +27,7 @@ module.exports = app => {
               }
             })
             .then((data) => {
-              console.log(data)
+              // console.log(data)
               res.json(data.data)
             })
             .catch((error) => {
@@ -81,7 +81,7 @@ module.exports = app => {
     app.route('/geocode/city/:city')
       .get(cityGeocodeCache, async (req, res) => {
           const {city} = req.params;
-          console.log(cache['city_geocode'])
+          // console.log(cache['city_geocode'])
           const geocode_data = cache['city_geocode'][city]
 
           if (geocode_data) {

@@ -78,7 +78,7 @@
                     this.$emit('replying', null)
                     this.$emit('updateComments', true)
                 }).catch(err => {
-                    console.log(err);
+                    // console.log(err);
                 })
             },
 
@@ -132,7 +132,7 @@
                     this.debounceTimeout = setTimeout(() => {
                     // Call the backend API here
                         if ((this.upvoteFill != (this.liked === true)) || (this.downvoteFill != (this.liked === false))) {
-                            console.log('backend was called to ', icon, 'with', this.commentData.id, this.user.user_data.email);
+                            // console.log('backend was called to ', icon, 'with', this.commentData.id, this.user.user_data.email);
                             fetchWrapper.post(import.meta.env.VITE_BACKEND + '/forum/comments/' + icon, {
                                 comment_id : this.commentData.id,
                                 user_email : this.user.user_data.email

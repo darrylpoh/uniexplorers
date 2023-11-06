@@ -98,7 +98,7 @@ export default {
       } else {
         this.latitude = null;
         this.longitude = null;
-        console.log("Unable to get coordinates.");
+        // console.log("Unable to get coordinates.");
       }
     },
 

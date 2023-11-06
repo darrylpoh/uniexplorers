@@ -36,6 +36,8 @@ export const useCacheStore = defineStore({
                 const retrievedImg = URL.createObjectURL(new Blob([res.data]))
                 this.imgCache[key] = retrievedImg
                 return retrievedImg
+            }).catch(err => {
+              
             })
         }
     }

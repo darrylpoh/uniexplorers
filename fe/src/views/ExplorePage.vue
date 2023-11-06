@@ -157,7 +157,7 @@ import { tickStep } from 'd3';
 
         await this.getSearchResults(query).then(
           async data => {
-            console.log('response from query', data);
+            // console.log('response from query', data);
             const totalRes = data.length
             if (totalRes == 0) {
               this.error = 'No Results Found'
@@ -203,7 +203,7 @@ import { tickStep } from 'd3';
       </MqResponsive>
 
 <!-- FILTER DISPLAY FOR SM SCREENS -->
-      <MqResponsive target="sm-" class="w-full h-10 flex items-center gap-2">
+      <MqResponsive target="sm-" class="w-full h-10 flex items-center gap-2 z-50">
           <textSearch/>
           <button @click="toggleFilter" class="rounded-lg text-darkgreen outline outline-1 outline-darkgreen bg-white h-full flex justify-center items-center px-2 py-1 ">
             Filter

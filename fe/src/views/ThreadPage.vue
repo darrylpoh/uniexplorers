@@ -37,7 +37,7 @@ export default {
       this.img = res
     })
 
-    console.log(this.user.user_data);
+    // console.log(this.user.user_data);
 
     this.getComments()
     // axios.get(import.meta.env.VITE_BACKEND + '/forum/comments/' + this.$route.params.thread).then(res => {
@@ -65,7 +65,7 @@ export default {
         this.currentReply = null
         return this.getComments()
       }).catch(err => {
-        console.log(err);
+        // console.log(err);
       })
     },
 
