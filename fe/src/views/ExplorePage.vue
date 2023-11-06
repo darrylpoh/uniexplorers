@@ -184,7 +184,7 @@ import { tickStep } from 'd3';
 
 <!-- FILTER DISPLAY FOR SM SCREENS -->
     <Transition name="slide">
-      <div v-if="mq.smMinus" v-show="showfilter"  id="filter" class="dialogWrapper flex-col items-start pt-8" @click.self="toggleFilter">
+      <div v-if="mq.smMinus" v-show="showfilter"  id="filter" class="dialogWrapper flex-col items-start pt-8 z-50" @click.self="toggleFilter">
         <!-- [calc(100%-2rem)] -->
           <div class="filtersm relative card bg-white w-full text-darkgreen grow">
             <h2 class="text-xl font-bold"> Filter & Sort </h2>
@@ -203,7 +203,7 @@ import { tickStep } from 'd3';
       </MqResponsive>
 
 <!-- FILTER DISPLAY FOR SM SCREENS -->
-      <MqResponsive target="sm-" class="w-full h-10 flex items-center gap-2 z-50">
+      <MqResponsive target="sm-" class="w-full h-10 flex items-center gap-2 z-20">
           <textSearch/>
           <button @click="toggleFilter" class="rounded-lg text-darkgreen outline outline-1 outline-darkgreen bg-white h-full flex justify-center items-center px-2 py-1 ">
             Filter
